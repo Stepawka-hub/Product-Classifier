@@ -1,3 +1,6 @@
+import { ReactElement } from 'react';
+
 export type BasePageUIProps = {
-  title: string;
+  title?: string;
+  children?: ReactElement;
 }

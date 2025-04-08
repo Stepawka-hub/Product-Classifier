@@ -1,1 +1,3 @@
-export const CategoriesPageUI = () => <></>;
+import { BasePage } from '@pages';
+
+export const CategoriesPageUI = () => <BasePage title="Категории" />;
