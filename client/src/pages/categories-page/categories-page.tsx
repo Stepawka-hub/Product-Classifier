@@ -1,1 +1,3 @@
-export const CategoriesPage = () => <section>Categories</section>
+import { CategoriesPageUI } from '@ui/pages';
+
+export const CategoriesPage = () => <CategoriesPageUI />

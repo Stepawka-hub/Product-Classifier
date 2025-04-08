@@ -7,10 +7,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@images": path.resolve(__dirname, "src/assets/images"),
-      "@components": path.resolve(__dirname, "src/components"),
       "@ui": path.resolve(__dirname, "src/components/ui"),
-      "@pages": path.resolve(__dirname, "src/pages"),
       "@ui-pages": path.resolve(__dirname, "src/components/ui/pages"),
+      "@components": path.resolve(__dirname, "src/components"),
+      "@pages": path.resolve(__dirname, "src/pages"),
       "@slices": path.resolve(__dirname, "src/services/slices"),
       "@selectors": path.resolve(__dirname, "src/services/selectors"),
       "@thunks": path.resolve(__dirname, "src/services/thunks"),

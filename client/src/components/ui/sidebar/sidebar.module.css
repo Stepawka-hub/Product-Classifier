@@ -5,13 +5,13 @@
 }
 
 .sidebar {
+  gap: 3rem;
   margin-top: 3rem;
   padding: 0 2rem;
 }
 
 .titleContainer {
   padding: 0.5rem 0.25rem;
-  margin-bottom: 2rem;
   border-radius: 0.5rem;
   background-color: var(--theme-secondary-color);
 }
@@ -19,7 +19,7 @@
 .title {
   font-size: 1.35rem;
   font-weight: 500;
-  color: var(--lighten-orange-color);
+  color: var(--orange-color);
   text-align: center;
 }
 
@@ -50,4 +50,22 @@
 
 .link_active:active {
   opacity: 1;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.button {
+  font-weight: 500;
+}
+
+.fill {
+  background-color: var(--success-color);
+}
+
+.clear {
+  background-color: var(--red-color);
 }

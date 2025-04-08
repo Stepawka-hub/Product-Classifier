@@ -1,1 +1,3 @@
-export const UnitsPage = () => <section>Units</section>
+import { UnitsPageUI } from '@ui-pages';
+
+export const UnitsPage = () => <UnitsPageUI />
