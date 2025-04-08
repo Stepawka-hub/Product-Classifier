@@ -1,0 +1,1 @@
+export const ProductsPage = () => <section>Products</section>

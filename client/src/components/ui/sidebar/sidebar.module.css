@@ -1,0 +1,53 @@
+.sidebar,
+.links {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  margin-top: 3rem;
+  padding: 0 2rem;
+}
+
+.titleContainer {
+  padding: 0.5rem 0.25rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--theme-secondary-color);
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--lighten-orange-color);
+  text-align: center;
+}
+
+.links {
+  gap: 1.75rem;
+}
+
+.link {
+  font-size: 1.25rem;
+  transition: all 0.25s linear;
+}
+
+.link:hover {
+  transform: translateX(1rem);
+}
+
+.link:active {
+  opacity: 0.8;
+}
+
+.link_active {
+  color: var(--orange-color);
+}
+
+.link_active:hover {
+  transform: translateX(0);
+}
+
+.link_active:active {
+  opacity: 1;
+}

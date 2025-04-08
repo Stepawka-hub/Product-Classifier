@@ -1,0 +1,16 @@
+.home {
+  margin-top: 6rem;
+  text-align: center;
+}
+
+.home__title {
+  margin-bottom: 0.5rem;
+  font-size: 2.75rem;
+  font-weight: 600;
+  color: var(--orange-color);
+}
+
+.home__text {
+  font-size: 1.75rem;
+  font-weight: 500;
+}
