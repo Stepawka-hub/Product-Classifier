@@ -1,1 +1,6 @@
-export const ProductsPage = () => <section>Products</section>
+import { ProductsPageUI } from '@ui/pages';
+
+export const ProductsPage = () => {
+  const addProduct = () => alert('Добавление продукта');
+  return <ProductsPageUI addProduct={addProduct} />
+}

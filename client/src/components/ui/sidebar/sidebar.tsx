@@ -2,8 +2,10 @@ import { FC } from "react";
 import { NavLink } from "react-router-dom";
 import s from "./sidebar.module.css";
 import clsx from "clsx";
+import { Button } from "@components/common/buttons";
+import { SidebarUIProps } from "./type";
 
-export const SidebarUI: FC = () => (
+export const SidebarUI: FC<SidebarUIProps> = ({ fillData, clearData }) => (
   <aside className={s.sidebar}>
     <div className={s.titleContainer}>
       <h2 className={s.title}>Классификатор изделий</h2>
@@ -17,7 +19,7 @@ export const SidebarUI: FC = () => (
           })
         }
       >
-        Изделия
+        - Изделия
       </NavLink>
       <NavLink
         to="/categories"
@@ -27,7 +29,7 @@ export const SidebarUI: FC = () => (
           })
         }
       >
-        Категории
+        - Категории
       </NavLink>
       <NavLink
         to="/units"
@@ -37,8 +39,20 @@ export const SidebarUI: FC = () => (
           })
         }
       >
-        Единицы измерения
+        - Единицы измерения
       </NavLink>
+    </div>
+    <div className={s.buttons}>
+      <Button
+        children="Заполнить данные"
+        extraClass={s.button}
+        onClick={fillData}
+      />
+      <Button
+        children="Очистить данные"
+        extraClass={s.button}
+        onClick={clearData}
+      />
     </div>
   </aside>
 );

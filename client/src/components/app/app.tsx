@@ -3,20 +3,13 @@ import { Routes, Route } from "react-router";
 import { FC, useEffect } from "react";
 
 import s from "./app.module.css";
-import { useDispatch, useSelector } from '@store';
-import { getIsInitializedSelector } from '@slices/app';
-import { initialize } from '@thunks/app';
-import { AppPreloader } from '@components/app-preloader';
-import { Sidebar } from '@components/sidebar/sidebar';
-import { UnitsPage } from '@pages/units-page';
-import { ProductsPage } from '@pages/products-page';
-import { CategoriesPage } from '@pages/categories-page';
-import { HomePage } from '@pages/home-page';
-import { NotFound } from '@components/not-found';
-// import { NotFound } from '@components/not-found';
-
-// import { HomePage } from '@pages/home-page';
-// import { TaskPage } from '@pages/task-page';
+import { useDispatch, useSelector } from "@store";
+import { getIsInitializedSelector } from "@slices/app";
+import { initialize } from "@thunks/app";
+import { AppPreloader } from "@components/app-preloader";
+import { Sidebar } from "@components/sidebar/sidebar";
+import { HomePage, ProductsPage, CategoriesPage, UnitsPage } from "@pages";
+import { NotFound } from "@components/not-found";
 
 export const App: FC = () => {
   const dispatch = useDispatch();
@@ -24,18 +17,16 @@ export const App: FC = () => {
 
   useEffect(() => {
     dispatch(initialize());
-  }, [])
+  }, []);
 
   if (!isInitialized) {
-    return <AppPreloader />
+    return <AppPreloader />;
   }
 
   return (
     <div className={s.wrapper}>
-      <div>
+      <div></div>
 
-      </div>
-      
       <div className={s.sidebar}>
         <Sidebar />
       </div>

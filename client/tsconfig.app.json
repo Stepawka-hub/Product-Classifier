@@ -26,10 +26,10 @@
     "baseUrl": ".",
     "paths": {
       "@images/*": ["src/assets/images/*"],
-      "@components/*": ["src/components/*"],
       "@ui/*": ["src/components/ui/*"],
-      "@pages/*": ["src/pages/*"],
-      "@ui-pages/*": ["src/components/ui/pages/*"],
+      "@ui-pages": ["src/components/ui/pages"],
+      "@components/*": ["src/components/*"],
+      "@pages": ["src/pages"],
       "@slices/*": ["src/services/slices/*"],
       "@selectors/*": ["src/services/selectors/*"],
       "@thunks/*": ["src/services/thunks/*"],

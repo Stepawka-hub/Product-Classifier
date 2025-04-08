@@ -1,0 +1,8 @@
+.title {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--lighten-orange-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}

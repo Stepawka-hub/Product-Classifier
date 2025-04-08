@@ -4,7 +4,7 @@ export interface ButtonUIProps
   extends React.PropsWithChildren<
     Omit<React.HTMLProps<HTMLButtonElement>, "type" | "size">
   > {
-  type?: 'default' | 'edit' | 'cross' | 'done';
+  type?: 'default' | 'edit' | 'cross' | 'done' | 'plus';
   size?: 'small' | 'medium' | 'large';
   extraClass?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;

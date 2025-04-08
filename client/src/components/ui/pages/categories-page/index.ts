@@ -1,0 +1,1 @@
+export { CategoriesPageUI } from './categories-page';
