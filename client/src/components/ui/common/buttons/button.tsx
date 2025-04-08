@@ -6,6 +6,7 @@ import { ButtonUIProps } from "./type";
 import editPenIcon from "@images/edit-pen.svg";
 import crossIcon from "@images/cross.svg";
 import doneIcon from "@images/done.svg";
+import plusIcon from "@images/plus.svg";
 
 const iconMap = {
   default: null,
@@ -23,6 +24,11 @@ const iconMap = {
     src: crossIcon,
     alt: "Cross Icon",
     buttonClassName: s.cross,
+  },
+  plus: {
+    src: plusIcon,
+    alt: "Plus Icon",
+    buttonClassName: s.plus,
   },
 };
 
@@ -46,7 +52,11 @@ export const ButtonUI: FC<ButtonUIProps> = ({
   return (
     <button className={buttonClass} disabled={disabled} onClick={onClick}>
       {icon && (
-        <img className={s[`icon__${size}`]} src={icon.src} alt={icon.alt} />
+        <img
+          className={s[`icon__${size}`]}
+          src={icon.src}
+          alt={icon.alt}
+        />
       )}
       {children}
     </button>

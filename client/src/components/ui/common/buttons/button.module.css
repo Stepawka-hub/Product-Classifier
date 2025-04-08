@@ -32,8 +32,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
   transition: all 0.2s linear;
+  border-radius: 50%;
+  background-color: #000;
 }
 
 .btnWithIcon__small {

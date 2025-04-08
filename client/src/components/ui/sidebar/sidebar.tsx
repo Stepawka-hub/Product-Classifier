@@ -45,12 +45,12 @@ export const SidebarUI: FC<SidebarUIProps> = ({ fillData, clearData }) => (
     <div className={s.buttons}>
       <Button
         children="Заполнить данные"
-        extraClass={clsx(s.button, s.fill)}
+        extraClass={s.button}
         onClick={fillData}
       />
       <Button
         children="Очистить данные"
-        extraClass={clsx(s.button, s.clear)}
+        extraClass={s.button}
         onClick={clearData}
       />
     </div>
