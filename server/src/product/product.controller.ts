@@ -22,7 +22,7 @@ export class ProductController {
 
   @Get()
   findAll() {
-    return this.productService.findAll();
+    return 'Test data';
   }
 
   @Get(':id')

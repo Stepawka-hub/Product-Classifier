@@ -6,9 +6,11 @@ import {
 } from 'react-redux';
 
 import { reducer as appReducer } from '@slices/app';
+import { reducer as productReducer } from '@slices/app';
 
 const rootReducer = combineReducers({
   app: appReducer,
+  product: productReducer
 });
 
 export const store = configureStore({
