@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { InitialAppState } from './types/types';
+import { TInitialAppState } from './types/types';
 
-const initialState: InitialAppState = {
+const initialState: TInitialAppState = {
   isInitialized: false,
-}
+};
 
 const appSlice = createSlice({
   name: 'app',

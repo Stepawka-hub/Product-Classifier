@@ -1,3 +1,5 @@
-export type InitialAppState = {
-  isInitialized: boolean; 
-}
+export type TInitialAppState = {
+  isInitialized: boolean;
+};
+
+export type TInitialProductState = {};
