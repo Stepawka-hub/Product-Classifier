@@ -1,26 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUnitDto } from './dto/create-unit.dto';
-import { UpdateUnitDto } from './dto/update-unit.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Unit } from './entities/unit.entity';
 
 @Injectable()
 export class UnitService {
-  create(createUnitDto: CreateUnitDto) {
-    return 'This action adds a new unit';
-  }
+  constructor(
+    @InjectRepository(Unit)
+    private unitRepository: Repository<Unit>,
+  ) {}
 
-  findAll() {
-    return `This action returns all unit`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} unit`;
-  }
-
-  update(id: number, updateUnitDto: UpdateUnitDto) {
-    return `This action updates a #${id} unit`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} unit`;
+  async findAll(): Promise<Unit[]> {
+    return await this.unitRepository.find();
   }
 }
