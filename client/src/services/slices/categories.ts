@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialCategoryState } from "./types/types";
 import { getAllCategoriesAsync } from "@thunks/categories";
-import { TCategory } from '@utils/types';
+import { TCategory } from "@utils/types";
 
 const initialState: TInitialCategoryState = {
   categories: [],
@@ -11,7 +11,11 @@ const initialState: TInitialCategoryState = {
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {},
+  reducers: {
+    setCategories: (state, { payload }: PayloadAction<TCategory[]>) => {
+      state.categories = payload;
+    }
+  },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
   },
@@ -29,9 +33,10 @@ const categoriesSlice = createSlice({
       )
       .addCase(getAllCategoriesAsync.rejected, (state) => {
         state.isLoading = false;
-      })
+      });
   },
 });
 
 export const reducer = categoriesSlice.reducer;
 export const { getCategoriesSelector } = categoriesSlice.selectors;
+export const { setCategories } = categoriesSlice.actions;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { SidebarUI } from "@ui/sidebar";
 import { useDispatch } from '@store';
-import { fillDataAsync } from '@thunks/app';
+import { clearDataAsync, fillDataAsync } from '@thunks/app';
 
 export const Sidebar: FC = () => {
   const dispatch = useDispatch();
@@ -10,7 +10,9 @@ export const Sidebar: FC = () => {
     dispatch(fillDataAsync());
   };
 
-  const clearData = () => alert("clear");
+  const clearData = () => {
+    dispatch(clearDataAsync());
+  }
 
   return <SidebarUI fillData={fillData} clearData={clearData} />;
 };

@@ -11,7 +11,11 @@ const initialState: TInitialProductState = {
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    setProducts: (state, { payload }: PayloadAction<TProduct[]>) => {
+      state.products = payload;
+    },
+  },
   selectors: {
     getProductsSelector: (state) => state.products,
   },
@@ -35,3 +39,4 @@ const productsSlice = createSlice({
 
 export const reducer = productsSlice.reducer;
 export const { getProductsSelector } = productsSlice.selectors;
+export const { setProducts } = productsSlice.actions;

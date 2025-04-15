@@ -10,4 +10,10 @@ export class AppController {
   async fillData(): Promise<IAppData> {
     return await this.appService.fillData();
   }
+
+  @Post('clear-data')
+  async clearData() {
+    await this.appService.clearData();
+    return { resultCode: 0, message: 'Data cleared successfully' };
+  }
 }

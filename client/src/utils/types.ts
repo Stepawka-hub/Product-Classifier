@@ -11,3 +11,9 @@ export type TUnit = {
   id: number;
   name: string;
 };
+
+export type TAppData = {
+  categories: TCategory[];
+  products: TProduct[];
+  units: TUnit[];
+}

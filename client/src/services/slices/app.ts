@@ -15,7 +15,7 @@ const appSlice = createSlice({
   },
   selectors: {
     getIsInitializedSelector: (state) => state.isInitialized
-  }
+  },
 });
 
 export const reducer = appSlice.reducer;

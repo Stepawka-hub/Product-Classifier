@@ -1,6 +1,8 @@
-import { TCategory, TProduct, TUnit } from '@utils/types';
+import { TAppData, TCategory, TProduct, TUnit } from '@utils/types';
+import { TServerResponse } from './types/types';
 
 const URL = import.meta.env.VITE_API_URL;
+export const SUCCESS_CODE = 0;
 
 class Api {
   constructor(private URL: string) {};
@@ -32,17 +34,28 @@ class Api {
     return await res.json();
   }
 
-  fillData = async () => {
+  fillData = async (): Promise<TAppData> => {
     const res = await fetch(`${this.URL}/fill-data`, {
       method: 'POST'
     });
+
     if (!res.ok) {
       throw new Error('Произошла ошибка при заполнении данных!');
     }
 
-    console.log(res.ok)
-    const result = await res.json();
-    console.log(result);
+    return res.json();
+  }
+
+  clearData = async (): Promise<TServerResponse> => {
+    const res = await fetch(`${this.URL}/clear-data`, {
+      method: 'POST'
+    });
+
+    if (!res.ok) {
+      throw new Error('Произошла ошибка при очистке данных!');
+    }
+
+    return res.json();
   }
 }
 

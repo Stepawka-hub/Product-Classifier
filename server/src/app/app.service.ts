@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { ProductService } from '../product/product.service';
@@ -27,7 +27,22 @@ export class AppService {
     return { products, categories, units };
   }
 
-  private async seedDatabase(): Promise<void> {
+  async clearData() {
+    try {
+      await this.clearDatabase();
+    } catch {
+      throw new HttpException(
+        { resultCode: 1, message: 'Database clearing failed' },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  private async seedDatabase() {
     await this.dataSource.query('CALL seed_database()');
+  }
+
+  private async clearDatabase() {
+    await this.dataSource.query('CALL clear_database()');
   }
 }

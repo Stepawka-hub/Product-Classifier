@@ -11,7 +11,11 @@ const initialState: TInitialUnitState = {
 const unitsSlice = createSlice({
   name: "units",
   initialState,
-  reducers: {},
+  reducers: {
+    setUnits: (state, { payload }: PayloadAction<TUnit[]>) => {
+      state.units = payload;
+    },
+  },
   selectors: {
     getUnitsSelector: (state) => state.units,
   },
@@ -35,3 +39,4 @@ const unitsSlice = createSlice({
 
 export const reducer = unitsSlice.reducer;
 export const { getUnitsSelector } = unitsSlice.selectors;
+export const { setUnits } = unitsSlice.actions;

@@ -1,13 +1,12 @@
 import { getUnitsSelector } from '@slices/units';
 import { useSelector } from '@store';
 import { UnitsPageUI } from "@ui-pages";
+import { unitHeaders } from '@utils/constants';
 
 export const UnitsPage = () => {
   const units = useSelector(getUnitsSelector);
-  const headers = [
-    "ID Единицы измерения",
-    "Название"
-  ];
+
   const addUnit = () => alert("Добавление ЕИ");
-  return <UnitsPageUI headers={headers} units={units} addUnit={addUnit} />;
+
+  return <UnitsPageUI headers={unitHeaders} units={units} addUnit={addUnit} />;
 };
