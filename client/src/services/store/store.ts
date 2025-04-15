@@ -1,20 +1,24 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   useDispatch as dispatchHook,
   useSelector as selectorHook,
-  TypedUseSelectorHook
-} from 'react-redux';
+  TypedUseSelectorHook,
+} from "react-redux";
 
-import { reducer as appReducer } from '@slices/app';
-import { reducer as productReducer } from '@slices/app';
+import { reducer as appReducer } from "@slices/app";
+import { reducer as productsReducer } from "@slices/products";
+import { reducer as categoriesReducer } from "@slices/categories";
+import { reducer as unitsReducer } from "@slices/units";
 
 const rootReducer = combineReducers({
   app: appReducer,
-  product: productReducer
+  products: productsReducer,
+  categories: categoriesReducer,
+  units: unitsReducer
 });
 
 export const store = configureStore({
-  reducer: rootReducer
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

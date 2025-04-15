@@ -15,6 +15,12 @@ export class Category {
   @Column({ type: 'varchar', length: 250, nullable: false, unique: true })
   name: string;
 
+  @Column({ name: 'parentid', nullable: true })
+  parentId: number | null;
+
+  @Column({ name: 'umid', nullable: true })
+  unitId: number | null;
+
   @ManyToOne(() => Category, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'parentid' })
   parent: Category;
