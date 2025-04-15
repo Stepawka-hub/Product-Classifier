@@ -1,17 +1,23 @@
-import { FC } from 'react';
+import { FC } from "react";
 import { BasePage } from "@pages";
-import { Button } from '@components/common/buttons';
-import { ProductsPageUIProps } from './type';
+import { Button } from "@components/common/buttons";
+import { ProductsPageUIProps } from "./type";
+import { Table } from "@components/table";
+import { TProduct } from '@utils/types';
 
-export const ProductsPageUI: FC<ProductsPageUIProps> = ({ addProduct }) => (
+export const ProductsPageUI: FC<ProductsPageUIProps> = ({
+  headers,
+  products,
+  addProduct,
+}) => (
   <BasePage title="Изделия">
-    <div className='content'>
-      <div>Какие-то изделия...</div>
+    <div className="content">
+      <Table<TProduct> headers={headers} elements={products} />
       <div>
         <Button
-          type='plus'
+          type="plus"
           children="Добавить продукт"
-          className='actionButton'
+          className="actionButton"
           onClick={addProduct}
         />
       </div>

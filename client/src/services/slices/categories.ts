@@ -34,3 +34,4 @@ const categoriesSlice = createSlice({
 });
 
 export const reducer = categoriesSlice.reducer;
+export const { getCategoriesSelector } = categoriesSlice.selectors;

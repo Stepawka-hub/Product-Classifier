@@ -34,3 +34,4 @@ const unitsSlice = createSlice({
 });
 
 export const reducer = unitsSlice.reducer;
+export const { getUnitsSelector } = unitsSlice.selectors;

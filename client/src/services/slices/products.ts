@@ -34,3 +34,4 @@ const productsSlice = createSlice({
 });
 
 export const reducer = productsSlice.reducer;
+export const { getProductsSelector } = productsSlice.selectors;

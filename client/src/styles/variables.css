@@ -24,5 +24,9 @@
   --custom-checkbox-color: #4DD599;
   --custom-checkbox-hover-color: #E8E8E8;
 
-  --edit-btn-bg: #1e1e1e;
+  --edit-btn-bg-hover: #1f1f1f;
+
+  --table-color: #171717;
+  --table-body-color-odd: #282828;
+  --table-body-color-even: #232323;
 }
