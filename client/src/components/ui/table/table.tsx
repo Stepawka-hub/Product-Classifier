@@ -6,11 +6,11 @@ export const TableUI = <T extends object>({
   headers,
   elements,
 }: TableUIProps<T>) => {
-  const headerElements = headers.map((h) => <th>{h}</th>);
-  const cellElements = elements.map((el) => (
-    <tr className={s.trow}>
-      {Object.values(el).map((v) => (
-        <td>{String(v)}</td>
+  const headerElements = headers.map((h, hIndex) => <th key={hIndex}>{h}</th>);
+  const cellElements = elements.map((el, elIndex) => (
+    <tr key={elIndex} className={s.trow}>
+      {Object.values(el).map((v, vIndex) => (
+        <td key={vIndex}>{String(v)}</td>
       ))}
       <td className={s.actions}>
         <Button type="edit" size="small" />
@@ -23,8 +23,10 @@ export const TableUI = <T extends object>({
     <div className={s.tableContainer}>
       <table className={s.table}>
         <thead className={s.thead}>
-          {headerElements}
-          <th>Действия</th>
+          <tr>
+            {headerElements}
+            <th>Действия</th>
+          </tr>
         </thead>
         <tbody className={s.tbody}>{cellElements}</tbody>
       </table>
