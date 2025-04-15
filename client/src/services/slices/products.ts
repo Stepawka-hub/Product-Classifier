@@ -1,15 +1,36 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TInitialProductState } from './types/types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TInitialProductState } from "./types/types";
+import { getAllProductsAsync } from "@thunks/products";
+import { TProduct } from "@utils/types";
 
 const initialState: TInitialProductState = {
-  products: []
+  products: [],
+  isLoading: false,
 };
 
 const productsSlice = createSlice({
-  name: 'products',
+  name: "products",
   initialState,
   reducers: {},
-  selectors: {}
+  selectors: {
+    getProductsSelector: (state) => state.products,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllProductsAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getAllProductsAsync.fulfilled,
+        (state, { payload }: PayloadAction<TProduct[]>) => {
+          state.isLoading = false;
+          state.products = payload;
+        }
+      )
+      .addCase(getAllProductsAsync.rejected, (state) => {
+        state.isLoading = false;
+      });
+  },
 });
 
 export const reducer = productsSlice.reducer;
