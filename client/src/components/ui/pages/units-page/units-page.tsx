@@ -2,11 +2,13 @@ import { BasePage } from "@pages";
 import { FC } from 'react';
 import { Button } from '@components/common/buttons';
 import { UnitsPageUIProps } from './type';
+import { TUnit } from '@utils/types';
+import { Table } from '@components/table';
 
-export const UnitsPageUI: FC<UnitsPageUIProps> = ({ addUnit }) => (
+export const UnitsPageUI: FC<UnitsPageUIProps> = ({ headers, units, addUnit }) => (
   <BasePage title="Изделия">
     <div className='content'>
-      <div>Какие-то единицы измерения...</div>
+      <Table<TUnit> headers={headers} elements={units} />
       <div>
         <Button
           type='plus'
