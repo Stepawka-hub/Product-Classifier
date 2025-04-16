@@ -2,6 +2,8 @@ import { TCategory, TProduct, TToast, TUnit } from '@utils/types';
 
 export type TInitialAppState = {
   isInitialized: boolean;
+  isFillingData: boolean;
+  isClearingData: boolean;
 };
 
 export type TInitialProductState = {
