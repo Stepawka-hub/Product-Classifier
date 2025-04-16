@@ -10,7 +10,7 @@ export const TableUI = <T extends object>({
   const cellElements = elements.map((el, elIndex) => (
     <tr key={elIndex} className={s.trow}>
       {Object.values(el).map((v, vIndex) => (
-        <td key={vIndex}>{String(v)}</td>
+        <td key={vIndex}>{v ? String(v) : "Нет"}</td>
       ))}
       <td className={s.actions}>
         <Button type="edit" size="small" />

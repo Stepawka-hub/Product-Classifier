@@ -1,4 +1,4 @@
-import { TCategory, TProduct, TUnit } from '@utils/types';
+import { TCategory, TProduct, TToast, TUnit } from '@utils/types';
 
 export type TInitialAppState = {
   isInitialized: boolean;
@@ -17,4 +17,9 @@ export type TInitialCategoryState = {
 export type TInitialUnitState = {
   units: TUnit[];
   isLoading: boolean;
+};
+
+export type TToastsState = {
+  toasts: TToast[];
+  maxCount: number;
 };

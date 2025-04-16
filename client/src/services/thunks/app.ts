@@ -7,6 +7,7 @@ import { getAllUnitsAsync } from "./units";
 import { setUnits } from "@slices/units";
 import { setCategories } from "@slices/categories";
 import { setProducts } from "@slices/products";
+import { addToast } from "@slices/toasts";
 
 const INITIALIZE_APP = "app/initialize";
 const FILL_DATA = "app/fill-data";
@@ -31,6 +32,13 @@ export const fillDataAsync = createAsyncThunk(
     dispatch(setProducts(products));
     dispatch(setCategories(categories));
     dispatch(setUnits(units));
+    dispatch(
+      addToast({
+        message: "Данные успешно заполнены!",
+        type: "success",
+        duration: 2500,
+      })
+    );
   }
 );
 
@@ -43,6 +51,13 @@ export const clearDataAsync = createAsyncThunk(
       dispatch(setProducts([]));
       dispatch(setCategories([]));
       dispatch(setUnits([]));
+      dispatch(
+        addToast({
+          message: "Данные успешно очищены!",
+          type: "success",
+          duration: 2500,
+        })
+      );
     }
   }
 );

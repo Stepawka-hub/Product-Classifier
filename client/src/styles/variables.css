@@ -29,4 +29,11 @@
   --table-color: #171717;
   --table-body-color-odd: #282828;
   --table-body-color-even: #232323;
+
+  --toast-bg-color: #FFF;
+  --toast-btn-color: #ff5947;
+  --toast-box-shadow: #ffddad;
+  --toast-success-color: #32bea6;
+  --toast-error-color: #e04f5f;
+
 }

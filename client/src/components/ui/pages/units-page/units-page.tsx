@@ -6,7 +6,7 @@ import { TUnit } from '@utils/types';
 import { Table } from '@components/table';
 
 export const UnitsPageUI: FC<UnitsPageUIProps> = ({ headers, units, addUnit }) => (
-  <BasePage title="Изделия">
+  <BasePage title="Единицы измерения">
     <div className='content'>
       <Table<TUnit> headers={headers} elements={units} />
       <div>
