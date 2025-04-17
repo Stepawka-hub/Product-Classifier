@@ -31,11 +31,10 @@
       "@components/*": ["src/components/*"],
       "@pages": ["src/pages"],
       "@slices/*": ["src/services/slices/*"],
-      "@selectors/*": ["src/services/selectors/*"],
       "@thunks/*": ["src/services/thunks/*"],
+      "@api": ["src/utils/api/api.ts"],
       "@utils/*": ["src/utils/*"],
       "@store": ["src/services/store/store.ts"],
-      "@api": ["src/utils/api/api.ts"],
     }
   },
   "include": ["src"]

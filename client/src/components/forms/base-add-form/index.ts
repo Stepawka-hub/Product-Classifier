@@ -1,0 +1,1 @@
+export { BaseAddForm } from './base-add-form';
