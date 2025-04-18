@@ -14,10 +14,11 @@ const categoriesSlice = createSlice({
   reducers: {
     setCategories: (state, { payload }: PayloadAction<TCategory[]>) => {
       state.categories = payload;
-    }
+    },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
+    getIsLoadingSelector: (state) => state.isLoading,
   },
   extraReducers: (builder) => {
     builder
@@ -38,5 +39,6 @@ const categoriesSlice = createSlice({
 });
 
 export const reducer = categoriesSlice.reducer;
-export const { getCategoriesSelector } = categoriesSlice.selectors;
+export const { getCategoriesSelector, getIsLoadingSelector } =
+  categoriesSlice.selectors;
 export const { setCategories } = categoriesSlice.actions;

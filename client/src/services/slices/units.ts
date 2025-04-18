@@ -18,6 +18,7 @@ const unitsSlice = createSlice({
   },
   selectors: {
     getUnitsSelector: (state) => state.units,
+    getIsLoadingSelector: (state) => state.isLoading,
   },
   extraReducers: (builder) => {
     builder
@@ -38,5 +39,5 @@ const unitsSlice = createSlice({
 });
 
 export const reducer = unitsSlice.reducer;
-export const { getUnitsSelector } = unitsSlice.selectors;
+export const { getUnitsSelector, getIsLoadingSelector } = unitsSlice.selectors;
 export const { setUnits } = unitsSlice.actions;
