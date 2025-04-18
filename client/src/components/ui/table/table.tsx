@@ -1,35 +1,25 @@
-import { Button } from "@components/common/buttons";
 import s from "./table.module.css";
 import { TableUIProps } from "./type";
+import { TableHeader, TableRow } from "@components/table-elements";
 
 export const TableUI = <T extends object>({
   headers,
   data,
-}: TableUIProps<T>) => {
-  const headerElements = headers.map((h, hIndex) => <th key={hIndex}>{h}</th>);
-  const cellElements = data.map((el, elIndex) => (
-    <tr key={elIndex} className={s.trow}>
-      {Object.values(el).map((v, vIndex) => (
-        <td key={vIndex}>{v ? String(v) : "Нет"}</td>
-      ))}
-      <td className={s.actions}>
-        <Button type="edit" size="small" />
-        <Button type="cross" size="small" />
-      </td>
-    </tr>
-  ));
-
-  return (
-    <div className={s.tableContainer}>
-      <table className={s.table}>
-        <thead className={s.thead}>
-          <tr>
-            {headerElements}
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody className={s.tbody}>{cellElements}</tbody>
-      </table>
-    </div>
-  );
-};
+}: TableUIProps<T>) => (
+  <div className={s.tableContainer}>
+    <table className={s.table}>
+      <TableHeader headers={Object.values(headers)} />
+      <tbody className={s.tbody}>
+        {data.map((row, rowIndex) => (
+          <TableRow
+            key={rowIndex}
+            headers={headers}
+            rowData={row}
+            onEdit={() => null}
+            onDelete={() => null}
+          />
+        ))}
+      </tbody>
+    </table>
+  </div>
+);

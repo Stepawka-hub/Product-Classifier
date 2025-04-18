@@ -1,15 +1,20 @@
-export const productsHeaders = [
-  "ID продукта",
-  "Название продукта",
-  "ID категории",
-  "ID ЕИ",
-];
+import { TCategory, TProduct, TUnit } from "./types";
 
-export const categoriesHeaders = [
-  "ID категории",
-  "Название категории",
-  "ID родительской категории",
-  "ID ЕИ",
-];
+export const productsHeaders: Record<keyof TProduct, string> = {
+  id: "ID изделия",
+  name: "Название",
+  parentName: "Категория",
+  unitName: "Единицы измерения",
+};
 
-export const unitHeaders = ["ID Единицы измерения", "Название"];
+export const categoriesHeaders: Record<keyof TCategory, string> = {
+  id: "ID категории",
+  name: "Название",
+  parentName: "Родительская категория",
+  unitName: "Единица измерения",
+};
+
+export const unitHeaders: Record<keyof TUnit, string> = {
+  id: "ID Единицы измерения",
+  name: "Название",
+};

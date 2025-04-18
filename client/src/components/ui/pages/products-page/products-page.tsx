@@ -12,10 +12,10 @@ export const ProductsPageUI: FC<ProductsPageUIProps> = ({
   handleCloseModal,
 }) => (
   <TablePage<TProduct>
-    title="Продукты"
+    title="Изделия"
     headers={productsHeaders}
     data={products}
-    addButtonLabel="Добавить продукт"
+    addButtonLabel="Добавить изделие"
     renderModal={<AddProductForm onClose={handleCloseModal} />}
     isModalOpen={showModal}
     onOpenModal={handleShowModal}

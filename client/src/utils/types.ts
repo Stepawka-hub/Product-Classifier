@@ -1,8 +1,8 @@
 export type TCategory = {
   id: number;
   name: string;
-  unitid: number;
-  parentid: number;
+  unitName: string;
+  parentName: string;
 };
 
 export type TProduct = TCategory;

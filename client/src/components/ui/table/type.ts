@@ -1,4 +1,4 @@
 export type TableUIProps<T> = {
-  headers: string[];
+  headers: Record<keyof T, string>;
   data: T[];
 };

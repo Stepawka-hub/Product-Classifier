@@ -28,6 +28,7 @@
   padding: 2rem;
   border-radius: 1rem;
   z-index: 15;
+  animation: appearance 0.35s ease-in-out;
 }
 
 .modalClose { 
@@ -76,4 +77,14 @@
 .modalClose:hover::after,
 .modalClose:hover::before { 
   background-color: var(--orange-color);
+}
+
+@keyframes appearance {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }

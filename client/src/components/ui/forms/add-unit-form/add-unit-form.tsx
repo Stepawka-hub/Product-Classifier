@@ -4,6 +4,6 @@ import { AddFormUIProps } from '../types/types';
 
 export const AddUnitFormUI: FC<AddFormUIProps> = (props) => (
   <BaseAddForm {...props}>
-    <input placeholder="ID ЕИ"></input>
+    <input placeholder="ID ЕИ" />
   </BaseAddForm>
 );

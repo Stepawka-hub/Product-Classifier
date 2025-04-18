@@ -4,6 +4,6 @@ import { AddFormUIProps } from "../types/types";
 
 export const AddCategoryFormUI: FC<AddFormUIProps> = (props) => (
   <BaseAddForm {...props}>
-    <input placeholder="ID Категории"></input>
+    <input placeholder="ID Категории" />
   </BaseAddForm>
 );
