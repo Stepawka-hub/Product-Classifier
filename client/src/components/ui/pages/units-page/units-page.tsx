@@ -5,6 +5,7 @@ import { UnitsPageUIProps } from "./type";
 import { TUnit } from "@utils/types";
 import { Table } from "@components/table";
 import { Modal } from "@components/modal";
+import { AddUnitForm } from "@components/forms";
 
 export const UnitsPageUI: FC<UnitsPageUIProps> = ({
   headers,
@@ -27,6 +28,10 @@ export const UnitsPageUI: FC<UnitsPageUIProps> = ({
         </div>
       </div>
     </BasePage>
-    {showModal && <Modal onClose={handleCloseModal} />}
+    {showModal && (
+      <Modal onClose={handleCloseModal}>
+        <AddUnitForm onClose={handleCloseModal} />
+      </Modal>
+    )}
   </>
 );
