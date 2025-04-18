@@ -1,18 +1,18 @@
+import { useModal } from '@hooks/useModal';
 import { getCategoriesSelector } from "@slices/categories";
 import { useSelector } from "@store";
 import { CategoriesPageUI } from "@ui/pages";
-import { categoriesHeaders } from '@utils/constants';
 
 export const CategoriesPage = () => {
   const categories = useSelector(getCategoriesSelector);
-
-  const addCategory = () => alert("Добавление категории");
+  const { showModal, handleShowModal, handleCloseModal } = useModal();
 
   return (
     <CategoriesPageUI
-      headers={categoriesHeaders}
       categories={categories}
-      addCategory={addCategory}
+      showModal={showModal}
+      handleShowModal={handleShowModal}
+      handleCloseModal={handleCloseModal}
     />
   );
 };

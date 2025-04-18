@@ -2,8 +2,8 @@ import { BaseAddForm } from "@components/forms";
 import { FC } from "react";
 import { AddFormUIProps } from '../types/types';
 
-export const AddUnitFormUI: FC<AddFormUIProps> = (props) => (
+export const AddProductFormUI: FC<AddFormUIProps> = (props) => (
   <BaseAddForm {...props}>
-    <input placeholder="ID ЕИ"></input>
+    <input placeholder="ID Продукта"></input>
   </BaseAddForm>
 );

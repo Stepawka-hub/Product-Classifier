@@ -4,10 +4,10 @@ import { TableUIProps } from "./type";
 
 export const TableUI = <T extends object>({
   headers,
-  elements,
+  data,
 }: TableUIProps<T>) => {
   const headerElements = headers.map((h, hIndex) => <th key={hIndex}>{h}</th>);
-  const cellElements = elements.map((el, elIndex) => (
+  const cellElements = data.map((el, elIndex) => (
     <tr key={elIndex} className={s.trow}>
       {Object.values(el).map((v, vIndex) => (
         <td key={vIndex}>{v ? String(v) : "Нет"}</td>

@@ -1,4 +1,4 @@
-export type AddUnitFormUIProps = {
+export type AddFormUIProps = {
   onSubmit: () => void;
   onClose: () => void;
 };

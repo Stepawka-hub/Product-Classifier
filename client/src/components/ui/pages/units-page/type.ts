@@ -1,9 +1,6 @@
 import { TUnit } from '@utils/types';
+import { ModalHandlers } from '../types/types';
 
-export type UnitsPageUIProps = {
-  headers: string[];
+export type UnitsPageUIProps = ModalHandlers & {
   units: TUnit[];
-  showModal: boolean;
-  handleShowModal: () => void;
-  handleCloseModal: () => void;
 };

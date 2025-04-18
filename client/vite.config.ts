@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@images": path.resolve(__dirname, "src/assets/images"),
+      "@hooks": path.resolve(__dirname, "src/hooks"),
       "@ui": path.resolve(__dirname, "src/components/ui"),
       "@ui-pages": path.resolve(__dirname, "src/components/ui/pages"),
       "@components": path.resolve(__dirname, "src/components"),

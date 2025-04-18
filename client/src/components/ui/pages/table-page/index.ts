@@ -1,0 +1,1 @@
+export { TablePageUI } from './table-page';

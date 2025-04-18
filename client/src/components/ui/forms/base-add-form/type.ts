@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
+import { AddFormUIProps } from "../types/types";
 
-export type BaseAddFormUIProps = {
+export type BaseAddFormUIProps = AddFormUIProps & {
   children: ReactElement;
-  onSubmit: () => void;
-  onClose: () => void;
 };

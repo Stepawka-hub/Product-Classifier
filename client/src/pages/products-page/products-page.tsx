@@ -1,18 +1,18 @@
+import { useModal } from '@hooks/useModal';
 import { getProductsSelector } from "@slices/products";
 import { useSelector } from "@store";
 import { ProductsPageUI } from "@ui/pages";
-import { productsHeaders } from '@utils/constants';
 
 export const ProductsPage = () => {
   const products = useSelector(getProductsSelector);
-
-  const addProduct = () => alert("Добавление продукта");
+  const { showModal, handleShowModal, handleCloseModal } = useModal();
 
   return (
     <ProductsPageUI
-      headers={productsHeaders}
       products={products}
-      addProduct={addProduct} 
+      showModal={showModal}
+      handleShowModal={handleShowModal}
+      handleCloseModal={handleCloseModal}
     />
   );
 };

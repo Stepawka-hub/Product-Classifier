@@ -1,7 +1,6 @@
-import { TProduct } from '@utils/types';
+import { TProduct } from "@utils/types";
+import { ModalHandlers } from "../types/types";
 
-export type ProductsPageUIProps = {
-  headers: string[];
+export type ProductsPageUIProps = ModalHandlers & {
   products: TProduct[];
-  addProduct: () => void;
 };

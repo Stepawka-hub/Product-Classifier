@@ -1,26 +1,24 @@
-import { Button } from "@components/common/buttons";
-import { BasePage } from "@pages";
-import { FC } from "react";
-import { CategoriesPageUIProps } from "./type";
+import { AddCategoryForm } from '@components/forms';
+import { TablePage } from "@pages";
 import { TCategory } from "@utils/types";
-import { Table } from "@components/table";
+import { FC } from 'react';
+import { CategoriesPageUIProps } from './type';
+import { categoriesHeaders } from '@utils/constants';
 
 export const CategoriesPageUI: FC<CategoriesPageUIProps> = ({
-  headers,
   categories,
-  addCategory,
+  showModal,
+  handleShowModal,
+  handleCloseModal,
 }) => (
-  <BasePage title="Категории">
-    <div className="content">
-      <Table<TCategory> headers={headers} elements={categories} />
-      <div>
-        <Button
-          type="plus"
-          children="Добавить категорию"
-          className="actionButton"
-          onClick={addCategory}
-        />
-      </div>
-    </div>
-  </BasePage>
+  <TablePage<TCategory>
+    title="Категории"
+    headers={categoriesHeaders}
+    data={categories}
+    addButtonLabel="Добавить категорию"
+    renderModal={<AddCategoryForm onClose={handleCloseModal} />}
+    isModalOpen={showModal}
+    onOpenModal={handleShowModal}
+    onCloseModal={handleCloseModal}
+  />
 );
