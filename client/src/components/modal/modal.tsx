@@ -1,20 +1,32 @@
-import { FC, useEffect } from "react";
-import { ModalProps } from "./type";
 import { ModalUI } from "@ui/modal";
+import { FC, MouseEventHandler, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { ModalProps } from "./type";
 
-export const Modal: FC<ModalProps> = ({ children, delay, onClose }) => {
+export const Modal: FC<ModalProps> = ({ children, onClose }) => {
   const modalRoot = document.getElementById("root");
 
   useEffect(() => {
-    if (delay === undefined) return;
-    const timerId = setTimeout(onClose, delay);
+    document.addEventListener("keydown", closeByEsc);
+    return () => document.removeEventListener("keydown", closeByEsc);
+  }, []);
 
-    return () => clearTimeout(timerId);
-  }, [delay, onClose]);
+  const closeByEsc = (evt: KeyboardEvent) => {
+    if (evt.key === "Escape") {
+      onClose();
+    }
+  };
+
+  const handleOverlayClick: MouseEventHandler = (evt) => {
+    if (evt.target === evt.currentTarget) {
+      onClose();
+    }
+  };
 
   return createPortal(
-    <ModalUI onClose={onClose}>{children}</ModalUI>,
+    <ModalUI onOverlayClick={handleOverlayClick} onClose={onClose}>
+      {children}
+    </ModalUI>,
     modalRoot!
   );
 };
