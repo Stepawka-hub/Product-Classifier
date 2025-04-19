@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
 import { TUnit } from "@utils/types";
+import { TPaginatedResponse } from "@utils/api/types/types";
 
 const initialState: TInitialUnitState = {
   units: [],
@@ -9,7 +10,7 @@ const initialState: TInitialUnitState = {
   isAdding: false,
   pagination: {
     totalCount: 1,
-    pageSize: 15,
+    pageSize: 10,
     currentPage: 1,
   },
 };
@@ -38,9 +39,10 @@ const unitsSlice = createSlice({
       })
       .addCase(
         getAllUnitsAsync.fulfilled,
-        (state, { payload }: PayloadAction<TUnit[]>) => {
+        (state, { payload }: PayloadAction<TPaginatedResponse<TUnit>>) => {
           state.isLoading = false;
-          state.units = payload;
+          state.units = payload.items;
+          state.pagination.totalCount = payload.total;
         }
       )
       .addCase(getAllUnitsAsync.rejected, (state) => {

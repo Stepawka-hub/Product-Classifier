@@ -2,13 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { TCreateProductData, TProduct } from "@utils/types";
 import { addToast } from "@slices/toasts";
 import { api } from '@api';
-import { PaginationParams } from '@utils/api/types/types';
+import { PaginationParams, TPaginatedResponse } from '@utils/api/types/types';
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
 
 export const getAllProductsAsync = createAsyncThunk<
-  TProduct[],
+  TPaginatedResponse<TProduct>,
   PaginationParams
 >(
   GET_PRODUCTS,

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialCategoryState } from "./types/types";
 import { addCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { TCategory } from "@utils/types";
+import { TPaginatedResponse } from "@utils/api/types/types";
 
 const initialState: TInitialCategoryState = {
   categories: [],
@@ -9,7 +10,7 @@ const initialState: TInitialCategoryState = {
   isAdding: false,
   pagination: {
     totalCount: 1,
-    pageSize: 15,
+    pageSize: 10,
     currentPage: 1,
   },
 };
@@ -38,9 +39,10 @@ const categoriesSlice = createSlice({
       })
       .addCase(
         getAllCategoriesAsync.fulfilled,
-        (state, { payload }: PayloadAction<TCategory[]>) => {
+        (state, { payload }: PayloadAction<TPaginatedResponse<TCategory>>) => {
           state.isLoading = false;
-          state.categories = payload;
+          state.categories = payload.items;
+          state.pagination.totalCount = payload.total;
         }
       )
       .addCase(getAllCategoriesAsync.rejected, (state) => {

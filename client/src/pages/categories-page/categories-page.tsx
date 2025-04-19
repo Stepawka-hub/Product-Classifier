@@ -18,15 +18,16 @@ export const CategoriesPage = () => {
   const categories = useSelector(getCategoriesSelector);
   const pagination = useSelector(getPaginationSelector);
   const isLoading = useSelector(getIsLoadingSelector);
+  const { currentPage, pageSize } = pagination;
 
   useEffect(() => {
     dispatch(
       getAllCategoriesAsync({
-        page: pagination.currentPage,
-        limit: pagination.pageSize,
+        page: currentPage,
+        limit: pageSize,
       })
     );
-  }, []);
+  }, [currentPage, pageSize]);
 
   const setPageNumber = (page: number) => {
     dispatch(setCurrentPage(page));
