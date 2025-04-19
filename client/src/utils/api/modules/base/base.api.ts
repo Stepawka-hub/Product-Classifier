@@ -3,7 +3,6 @@ export class BaseApi {
 
   constructor(baseUrl: string, baseEndpoint: string = "") {
     this.baseUrl = baseEndpoint ? `${baseUrl}/${baseEndpoint}` : baseUrl;
-    console.log(this.baseUrl);
   }
 
   protected async get<T>(endpoint: string = ""): Promise<T> {

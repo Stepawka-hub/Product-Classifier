@@ -1,20 +1,36 @@
-import { AddUnitFormUI } from "@ui/forms";
-import { FC } from "react";
-import { AddFormProps } from "../types/types";
-import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch } from "@store";
+import { useDispatch, useSelector } from "@store";
 import { addUnitAsync } from "@thunks/units";
+import { AddUnitFormUI } from "@ui/forms";
+import { ChangeEvent, FC, useState } from "react";
+import { AddFormProps } from "../types/types";
+import { getIsAddingSeletor } from "@slices/units";
 
 export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
   const dispatch = useDispatch();
-  const fakeData = {
-    name: "Test" + nanoid(),
+  const isAdding = useSelector(getIsAddingSeletor);
+  const [unitName, setUnitName] = useState("");
+
+  const onChangeUnitName = (evt: ChangeEvent<HTMLInputElement>) => {
+    setUnitName(evt.target.value);
   };
 
   const handleSubmit = () => {
-    dispatch(addUnitAsync(fakeData));
+    dispatch(
+      addUnitAsync({
+        name: unitName,
+      })
+    );
+    setUnitName('');
     onClose();
   };
 
-  return <AddUnitFormUI onSubmit={handleSubmit} onClose={onClose} />;
+  return (
+    <AddUnitFormUI
+      isAdding={isAdding}
+      unitName={unitName}
+      onChangeUnitName={onChangeUnitName}
+      onSubmit={handleSubmit}
+      onClose={onClose}
+    />
+  );
 };

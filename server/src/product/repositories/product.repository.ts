@@ -3,6 +3,7 @@ import { Product } from '../entities/product.entity';
 import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { ProductDto } from '../dto/product.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -10,7 +11,7 @@ export class ProductRepository extends Repository<Product> {
     super(Product, dataSource.createEntityManager());
   }
 
-  async createWithAddRow(dto: CreateProductDto): Promise<Product> {
+  async createWithAddRow(dto: CreateProductDto): Promise<ProductDto> {
     const query = `
       SELECT * FROM AddRow(
         'product',
@@ -24,6 +25,20 @@ export class ProductRepository extends Repository<Product> {
       dto.unitId,
     ])) as Product[];
 
-    return result[0];
+    const createdProduct = result[0];
+    if (createdProduct?.id === null) {
+      throw new Error('Product creation failed');
+    }
+
+    const productWithRelations = await this.findOne({
+      where: { id: createdProduct.id },
+      relations: ['unit', 'parent'],
+    });
+
+    if (!productWithRelations) {
+      throw new Error('Product not found after creation');
+    }
+
+    return new ProductDto(productWithRelations);
   }
 }

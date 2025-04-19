@@ -1,9 +1,18 @@
 import { BaseAddForm } from "@components/forms";
 import { FC } from "react";
-import { AddFormUIProps } from '../types/types';
+import { AddUnitFormUIProps } from "./type";
 
-export const AddUnitFormUI: FC<AddFormUIProps> = (props) => (
+export const AddUnitFormUI: FC<AddUnitFormUIProps> = ({
+  unitName,
+  onChangeUnitName,
+  ...props
+}) => (
   <BaseAddForm {...props}>
-    <input placeholder="Название ЕИ" />
+    <input
+      value={unitName}
+      onChange={onChangeUnitName}
+      placeholder="Название ЕИ"
+      required
+    />
   </BaseAddForm>
 );

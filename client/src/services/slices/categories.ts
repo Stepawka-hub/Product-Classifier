@@ -6,6 +6,7 @@ import { TCategory } from "@utils/types";
 const initialState: TInitialCategoryState = {
   categories: [],
   isLoading: false,
+  isAdding: false,
 };
 
 const categoriesSlice = createSlice({
@@ -19,6 +20,7 @@ const categoriesSlice = createSlice({
   selectors: {
     getCategoriesSelector: (state) => state.categories,
     getIsLoadingSelector: (state) => state.isLoading,
+    getIsAddingSeletor: (state) => state.isAdding,
   },
   extraReducers: (builder) => {
     builder
@@ -39,6 +41,9 @@ const categoriesSlice = createSlice({
 });
 
 export const reducer = categoriesSlice.reducer;
-export const { getCategoriesSelector, getIsLoadingSelector } =
-  categoriesSlice.selectors;
+export const {
+  getCategoriesSelector,
+  getIsLoadingSelector,
+  getIsAddingSeletor,
+} = categoriesSlice.selectors;
 export const { setCategories } = categoriesSlice.actions;

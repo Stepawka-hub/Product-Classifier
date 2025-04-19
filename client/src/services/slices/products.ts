@@ -6,7 +6,7 @@ import { TProduct } from "@utils/types";
 const initialState: TInitialProductState = {
   products: [],
   isLoading: false,
-  isAdding: false
+  isAdding: false,
 };
 
 const productsSlice = createSlice({
@@ -20,6 +20,7 @@ const productsSlice = createSlice({
   selectors: {
     getProductsSelector: (state) => state.products,
     getIsLoadingSelector: (state) => state.isLoading,
+    getIsAddingSeletor: (state) => state.isAdding,
   },
   extraReducers: (builder) => {
     builder
@@ -54,6 +55,6 @@ const productsSlice = createSlice({
 });
 
 export const reducer = productsSlice.reducer;
-export const { getProductsSelector, getIsLoadingSelector } =
+export const { getProductsSelector, getIsLoadingSelector, getIsAddingSeletor } =
   productsSlice.selectors;
 export const { setProducts } = productsSlice.actions;

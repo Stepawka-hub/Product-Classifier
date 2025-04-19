@@ -1,24 +1,46 @@
-import { AddProductFormUI } from "@ui/forms";
-import { FC } from "react";
-import { AddFormProps } from "../types/types";
-import { nanoid } from "@reduxjs/toolkit";
+import { getIsAddingSeletor } from "@slices/products";
+import { useDispatch, useSelector } from "@store";
 import { addProductAsync } from "@thunks/products";
-import { useDispatch } from '@store';
+import { AddProductFormUI } from "@ui/forms";
+import { ChangeEventHandler, FC, useState } from "react";
+import { AddFormProps } from "../types/types";
 
 export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
   const dispatch = useDispatch();
-  const fakeData = {
-    name: "Test Product" + nanoid(),
-    unitId: 2,
-    parentId: 2,
-  }
+  const isAdding = useSelector(getIsAddingSeletor);
+  const initialState = {
+    name: "",
+    parentId: "",
+    unitId: "",
+  };
+  const [formData, setFormData] = useState(initialState);
+
+  const handleChange =
+    (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
+    };
 
   const handleSubmit = () => {
     dispatch(
-      addProductAsync(fakeData)
+      addProductAsync({
+        name: formData.name,
+        parentId: Number(formData.parentId),
+        unitId: Number(formData.unitId),
+      })
     );
+
+    setFormData(initialState);
     onClose();
   };
 
-  return <AddProductFormUI onSubmit={handleSubmit} onClose={onClose} />;
+  return (
+    <AddProductFormUI
+      isAdding={isAdding}
+      formData={formData}
+      onChange={handleChange}
+      onSubmit={handleSubmit}
+      onClose={onClose}
+    />
+  );
 };

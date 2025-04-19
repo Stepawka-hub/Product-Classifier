@@ -13,7 +13,6 @@ export const Sidebar: FC = () => {
   const isClearingData = useSelector(getIsClearingDataSelector);
 
   const fillData = () => {
-    console.log('Fill');
     dispatch(fillDataAsync());
   };
 

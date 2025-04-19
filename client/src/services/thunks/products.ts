@@ -18,6 +18,7 @@ export const addProductAsync = createAsyncThunk<TProduct, TCreateProductData>(
   ADD_PRODUCT,
   async (createProductData, { dispatch }) => {
     const res = await api.products.create(createProductData);
+
     dispatch(
       addToast({
         message: "Продукт успешно добавлен!",

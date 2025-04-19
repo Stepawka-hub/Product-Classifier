@@ -15,6 +15,7 @@ export type TInitialProductState = {
 export type TInitialCategoryState = {
   categories: TCategory[];
   isLoading: boolean;
+  isAdding: boolean;
 };
 
 export type TInitialUnitState = {
