@@ -1,5 +1,5 @@
 import s from "@ui/table/table.module.css";
-import { TableCell } from "../table-cell";
+import { TableCell } from "@components/table-elements";
 import { Button } from "@components/common/buttons";
 import { TableRowProps } from "./type";
 

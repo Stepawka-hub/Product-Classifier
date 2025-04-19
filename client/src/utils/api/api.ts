@@ -1,5 +1,5 @@
 import { TAppData, TCategory, TProduct, TUnit } from '@utils/types';
-import { TServerResponse } from './types/types';
+import { TCreateProductData, TCreateUnitData, TServerResponse } from './types/types';
 
 const URL = import.meta.env.VITE_API_URL;
 export const SUCCESS_CODE = 0;
@@ -43,7 +43,7 @@ class Api {
       throw new Error('Произошла ошибка при заполнении данных!');
     }
 
-    return res.json();
+    return await res.json();
   }
 
   clearData = async (): Promise<TServerResponse> => {
@@ -55,7 +55,47 @@ class Api {
       throw new Error('Произошла ошибка при очистке данных!');
     }
 
-    return res.json();
+    return await res.json();
+  }
+
+  addUnit = async (createUnitData: TCreateUnitData): Promise<TUnit> => {
+    const res = await fetch(`${this.URL}/units`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(createUnitData)
+    });
+
+    if (!res.ok) {
+      throw new Error('Произошла ошибка при добавлении ЕИ!');
+    }
+
+    const result = await res.json();
+    console.log(result);
+
+    return result;
+  }
+
+  addProduct = async (createProductData: TCreateProductData): Promise<TUnit> => {
+    const res = await fetch(`${this.URL}/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(createProductData)
+    });
+
+    if (!res.ok) {
+      throw new Error('Произошла ошибка при добавлении изделия!');
+    }
+
+    const result = await res.json();
+    console.log(result);
+
+    return result;
   }
 }
 
