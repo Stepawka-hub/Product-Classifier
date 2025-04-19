@@ -12,11 +12,11 @@ export class UnitRepository extends Repository<Unit> {
 
   async createWithAddRow(dto: CreateUnitDto): Promise<Unit> {
     const query = `
-      SELECT * FROM AddRow(
-        'product',
-        ARRAY['name', 'parentid', 'umid'],
-        ARRAY[quote_literal($1), $2::text, $3::text]
-      ) AS t(id INTEGER, name VARCHAR, umid INTEGER, parentid INTEGER)`;
+    SELECT * FROM AddRow(
+      'unitmeasurement',
+      ARRAY['name'],
+      ARRAY[quote_literal($1)]
+    ) AS t(ID INTEGER, name VARCHAR)`;
 
     const result = (await this.query(query, [dto.name])) as Unit[];
 
