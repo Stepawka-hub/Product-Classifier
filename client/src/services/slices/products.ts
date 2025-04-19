@@ -7,6 +7,11 @@ const initialState: TInitialProductState = {
   products: [],
   isLoading: false,
   isAdding: false,
+  pagination: {
+    totalCount: 1,
+    pageSize: 15,
+    currentPage: 1,
+  },
 };
 
 const productsSlice = createSlice({
@@ -16,11 +21,15 @@ const productsSlice = createSlice({
     setProducts: (state, { payload }: PayloadAction<TProduct[]>) => {
       state.products = payload;
     },
+    setCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.currentPage = payload;
+    },
   },
   selectors: {
     getProductsSelector: (state) => state.products,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSeletor: (state) => state.isAdding,
+    getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
     builder
@@ -55,6 +64,10 @@ const productsSlice = createSlice({
 });
 
 export const reducer = productsSlice.reducer;
-export const { getProductsSelector, getIsLoadingSelector, getIsAddingSeletor } =
-  productsSlice.selectors;
-export const { setProducts } = productsSlice.actions;
+export const {
+  getProductsSelector,
+  getIsLoadingSelector,
+  getIsAddingSeletor,
+  getPaginationSelector,
+} = productsSlice.selectors;
+export const { setProducts, setCurrentPage } = productsSlice.actions;

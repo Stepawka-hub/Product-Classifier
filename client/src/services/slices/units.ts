@@ -7,6 +7,11 @@ const initialState: TInitialUnitState = {
   units: [],
   isLoading: false,
   isAdding: false,
+  pagination: {
+    totalCount: 1,
+    pageSize: 15,
+    currentPage: 1,
+  },
 };
 
 const unitsSlice = createSlice({
@@ -16,11 +21,15 @@ const unitsSlice = createSlice({
     setUnits: (state, { payload }: PayloadAction<TUnit[]>) => {
       state.units = payload;
     },
+    setCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.currentPage = payload;
+    },
   },
   selectors: {
     getUnitsSelector: (state) => state.units,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSeletor: (state) => state.isAdding,
+    getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
     builder
@@ -55,6 +64,10 @@ const unitsSlice = createSlice({
 });
 
 export const reducer = unitsSlice.reducer;
-export const { getUnitsSelector, getIsLoadingSelector, getIsAddingSeletor } =
-  unitsSlice.selectors;
-export const { setUnits } = unitsSlice.actions;
+export const {
+  getUnitsSelector,
+  getIsLoadingSelector,
+  getIsAddingSeletor,
+  getPaginationSelector,
+} = unitsSlice.selectors;
+export const { setUnits, setCurrentPage } = unitsSlice.actions;

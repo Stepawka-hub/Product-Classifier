@@ -8,6 +8,7 @@ import { categoriesHeaders } from '@utils/constants';
 export const CategoriesPageUI: FC<CategoriesPageUIProps> = ({
   categories,
   showModal,
+  pagination,
   handleShowModal,
   handleCloseModal,
 }) => (
@@ -16,6 +17,7 @@ export const CategoriesPageUI: FC<CategoriesPageUIProps> = ({
     headers={categoriesHeaders}
     data={categories}
     addButtonLabel="Добавить категорию"
+    pagination={pagination}
     renderModal={<AddCategoryForm onClose={handleCloseModal} />}
     isModalOpen={showModal}
     onOpenModal={handleShowModal}

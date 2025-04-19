@@ -1,4 +1,4 @@
-import { TCategory, TProduct, TToast, TUnit } from '@utils/types';
+import { TCategory, TProduct, TToast, TUnit } from "@utils/types";
 
 export type TInitialAppState = {
   isInitialized: boolean;
@@ -6,22 +6,26 @@ export type TInitialAppState = {
   isClearingData: boolean;
 };
 
-export type TInitialProductState = {
+export type TCommonInitialState = {
+  isLoading: boolean;
+  isAdding: boolean;
+  pagination: {
+    totalCount: number;
+    pageSize: number;
+    currentPage: number;
+  };
+};
+
+export type TInitialProductState = TCommonInitialState & {
   products: TProduct[];
-  isLoading: boolean;
-  isAdding: boolean;
 };
 
-export type TInitialCategoryState = {
+export type TInitialCategoryState = TCommonInitialState & {
   categories: TCategory[];
-  isLoading: boolean;
-  isAdding: boolean;
 };
 
-export type TInitialUnitState = {
+export type TInitialUnitState = TCommonInitialState & {
   units: TUnit[];
-  isLoading: boolean;
-  isAdding: boolean;
 };
 
 export type TToastsState = {

@@ -8,6 +8,7 @@ import { ProductsPageUIProps } from "./type";
 export const ProductsPageUI: FC<ProductsPageUIProps> = ({
   products,
   showModal,
+  pagination,
   handleShowModal,
   handleCloseModal,
 }) => (
@@ -16,6 +17,7 @@ export const ProductsPageUI: FC<ProductsPageUIProps> = ({
     headers={productsHeaders}
     data={products}
     addButtonLabel="Добавить изделие"
+    pagination={pagination}
     renderModal={<AddProductForm onClose={handleCloseModal} />}
     isModalOpen={showModal}
     onOpenModal={handleShowModal}

@@ -8,6 +8,7 @@ import { UnitsPageUIProps } from "./type";
 export const UnitsPageUI: FC<UnitsPageUIProps> = ({
   units,
   showModal,
+  pagination,
   handleShowModal,
   handleCloseModal,
 }) => (
@@ -16,6 +17,7 @@ export const UnitsPageUI: FC<UnitsPageUIProps> = ({
     headers={unitHeaders}
     data={units}
     addButtonLabel="Добавить ЕИ"
+    pagination={pagination}
     renderModal={<AddUnitForm onClose={handleCloseModal} />}
     isModalOpen={showModal}
     onOpenModal={handleShowModal}

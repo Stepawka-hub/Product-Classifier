@@ -7,6 +7,11 @@ const initialState: TInitialCategoryState = {
   categories: [],
   isLoading: false,
   isAdding: false,
+  pagination: {
+    totalCount: 1,
+    pageSize: 15,
+    currentPage: 1,
+  },
 };
 
 const categoriesSlice = createSlice({
@@ -16,11 +21,15 @@ const categoriesSlice = createSlice({
     setCategories: (state, { payload }: PayloadAction<TCategory[]>) => {
       state.categories = payload;
     },
+    setCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.currentPage = payload;
+    },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSeletor: (state) => state.isAdding,
+    getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
     builder
@@ -59,5 +68,6 @@ export const {
   getCategoriesSelector,
   getIsLoadingSelector,
   getIsAddingSeletor,
+  getPaginationSelector,
 } = categoriesSlice.selectors;
-export const { setCategories } = categoriesSlice.actions;
+export const { setCategories, setCurrentPage } = categoriesSlice.actions;

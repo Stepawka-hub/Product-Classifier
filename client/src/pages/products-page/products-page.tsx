@@ -1,20 +1,36 @@
 import { Loader } from "@components/common/loader";
 import { useModal } from "@hooks/useModal";
-import { getIsLoadingSelector, getProductsSelector } from "@slices/products";
+import {
+  getIsLoadingSelector,
+  getPaginationSelector,
+  getProductsSelector,
+  setCurrentPage,
+} from "@slices/products";
 import { useDispatch, useSelector } from "@store";
-import { getAllProductsAsync } from '@thunks/products';
+import { getAllProductsAsync } from "@thunks/products";
 import { ProductsPageUI } from "@ui/pages";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export const ProductsPage = () => {
   const dispatch = useDispatch();
-  const products = useSelector(getProductsSelector);
-  const isLoading = useSelector(getIsLoadingSelector);
   const { showModal, handleShowModal, handleCloseModal } = useModal();
 
+  const products = useSelector(getProductsSelector);
+  const pagination = useSelector(getPaginationSelector);
+  const isLoading = useSelector(getIsLoadingSelector);
+
   useEffect(() => {
-    dispatch(getAllProductsAsync());
+    dispatch(
+      getAllProductsAsync({
+        page: pagination.currentPage,
+        limit: pagination.pageSize,
+      })
+    );
   }, []);
+
+  const setPageNumber = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
 
   if (isLoading) return <Loader />;
 
@@ -22,6 +38,7 @@ export const ProductsPage = () => {
     <ProductsPageUI
       products={products}
       showModal={showModal}
+      pagination={{ ...pagination, setCurrentPage: setPageNumber }}
       handleShowModal={handleShowModal}
       handleCloseModal={handleCloseModal}
     />

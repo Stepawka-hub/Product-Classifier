@@ -12,13 +12,14 @@ export const TablePageUI = <T extends object>({
   addButtonLabel,
   renderModal,
   isModalOpen,
+  pagination,
   onOpenModal,
   onCloseModal,
 }: TablePageUIProps<T>) => (
   <>
     <BasePage title={title}>
       <div className={s.content}>
-        <Table<T> headers={headers} data={data} />
+        <Table<T> headers={headers} data={data} pagination={pagination} />
         <div>
           <Button
             type="plus"

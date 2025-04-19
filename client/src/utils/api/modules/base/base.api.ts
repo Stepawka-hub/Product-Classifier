@@ -5,8 +5,21 @@ export class BaseApi {
     this.baseUrl = baseEndpoint ? `${baseUrl}/${baseEndpoint}` : baseUrl;
   }
 
-  protected async get<T>(endpoint: string = ""): Promise<T> {
-    const url = `${this.baseUrl}/${endpoint}`;
+  protected async get<T>(
+    endpoint: string = "",
+    params?: Record<string, string | number>
+  ): Promise<T> {
+    const url = new URL(`${this.baseUrl}/${endpoint}`);
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          url.searchParams.append(key, String(value));
+        }
+      });
+    }
+
+    console.log(url);
 
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Ошибка при запросе ${endpoint}`);

@@ -3,6 +3,8 @@ import { useModal } from "@hooks/useModal";
 import {
   getCategoriesSelector,
   getIsLoadingSelector,
+  getPaginationSelector,
+  setCurrentPage,
 } from "@slices/categories";
 import { useDispatch, useSelector } from "@store";
 import { getAllCategoriesAsync } from "@thunks/categories";
@@ -11,13 +13,24 @@ import { useEffect } from "react";
 
 export const CategoriesPage = () => {
   const dispatch = useDispatch();
-  const categories = useSelector(getCategoriesSelector);
-  const isLoading = useSelector(getIsLoadingSelector);
   const { showModal, handleShowModal, handleCloseModal } = useModal();
 
+  const categories = useSelector(getCategoriesSelector);
+  const pagination = useSelector(getPaginationSelector);
+  const isLoading = useSelector(getIsLoadingSelector);
+
   useEffect(() => {
-    dispatch(getAllCategoriesAsync());
+    dispatch(
+      getAllCategoriesAsync({
+        page: pagination.currentPage,
+        limit: pagination.pageSize,
+      })
+    );
   }, []);
+
+  const setPageNumber = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
 
   if (isLoading) return <Loader />;
 
@@ -25,6 +38,7 @@ export const CategoriesPage = () => {
     <CategoriesPageUI
       categories={categories}
       showModal={showModal}
+      pagination={{ ...pagination, setCurrentPage: setPageNumber }}
       handleShowModal={handleShowModal}
       handleCloseModal={handleCloseModal}
     />
