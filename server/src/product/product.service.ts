@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ProductRepository } from 'src/product/repositories/product.repository';
 
 @Injectable()
 export class ProductService {
-  constructor(
-    @InjectRepository(Product)
-    private productRepository: Repository<Product>,
-  ) {}
+  constructor(private productRepository: ProductRepository) {}
 
   async findAll(): Promise<ProductDto[]> {
     const products = await this.productRepository.find({
@@ -20,34 +16,13 @@ export class ProductService {
     return products.map((p) => new ProductDto(p));
   }
 
-  async createProduct(createProductDto: CreateProductDto): Promise<ProductDto> {
-    const query = `
-    SELECT * FROM AddRow(
-      'product',
-      ARRAY['name', 'parentid', 'umid'], 
-      ARRAY[quote_literal($1), $2::text, $3::text]
-    ) AS t(id INTEGER, name VARCHAR, umid INTEGER, parentid INTEGER)`;
+  async createProduct(dto: CreateProductDto): Promise<Product> {
+    const product = await this.productRepository.createWithAddRow(dto);
 
-    const result = (await this.productRepository.query(query, [
-      createProductDto.name,
-      createProductDto.parentId,
-      createProductDto.unitId,
-    ])) as Product[];
-
-    const product = result[0];
-    if (product.id === null) {
-      throw new Error('Error adding product');
+    if (!product?.id) {
+      throw new Error('Product creation failed');
     }
 
-    const fullProduct = await this.productRepository.findOne({
-      where: { id: product.id },
-      relations: ['unit', 'parent'],
-    });
-
-    if (!fullProduct) {
-      throw new Error('Product not found after creation');
-    }
-
-    return new ProductDto(fullProduct);
+    return product;
   }
 }

@@ -8,7 +8,7 @@ export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
   const handleSubmit = () => {
     api.addProduct({
       name: 'Test Product' + nanoid(),
-      unitId: 8,
+      unitId: 9,
       parentId: 2 
     });
     onClose();
