@@ -11,8 +11,8 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
-  // @Post()
-  // createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-  //   return this.categoryService.createCategory(createCategoryDto);
-  // }
+  @Post()
+  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoryService.createCategory(createCategoryDto);
+  }
 }

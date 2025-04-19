@@ -31,6 +31,13 @@ export type TCreateUnitData = Pick<TUnit, 'name'>;
 
 export type TCreateProductData = {
   name: string;
-  unitId: number;
   parentId: number;
+  unitId: number;
 };
+
+export type TCreateCategoryData = {
+  name: string;
+  parentName: string;
+  unitName: string;
+};
+
