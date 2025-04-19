@@ -1,13 +1,29 @@
-import { getUnitsSelector } from '@slices/units';
-import { useSelector } from '@store';
+import { Loader } from "@components/common/loader";
+import { useModal } from "@hooks/useModal";
+import { getIsLoadingSelector, getUnitsSelector } from "@slices/units";
+import { useDispatch, useSelector } from "@store";
+import { getAllUnitsAsync } from "@thunks/units";
 import { UnitsPageUI } from "@ui-pages";
+import { useEffect } from "react";
 
 export const UnitsPage = () => {
+  const dispatch = useDispatch();
   const units = useSelector(getUnitsSelector);
-  const headers = [
-    "ID Единицы измерения",
-    "Название"
-  ];
-  const addUnit = () => alert("Добавление ЕИ");
-  return <UnitsPageUI headers={headers} units={units} addUnit={addUnit} />;
+  const isLoading = useSelector(getIsLoadingSelector);
+  const { showModal, handleShowModal, handleCloseModal } = useModal();
+
+  useEffect(() => {
+    dispatch(getAllUnitsAsync());
+  }, []);
+
+  if (isLoading) return <Loader />;
+
+  return (
+    <UnitsPageUI
+      units={units}
+      showModal={showModal}
+      handleShowModal={handleShowModal}
+      handleCloseModal={handleCloseModal}
+    />
+  );
 };

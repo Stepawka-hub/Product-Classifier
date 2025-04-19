@@ -1,0 +1,1 @@
+export { AddProductFormUI } from './add-product-form';

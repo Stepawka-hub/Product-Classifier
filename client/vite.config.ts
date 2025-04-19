@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@images": path.resolve(__dirname, "src/assets/images"),
+      "@hooks": path.resolve(__dirname, "src/hooks"),
       "@ui": path.resolve(__dirname, "src/components/ui"),
       "@ui-pages": path.resolve(__dirname, "src/components/ui/pages"),
       "@components": path.resolve(__dirname, "src/components"),
@@ -14,9 +15,9 @@ export default defineConfig({
       "@slices": path.resolve(__dirname, "src/services/slices"),
       "@selectors": path.resolve(__dirname, "src/services/selectors"),
       "@thunks": path.resolve(__dirname, "src/services/thunks"),
+      "@api": path.resolve(__dirname, "src/utils/api/api.ts"),
       "@utils": path.resolve(__dirname, "src/utils"),
       "@store": path.resolve(__dirname, "src/services/store/store.ts"),
-      "@api": path.resolve(__dirname, "src/utils/api/api.ts"),
     }
   },
   plugins: [react()],

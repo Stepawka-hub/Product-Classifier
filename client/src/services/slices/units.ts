@@ -1,19 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAllUnitsAsync } from "@thunks/units";
+import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
 import { TUnit } from "@utils/types";
 
 const initialState: TInitialUnitState = {
   units: [],
   isLoading: false,
+  isAdding: false,
 };
 
 const unitsSlice = createSlice({
   name: "units",
   initialState,
-  reducers: {},
+  reducers: {
+    setUnits: (state, { payload }: PayloadAction<TUnit[]>) => {
+      state.units = payload;
+    },
+  },
   selectors: {
     getUnitsSelector: (state) => state.units,
+    getIsLoadingSelector: (state) => state.isLoading,
+    getIsAddingSeletor: (state) => state.isAdding,
   },
   extraReducers: (builder) => {
     builder
@@ -29,9 +36,25 @@ const unitsSlice = createSlice({
       )
       .addCase(getAllUnitsAsync.rejected, (state) => {
         state.isLoading = false;
+      })
+
+      .addCase(addUnitAsync.pending, (state) => {
+        state.isAdding = true;
+      })
+      .addCase(
+        addUnitAsync.fulfilled,
+        (state, { payload }: PayloadAction<TUnit>) => {
+          state.isAdding = false;
+          state.units = [...state.units, payload];
+        }
+      )
+      .addCase(addUnitAsync.rejected, (state) => {
+        state.isAdding = false;
       });
   },
 });
 
 export const reducer = unitsSlice.reducer;
-export const { getUnitsSelector } = unitsSlice.selectors;
+export const { getUnitsSelector, getIsLoadingSelector, getIsAddingSeletor } =
+  unitsSlice.selectors;
+export const { setUnits } = unitsSlice.actions;

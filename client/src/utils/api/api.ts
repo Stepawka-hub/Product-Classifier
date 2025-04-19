@@ -1,48 +1,22 @@
-import { TCategory, TProduct, TUnit } from '@utils/types';
+import { ProductApi } from "./modules/product.api";
+import { UnitApi } from "./modules/unit.api";
+import { CategoryApi } from "./modules/category.api";
+import { AppApi } from "./modules/app.api";
 
 const URL = import.meta.env.VITE_API_URL;
+export const SUCCESS_CODE = 0;
 
 class Api {
-  constructor(private URL: string) {};
+  public readonly products: ProductApi;
+  public readonly units: UnitApi;
+  public readonly categories: CategoryApi;
+  public readonly app: AppApi;
 
-  getProducts = async (): Promise<TProduct[]> => {
-    const res = await fetch(`${this.URL}/products`);
-    if (!res.ok) {
-      throw new Error('Произошла ошибка при получении продуктов!');
-    }
-
-    return await res.json();
-  }
-
-  getCategories = async (): Promise<TCategory[]> => {
-    const res = await fetch(`${this.URL}/categories`);
-    if (!res.ok) {
-      throw new Error('Произошла ошибка при получении категорий!');
-    }
-
-    return await res.json();
-  }
-
-  getUnits = async (): Promise<TUnit[]> => {
-    const res = await fetch(`${this.URL}/units`);
-    if (!res.ok) {
-      throw new Error('Произошла ошибка при получении единиц измерения!');
-    }
-
-    return await res.json();
-  }
-
-  fillData = async () => {
-    const res = await fetch(`${this.URL}/fill-data`, {
-      method: 'POST'
-    });
-    if (!res.ok) {
-      throw new Error('Произошла ошибка при заполнении данных!');
-    }
-
-    console.log(res.ok)
-    const result = await res.json();
-    console.log(result);
+  constructor(baseUrl: string) {
+    this.products = new ProductApi(baseUrl, "products");
+    this.units = new UnitApi(baseUrl, "units");
+    this.categories = new CategoryApi(baseUrl, "categories");
+    this.app = new AppApi(baseUrl);
   }
 }
 

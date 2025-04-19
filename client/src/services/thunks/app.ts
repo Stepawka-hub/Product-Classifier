@@ -1,25 +1,55 @@
+import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setInitializeSuccess } from "@slices/app";
-import { getAllProductsAsync } from "./products";
-import { api } from "@api";
-import { getAllCategoriesAsync } from "./categories";
-import { getAllUnitsAsync } from "./units";
+import { setCategories } from "@slices/categories";
+import { setProducts } from "@slices/products";
+import { addToast } from "@slices/toasts";
+import { setUnits } from "@slices/units";
 
 const INITIALIZE_APP = "app/initialize";
 const FILL_DATA = "app/fill-data";
+const CLEAR_DATA = "app/clear-data";
 
 export const initialize = createAsyncThunk(
   INITIALIZE_APP,
   async (_, { dispatch }) => {
-    await Promise.all([
-      dispatch(getAllProductsAsync()),
-      dispatch(getAllCategoriesAsync()),
-      dispatch(getAllUnitsAsync()),
-    ]);
     dispatch(setInitializeSuccess());
   }
 );
 
-export const fillDataAsync = createAsyncThunk(FILL_DATA, async () => {
-  api.fillData();
-});
+export const fillDataAsync = createAsyncThunk(
+  FILL_DATA,
+  async (_, { dispatch }) => {
+    const { products, categories, units } = await api.app.fillData();
+    dispatch(setProducts(products));
+    dispatch(setCategories(categories));
+    dispatch(setUnits(units));
+    dispatch(
+      addToast({
+        message: "Данные успешно заполнены!",
+        type: "success",
+        duration: 2500,
+      })
+    );
+  }
+);
+
+export const clearDataAsync = createAsyncThunk(
+  CLEAR_DATA,
+  async (_, { dispatch }) => {
+    const { resultCode } = await api.app.clearData();
+
+    if (resultCode === SUCCESS_CODE) {
+      dispatch(setProducts([]));
+      dispatch(setCategories([]));
+      dispatch(setUnits([]));
+      dispatch(
+        addToast({
+          message: "Данные успешно очищены!",
+          type: "success",
+          duration: 2500,
+        })
+      );
+    }
+  }
+);

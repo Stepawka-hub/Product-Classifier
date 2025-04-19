@@ -1,18 +1,32 @@
-import { getCategoriesSelector } from "@slices/categories";
-import { useSelector } from "@store";
+import { Loader } from "@components/common/loader";
+import { useModal } from "@hooks/useModal";
+import {
+  getCategoriesSelector,
+  getIsLoadingSelector,
+} from "@slices/categories";
+import { useDispatch, useSelector } from "@store";
+import { getAllCategoriesAsync } from "@thunks/categories";
 import { CategoriesPageUI } from "@ui/pages";
+import { useEffect } from "react";
 
 export const CategoriesPage = () => {
+  const dispatch = useDispatch();
   const categories = useSelector(getCategoriesSelector);
-  const headers = ["ID категории", "Название категории", "ID родительской категории", "ID ЕИ"];
+  const isLoading = useSelector(getIsLoadingSelector);
+  const { showModal, handleShowModal, handleCloseModal } = useModal();
 
-  const addCategory = () => alert("Добавление категории");
+  useEffect(() => {
+    dispatch(getAllCategoriesAsync());
+  }, []);
+
+  if (isLoading) return <Loader />;
 
   return (
     <CategoriesPageUI
-      headers={headers}
       categories={categories}
-      addCategory={addCategory}
+      showModal={showModal}
+      handleShowModal={handleShowModal}
+      handleCloseModal={handleCloseModal}
     />
   );
 };

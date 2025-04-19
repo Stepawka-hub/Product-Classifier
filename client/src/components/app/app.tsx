@@ -10,6 +10,7 @@ import { AppPreloader } from "@components/app-preloader";
 import { Sidebar } from "@components/sidebar/sidebar";
 import { HomePage, ProductsPage, CategoriesPage, UnitsPage } from "@pages";
 import { NotFound } from "@components/not-found";
+import { ToastList } from '@components/toast-list';
 
 export const App: FC = () => {
   const dispatch = useDispatch();
@@ -25,8 +26,6 @@ export const App: FC = () => {
 
   return (
     <div className={s.wrapper}>
-      <div></div>
-
       <div className={s.sidebar}>
         <Sidebar />
       </div>
@@ -40,6 +39,8 @@ export const App: FC = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+
+      <ToastList />
     </div>
   );
 };

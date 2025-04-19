@@ -26,16 +26,16 @@
     "baseUrl": ".",
     "paths": {
       "@images/*": ["src/assets/images/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@ui/*": ["src/components/ui/*"],
       "@ui-pages": ["src/components/ui/pages"],
       "@components/*": ["src/components/*"],
       "@pages": ["src/pages"],
       "@slices/*": ["src/services/slices/*"],
-      "@selectors/*": ["src/services/selectors/*"],
       "@thunks/*": ["src/services/thunks/*"],
+      "@api": ["src/utils/api/api.ts"],
       "@utils/*": ["src/utils/*"],
       "@store": ["src/services/store/store.ts"],
-      "@api": ["src/utils/api/api.ts"],
     }
   },
   "include": ["src"]

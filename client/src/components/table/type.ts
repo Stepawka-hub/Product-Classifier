@@ -1,4 +1,4 @@
 export type TableProps<T> = {
-  headers: string[];
-  elements: T[];
+  headers: Record<keyof T, string>;
+  data: T[];
 }

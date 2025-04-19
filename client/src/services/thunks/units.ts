@@ -1,12 +1,25 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { api } from '@utils/api/api';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { addToast } from '@slices/toasts';
+import { api } from "@api";
+import { TCreateUnitData, TUnit } from "@utils/types";
 
 const GET_ALL_UNITS = "units/getAll";
+const ADD_UNIT = "units/add";
 
-export const getAllUnitsAsync = createAsyncThunk(
-  GET_ALL_UNITS,
-  async () => {
-    const res = await api.getUnits();
+export const getAllUnitsAsync = createAsyncThunk(GET_ALL_UNITS, async () => {
+  const res = await api.units.getAll();
+  return res;
+});
+
+export const addUnitAsync = createAsyncThunk<TUnit, TCreateUnitData>(
+  ADD_UNIT,
+  async (createUnitData, { dispatch }) => {
+    const res = await api.units.create(createUnitData);
+    dispatch(addToast({
+      message: 'ЕИ успешно добавлена!',
+      type: 'success',
+      duration: 2000
+    }))
     return res;
   }
 );

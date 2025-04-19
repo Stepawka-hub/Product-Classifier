@@ -1,22 +1,24 @@
-import { BasePage } from "@pages";
-import { FC } from 'react';
-import { Button } from '@components/common/buttons';
-import { UnitsPageUIProps } from './type';
-import { TUnit } from '@utils/types';
-import { Table } from '@components/table';
+import { AddUnitForm } from "@components/forms";
+import { TablePage } from "@pages";
+import { unitHeaders } from "@utils/constants";
+import { TUnit } from "@utils/types";
+import { FC } from "react";
+import { UnitsPageUIProps } from "./type";
 
-export const UnitsPageUI: FC<UnitsPageUIProps> = ({ headers, units, addUnit }) => (
-  <BasePage title="Изделия">
-    <div className='content'>
-      <Table<TUnit> headers={headers} elements={units} />
-      <div>
-        <Button
-          type='plus'
-          children="Добавить ЕИ"
-          className='actionButton'
-          onClick={addUnit}
-        />
-      </div>
-    </div>
-  </BasePage>
+export const UnitsPageUI: FC<UnitsPageUIProps> = ({
+  units,
+  showModal,
+  handleShowModal,
+  handleCloseModal,
+}) => (
+  <TablePage<TUnit>
+    title="Единицы измерения"
+    headers={unitHeaders}
+    data={units}
+    addButtonLabel="Добавить ЕИ"
+    renderModal={<AddUnitForm onClose={handleCloseModal} />}
+    isModalOpen={showModal}
+    onOpenModal={handleShowModal}
+    onCloseModal={handleCloseModal}
+  />
 );
