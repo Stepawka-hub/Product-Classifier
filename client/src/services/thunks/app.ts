@@ -1,4 +1,4 @@
-import { api, SUCCESS_CODE } from "@utils/api/base.api";
+import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setInitializeSuccess } from "@slices/app";
 import { setCategories } from "@slices/categories";
@@ -20,7 +20,7 @@ export const initialize = createAsyncThunk(
 export const fillDataAsync = createAsyncThunk(
   FILL_DATA,
   async (_, { dispatch }) => {
-    const { products, categories, units } = await api.fillData();
+    const { products, categories, units } = await api.app.fillData();
     dispatch(setProducts(products));
     dispatch(setCategories(categories));
     dispatch(setUnits(units));
@@ -37,7 +37,7 @@ export const fillDataAsync = createAsyncThunk(
 export const clearDataAsync = createAsyncThunk(
   CLEAR_DATA,
   async (_, { dispatch }) => {
-    const { resultCode } = await api.clearData();
+    const { resultCode } = await api.app.clearData();
 
     if (resultCode === SUCCESS_CODE) {
       dispatch(setProducts([]));
