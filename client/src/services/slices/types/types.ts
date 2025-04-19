@@ -9,6 +9,7 @@ export type TInitialAppState = {
 export type TInitialProductState = {
   products: TProduct[];
   isLoading: boolean;
+  isAdding: boolean;
 };
 
 export type TInitialCategoryState = {
@@ -19,6 +20,7 @@ export type TInitialCategoryState = {
 export type TInitialUnitState = {
   units: TUnit[];
   isLoading: boolean;
+  isAdding: boolean;
 };
 
 export type TToastsState = {

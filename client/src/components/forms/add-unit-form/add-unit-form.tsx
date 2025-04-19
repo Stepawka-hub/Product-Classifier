@@ -1,14 +1,18 @@
-import { api } from '@api';
 import { AddUnitFormUI } from "@ui/forms";
 import { FC } from "react";
 import { AddFormProps } from "../types/types";
-import { nanoid } from '@reduxjs/toolkit';
+import { nanoid } from "@reduxjs/toolkit";
+import { useDispatch } from "@store";
+import { addUnitAsync } from "@thunks/units";
 
 export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const fakeData = {
+    name: "Test" + nanoid(),
+  };
+
   const handleSubmit = () => {
-    api.addUnit({
-      name: 'Test' + nanoid()
-    })
+    dispatch(addUnitAsync(fakeData));
     onClose();
   };
 

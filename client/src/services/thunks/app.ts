@@ -1,4 +1,4 @@
-import { api, SUCCESS_CODE } from "@api";
+import { api, SUCCESS_CODE } from "@utils/api/base.api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setInitializeSuccess } from "@slices/app";
 import { setCategories } from "@slices/categories";

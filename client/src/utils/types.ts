@@ -26,3 +26,11 @@ export type TToast = {
 };
 
 export type TNewToastData = Omit<TToast, "id">;
+
+export type TCreateUnitData = Pick<TUnit, 'name'>;
+
+export type TCreateProductData = {
+  name: string;
+  unitId: number;
+  parentId: number;
+};

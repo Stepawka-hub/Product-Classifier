@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAllUnitsAsync } from "@thunks/units";
+import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
 import { TUnit } from "@utils/types";
 
 const initialState: TInitialUnitState = {
   units: [],
   isLoading: false,
+  isAdding: false,
 };
 
 const unitsSlice = createSlice({
@@ -34,6 +35,20 @@ const unitsSlice = createSlice({
       )
       .addCase(getAllUnitsAsync.rejected, (state) => {
         state.isLoading = false;
+      })
+
+      .addCase(addUnitAsync.pending, (state) => {
+        state.isAdding = true;
+      })
+      .addCase(
+        addUnitAsync.fulfilled,
+        (state, { payload }: PayloadAction<TUnit>) => {
+          state.isAdding = false;
+          state.units = [...state.units, payload];
+        }
+      )
+      .addCase(addUnitAsync.rejected, (state) => {
+        state.isAdding = false;
       });
   },
 });
