@@ -1,4 +1,4 @@
-import { TPagination } from "@components/pagination/type";
+import { TPagination } from '@utils/types';
 import { ReactElement } from "react";
 
 export type TablePageProps<T> = {

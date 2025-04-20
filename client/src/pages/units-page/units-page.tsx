@@ -1,5 +1,6 @@
 import { Loader } from "@components/common/loader";
 import { useModal } from "@hooks/useModal";
+import { usePagination } from '@hooks/usePagination';
 import {
   getIsLoadingSelector,
   getPaginationSelector,
@@ -14,11 +15,12 @@ import { useEffect } from "react";
 export const UnitsPage = () => {
   const dispatch = useDispatch();
   const { showModal, handleShowModal, handleCloseModal } = useModal();
-
+  const { pagination, currentPage, pageSize, setPageNumber } = usePagination(
+    getPaginationSelector,
+    setCurrentPage
+  );
   const units = useSelector(getUnitsSelector);
-  const pagination = useSelector(getPaginationSelector);
   const isLoading = useSelector(getIsLoadingSelector);
-  const { currentPage, pageSize } = pagination;
 
   useEffect(() => {
     dispatch(
@@ -28,10 +30,6 @@ export const UnitsPage = () => {
       })
     );
   }, [currentPage, pageSize]);
-
-  const setPageNumber = (page: number) => {
-    dispatch(setCurrentPage(page));
-  };
 
   if (isLoading) return <Loader />;
 

@@ -1,4 +1,4 @@
-import { TCategory, TProduct, TToast, TUnit } from "@utils/types";
+import { TCategory, TPagination, TProduct, TToast, TUnit } from "@utils/types";
 
 export type TInitialAppState = {
   isInitialized: boolean;
@@ -9,11 +9,7 @@ export type TInitialAppState = {
 export type TCommonInitialState = {
   isLoading: boolean;
   isAdding: boolean;
-  pagination: {
-    totalCount: number;
-    pageSize: number;
-    currentPage: number;
-  };
+  pagination: Omit<TPagination, "setCurrentPage">;
 };
 
 export type TInitialProductState = TCommonInitialState & {
@@ -32,5 +28,3 @@ export type TToastsState = {
   toasts: TToast[];
   maxCount: number;
 };
-
-

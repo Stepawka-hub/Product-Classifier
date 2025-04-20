@@ -45,3 +45,10 @@ export type TCreateCategoryData = {
   parentName: string;
   unitName: string;
 };
+
+export type TPagination = {
+  totalCount: number;
+  pageSize: number;
+  currentPage: number;
+  setCurrentPage: (n: number) => void;
+};
