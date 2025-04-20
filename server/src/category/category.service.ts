@@ -29,7 +29,7 @@ export class CategoryService {
     const category = await this.categoryRepository.createWithAddRow(dto);
 
     if (!category?.id) {
-      throw new Error('Product creation failed');
+      throw new Error('Category creation failed');
     }
 
     return category;

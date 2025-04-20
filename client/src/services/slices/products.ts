@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
 import { addProductAsync, getAllProductsAsync } from "@thunks/products";
 import { TProduct } from "@utils/types";
-import { TPaginatedResponse } from '@utils/api/types/types';
+import { TPaginatedData } from "@utils/api/types/types";
 
 const initialState: TInitialProductState = {
   products: [],
@@ -25,6 +25,9 @@ const productsSlice = createSlice({
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
     },
+    setTotalCount: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.totalCount = payload;
+    },
   },
   selectors: {
     getProductsSelector: (state) => state.products,
@@ -39,7 +42,7 @@ const productsSlice = createSlice({
       })
       .addCase(
         getAllProductsAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedResponse<TProduct>>) => {
+        (state, { payload }: PayloadAction<TPaginatedData<TProduct>>) => {
           state.isLoading = false;
           state.products = payload.items;
           state.pagination.totalCount = payload.total;
@@ -72,4 +75,5 @@ export const {
   getIsAddingSeletor,
   getPaginationSelector,
 } = productsSlice.selectors;
-export const { setProducts, setCurrentPage } = productsSlice.actions;
+export const { setProducts, setCurrentPage, setTotalCount } =
+  productsSlice.actions;

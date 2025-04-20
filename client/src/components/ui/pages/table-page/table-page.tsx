@@ -19,7 +19,11 @@ export const TablePageUI = <T extends object>({
   <>
     <BasePage title={title}>
       <div className={s.content}>
-        <Table<T> headers={headers} data={data} pagination={pagination} />
+        {data.length ? (
+          <Table<T> headers={headers} data={data} pagination={pagination} />
+        ) : (
+          <span className={s.noData}>Данных не найдено!</span>
+        )}
         <div>
           <Button
             type="plus"

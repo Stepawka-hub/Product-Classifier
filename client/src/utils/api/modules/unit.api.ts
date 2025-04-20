@@ -1,13 +1,13 @@
-import { TCreateUnitData, TUnit } from "@utils/types";
+import { TCreateUnitData, TPaginatedData, TUnit } from "@utils/types";
 import { BaseApi } from "./base/base.api";
-import { PaginationParams, TPaginatedResponse } from "../types/types";
+import { PaginationParams } from "../types/types";
 
 export class UnitApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {
     super(baseUrl, baseEndpoint);
   }
 
-  getAll(params: PaginationParams): Promise<TPaginatedResponse<TUnit>> {
+  getAll(params: PaginationParams): Promise<TPaginatedData<TUnit>> {
     return this.get("", params);
   }
 

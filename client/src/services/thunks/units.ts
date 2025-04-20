@@ -1,14 +1,14 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addToast } from "@slices/toasts";
 import { api } from "@api";
-import { TCreateUnitData, TUnit } from "@utils/types";
-import { PaginationParams, TPaginatedResponse } from "@utils/api/types/types";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { PaginationParams } from "@utils/api/types/types";
+import { TCreateUnitData, TPaginatedData, TUnit } from "@utils/types";
+import { dispatchSuccessToast } from "../helpers/toast";
 
 const GET_UNITS = "units/get";
 const ADD_UNIT = "units/add";
 
 export const getAllUnitsAsync = createAsyncThunk<
-  TPaginatedResponse<TUnit>,
+  TPaginatedData<TUnit>,
   PaginationParams
 >(GET_UNITS, async (paginationParams) => {
   const res = await api.units.getAll(paginationParams);
@@ -19,13 +19,9 @@ export const addUnitAsync = createAsyncThunk<TUnit, TCreateUnitData>(
   ADD_UNIT,
   async (createUnitData, { dispatch }) => {
     const res = await api.units.create(createUnitData);
-    dispatch(
-      addToast({
-        message: "ЕИ успешно добавлена!",
-        type: "success",
-        duration: 2000,
-      })
-    );
+
+    dispatchSuccessToast(dispatch, "ЕИ успешно добавлена!");
+
     return res;
   }
 );

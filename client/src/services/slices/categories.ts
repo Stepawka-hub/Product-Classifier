@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialCategoryState } from "./types/types";
 import { addCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { TCategory } from "@utils/types";
-import { TPaginatedResponse } from "@utils/api/types/types";
+import { TPaginatedData } from "@utils/api/types/types";
 
 const initialState: TInitialCategoryState = {
   categories: [],
@@ -25,6 +25,9 @@ const categoriesSlice = createSlice({
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
     },
+    setTotalCount: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.totalCount = payload;
+    },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
@@ -39,7 +42,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(
         getAllCategoriesAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedResponse<TCategory>>) => {
+        (state, { payload }: PayloadAction<TPaginatedData<TCategory>>) => {
           state.isLoading = false;
           state.categories = payload.items;
           state.pagination.totalCount = payload.total;
@@ -72,4 +75,5 @@ export const {
   getIsAddingSeletor,
   getPaginationSelector,
 } = categoriesSlice.selectors;
-export const { setCategories, setCurrentPage } = categoriesSlice.actions;
+export const { setCategories, setCurrentPage, setTotalCount } =
+  categoriesSlice.actions;

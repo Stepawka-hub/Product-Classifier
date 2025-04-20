@@ -1,10 +1,15 @@
 import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setInitializeSuccess } from "@slices/app";
-import { setCategories } from "@slices/categories";
-import { setProducts } from "@slices/products";
-import { addToast } from "@slices/toasts";
-import { setUnits } from "@slices/units";
+import {
+  setAllEntitiesState,
+  resetAllEntitiesState,
+} from "../helpers/entities";
+import {
+  setPaginationTotals,
+  resetAllPaginationState,
+} from "../helpers/pagination";
+import { dispatchSuccessToast } from "../helpers/toast";
 
 const INITIALIZE_APP = "app/initialize";
 const FILL_DATA = "app/fill-data";
@@ -21,16 +26,22 @@ export const fillDataAsync = createAsyncThunk(
   FILL_DATA,
   async (_, { dispatch }) => {
     const { products, categories, units } = await api.app.fillData();
-    dispatch(setProducts(products));
-    dispatch(setCategories(categories));
-    dispatch(setUnits(units));
-    dispatch(
-      addToast({
-        message: "Данные успешно заполнены!",
-        type: "success",
-        duration: 2500,
-      })
-    );
+
+    setAllEntitiesState(dispatch, {
+      products: products.items,
+      categories: categories.items,
+      units: units.items,
+    });
+
+    resetAllPaginationState(dispatch);
+
+    setPaginationTotals(dispatch, {
+      products: products.total,
+      categories: categories.total,
+      units: units.total,
+    });
+
+    dispatchSuccessToast(dispatch, "Данные успешно заполнены!");
   }
 );
 
@@ -40,16 +51,9 @@ export const clearDataAsync = createAsyncThunk(
     const { resultCode } = await api.app.clearData();
 
     if (resultCode === SUCCESS_CODE) {
-      dispatch(setProducts([]));
-      dispatch(setCategories([]));
-      dispatch(setUnits([]));
-      dispatch(
-        addToast({
-          message: "Данные успешно очищены!",
-          type: "success",
-          duration: 2500,
-        })
-      );
+      resetAllEntitiesState(dispatch);
+      resetAllPaginationState(dispatch);
+      dispatchSuccessToast(dispatch, "Данные успешно очищены!");
     }
   }
 );

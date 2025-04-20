@@ -23,3 +23,9 @@
 .actionButton:active {
   opacity: 0.8;
 }
+
+.noData {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0.5rem 0;
+}

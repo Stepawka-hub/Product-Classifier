@@ -19,8 +19,6 @@ export class BaseApi {
       });
     }
 
-    console.log(url);
-
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Ошибка при запросе ${endpoint}`);
     return res.json();

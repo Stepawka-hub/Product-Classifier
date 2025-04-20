@@ -12,10 +12,15 @@ export type TUnit = {
   name: string;
 };
 
+export type TPaginatedData<T> = {
+  items: T[];
+  total: number;
+};
+
 export type TAppData = {
-  categories: TCategory[];
-  products: TProduct[];
-  units: TUnit[];
+  categories: TPaginatedData<TCategory>;
+  products: TPaginatedData<TProduct>;
+  units: TPaginatedData<TUnit>;
 };
 
 export type TToast = {
@@ -27,7 +32,7 @@ export type TToast = {
 
 export type TNewToastData = Omit<TToast, "id">;
 
-export type TCreateUnitData = Pick<TUnit, 'name'>;
+export type TCreateUnitData = Pick<TUnit, "name">;
 
 export type TCreateProductData = {
   name: string;
