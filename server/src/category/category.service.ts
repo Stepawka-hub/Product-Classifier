@@ -18,6 +18,7 @@ export class CategoryService {
       relations: ['unit', 'parent'],
       skip,
       take: limit,
+      order: { id: 'ASC' },
     });
 
     return new PaginatedResponseDto(

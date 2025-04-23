@@ -1,10 +1,11 @@
-import { ModalUI } from "@ui/modal";
-import { FC, MouseEventHandler, useEffect } from "react";
+import { FC, memo, MouseEventHandler, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ModalProps } from "./type";
+import { ModalUI } from "@ui/modal";
 
-export const Modal: FC<ModalProps> = ({ children, onClose }) => {
+export const Modal: FC<ModalProps> = memo(({ children, onClose }) => {
   const modalRoot = document.getElementById("root");
+  console.log('Render');
 
   useEffect(() => {
     document.addEventListener("keydown", closeByEsc);
@@ -29,4 +30,4 @@ export const Modal: FC<ModalProps> = ({ children, onClose }) => {
     </ModalUI>,
     modalRoot!
   );
-};
+});

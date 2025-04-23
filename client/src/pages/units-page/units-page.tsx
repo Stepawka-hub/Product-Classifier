@@ -21,6 +21,7 @@ export const UnitsPage = () => {
   );
   const units = useSelector(getUnitsSelector);
   const isLoading = useSelector(getIsLoadingSelector);
+  console.log('Render');
 
   useEffect(() => {
     dispatch(

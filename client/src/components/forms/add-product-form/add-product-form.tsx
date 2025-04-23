@@ -31,7 +31,6 @@ export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
     );
 
     setFormData(initialState);
-    onClose();
   };
 
   return (

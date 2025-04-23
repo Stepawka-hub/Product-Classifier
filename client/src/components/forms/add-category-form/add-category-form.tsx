@@ -25,7 +25,6 @@ export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
     dispatch(addCategoryAsync(formData));
 
     setFormData(initialState);
-    onClose();
   };
 
   return (

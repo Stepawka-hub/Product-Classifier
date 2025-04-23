@@ -20,8 +20,7 @@ export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
         name: unitName,
       })
     );
-    setUnitName('');
-    onClose();
+    setUnitName("");
   };
 
   return (

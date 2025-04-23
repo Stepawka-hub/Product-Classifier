@@ -17,6 +17,7 @@ export class UnitService {
     const [units, total] = await this.unitRepository.findAndCount({
       skip,
       take: limit,
+      order: { id: 'ASC' },
     });
 
     return new PaginatedResponseDto(units, total);
