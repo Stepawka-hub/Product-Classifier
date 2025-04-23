@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
+import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryRepository } from './repositores/category.repository';
@@ -25,13 +26,7 @@ export class CategoryService {
     );
   }
 
-  async createCategory(dto: CreateCategoryDto): Promise<CategoryDto> {
-    const category = await this.categoryRepository.createWithAddRow(dto);
-
-    if (!category?.id) {
-      throw new Error('Category creation failed');
-    }
-
-    return category;
+  async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
+    return await this.categoryRepository.createWithAddRow(dto);
   }
 }

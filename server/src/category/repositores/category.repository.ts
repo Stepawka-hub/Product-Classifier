@@ -1,9 +1,10 @@
+import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
+import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { getErrorMessage } from 'src/utils/error-handler';
 import { DataSource, Repository } from 'typeorm';
 import { Category } from '../entities/category.entity';
-import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
-import { CategoryDto } from '../dto/category.dto';
 
 @Injectable()
 export class CategoryRepository extends Repository<Category> {
@@ -11,34 +12,43 @@ export class CategoryRepository extends Repository<Category> {
     super(Category, dataSource.createEntityManager());
   }
 
-  async createWithAddRow(dto: CreateCategoryDto): Promise<CategoryDto> {
-    const query = `
-      SELECT * FROM AddRow(
-        'category',
-        ARRAY['name', 'parentid', 'umid'],
-        ARRAY[quote_literal($1), $2::text, $3::text]
-      ) AS t(id INTEGER, name VARCHAR, umid INTEGER, parentid INTEGER)`;
+  async createWithAddRow(dto: CreateCategoryDto): Promise<BaseResponseDto> {
+    const { name, parentName, unitName } = dto;
+    const tableName = 'productclass';
 
-    const result = (await this.query(query, [
-      // dto.name,
-      // dto.parentId,
-      // dto.unitId,
-    ])) as Category[];
+    try {
+      // Без parentName и unitName
+      if (!parentName && !unitName) {
+        await this.query(`SELECT AddTreeClass($1::TEXT, $2::VARCHAR)`, [
+          tableName,
+          name,
+        ]);
+      }
+      // Только с unitName
+      else if (!parentName && unitName) {
+        await this.query(
+          `SELECT AddTreeClass($1::TEXT, $2::VARCHAR, umName => quote_literal($3))`,
+          [tableName, name, unitName],
+        );
+      }
+      // Только с parentName
+      else if (parentName && !unitName) {
+        await this.query(
+          `SELECT AddTreeClass($1::TEXT, $2::VARCHAR, quote_literal($3))`,
+          [tableName, name, parentName],
+        );
+      }
+      // С parentName и unitName
+      else if (parentName && unitName) {
+        await this.query(
+          `SELECT AddTreeClass($1::TEXT, $2::VARCHAR, quote_literal($3), quote_literal($4))`,
+          [tableName, name, parentName, unitName],
+        );
+      }
 
-    const createdCategory = result[0];
-    if (createdCategory?.id === null) {
-      throw new Error('Category creation failed');
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
     }
-
-    const categoryWithRelations = await this.findOne({
-      where: { id: createdCategory.id },
-      relations: ['unit', 'parent'],
-    });
-
-    if (!categoryWithRelations) {
-      throw new Error('Category not found after creation');
-    }
-
-    return new CategoryDto(categoryWithRelations);
   }
 }

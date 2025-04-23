@@ -19,13 +19,11 @@ export const AddCategoryFormUI: FC<AddCategoryFormUIProps> = ({
         value={formData.parentName}
         onChange={onChange("parentName")}
         placeholder="Название родительской категории"
-        required
       />
       <input
         value={formData.unitName}
         onChange={onChange("unitName")}
         placeholder="Название ЕИ"
-        required
       />
     </>
   </BaseAddForm>
