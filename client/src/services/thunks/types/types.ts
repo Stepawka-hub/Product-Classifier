@@ -9,3 +9,5 @@ export type TFetchEntitiesThunk<T> = AsyncThunk<
   PaginationParams,
   object
 >;
+
+export type TDeleteEntityThunk = AsyncThunk<void, number, object>;

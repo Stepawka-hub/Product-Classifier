@@ -4,14 +4,14 @@ import { ReactElement } from "react";
 export type TEntityPageUI<T> = {
   tableConfig: TTableConfig<T>;
   modalConfig: TModalConfig;
-  pagination?: TPagination;
+  pagination: TPagination;
 };
 
 export type TTableConfig<T> = {
   headers: Record<keyof T, string>;
   data: T[];
   onEdit: () => void;
-  onDelete: () => void;
+  onDelete: (id: number) => void;
 };
 
 export type TModalConfig = {

@@ -1,44 +1,67 @@
 export class BaseApi {
-  protected baseUrl: string;
+  protected baseUrl: URL;
 
   constructor(baseUrl: string, baseEndpoint: string = "") {
-    this.baseUrl = baseEndpoint ? `${baseUrl}/${baseEndpoint}` : baseUrl;
+    this.baseUrl = new URL(baseEndpoint, baseUrl + '/');
   }
 
   protected async get<T>(
-    endpoint: string = "",
-    params?: Record<string, string | number>
+    params?: Record<string, string | number>,
+    endpoint: string = ""
   ): Promise<T> {
-    const url = new URL(`${this.baseUrl}/${endpoint}`);
-
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          url.searchParams.append(key, String(value));
-        }
-      });
-    }
-
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Ошибка при запросе ${endpoint}`);
-    return res.json();
+    const url = this.buildUrl(endpoint);
+    this.addSearchParams(url, params);
+    return this.fetch(url);
   }
 
   protected async post<T>(
-    endpoint: string = "",
-    data: unknown = {}
+    data: unknown = {},
+    endpoint: string = ""
   ): Promise<T> {
-    const url = `${this.baseUrl}/${endpoint}`;
-
-    const res = await fetch(url, {
+    const url = this.buildUrl(endpoint);
+    return this.fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error(`Ошибка при запросе ${endpoint}`);
+  }
+
+  protected async delete<T>(
+    id: number | string,
+    endpoint: string = ""
+  ): Promise<T> {
+    const url = this.buildUrl(endpoint, id);
+    return this.fetch(url, { method: "DELETE" });
+  }
+
+  private buildUrl(endpoint: string, id?: string | number): URL {
+    const url = new URL(this.baseUrl);
+    url.pathname = [url.pathname, endpoint, id]
+      .filter(Boolean)
+      .join("/")
+      .replace(/\/+/g, "/");
+    return url;
+  }
+
+  private addSearchParams(url: URL, params?: Record<string, string | number>) {
+    if (!params) return;
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value != null) url.searchParams.append(key, String(value));
+    });
+  }
+
+  private async fetch<T>(url: URL, init?: RequestInit): Promise<T> {
+    const res = await fetch(url, {
+      headers: { Accept: "application/json" },
+      ...init,
+    });
+    console.log(url);
+
+    if (!res.ok) {
+      throw new Error(`Ошибка при запросе: ${url.pathname}`);
+    }
+
     return res.json();
   }
 }

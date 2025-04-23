@@ -8,10 +8,14 @@ export class UnitApi extends BaseApi {
   }
 
   getAll(params: PaginationParams): Promise<TPaginatedData<TUnit>> {
-    return this.get("", params);
+    return this.get(params);
   }
 
-  create(unitData: TCreateUnitData): Promise<TServerResponse> {
-    return this.post("", unitData);
+  createUnit(unitData: TCreateUnitData): Promise<TServerResponse> {
+    return this.post(unitData);
+  }
+
+  deleteUnit(id: number): Promise<TServerResponse> {
+    return this.delete(id);
   }
 }

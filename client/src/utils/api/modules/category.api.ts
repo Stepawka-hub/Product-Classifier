@@ -8,10 +8,14 @@ export class CategoryApi extends BaseApi {
   }
 
   getAll(params: PaginationParams): Promise<TPaginatedData<TCategory>> {
-    return this.get("", params);
+    return this.get(params);
   }
 
-  create(categoryData: TCreateCategoryData): Promise<TServerResponse> {
-    return this.post("", categoryData);
+  createCategory(categoryData: TCreateCategoryData): Promise<TServerResponse> {
+    return this.post(categoryData);
+  }
+
+  deleteCategory(id: number): Promise<TServerResponse> {
+    return this.delete(id);
   }
 }

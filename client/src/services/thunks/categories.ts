@@ -8,6 +8,7 @@ import { RootState } from "@store";
 
 const GET_CATEGORIES = "categories/get";
 const ADD_CATEGORY = "categories/add";
+const DELETE_CATEGORY = "categories/delete";
 
 export const getAllCategoriesAsync = createAsyncThunk<
   TPaginatedData<TCategory>,
@@ -20,7 +21,7 @@ export const getAllCategoriesAsync = createAsyncThunk<
 export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
   ADD_CATEGORY,
   async (createCategoryData, { dispatch, getState }) => {
-    const res = await api.categories.create(createCategoryData);
+    const res = await api.categories.createCategory(createCategoryData);
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
@@ -30,6 +31,25 @@ export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
         state.products.pagination
       );
       dispatchSuccessToast(dispatch, "Категория успешно добавлена!");
+    } else {
+      dispatchErrorToast(dispatch, res.message);
+    }
+  }
+);
+
+export const deleteCategoryAsync = createAsyncThunk<void, number>(
+  DELETE_CATEGORY,
+  async (id, { dispatch, getState }) => {
+    const res = await api.categories.deleteCategory(id);
+
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TCategory>(
+        dispatch,
+        getAllCategoriesAsync,
+        state.products.pagination
+      );
+      dispatchSuccessToast(dispatch, "Категория успешно удалена!");
     } else {
       dispatchErrorToast(dispatch, res.message);
     }

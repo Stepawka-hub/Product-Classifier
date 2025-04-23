@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
@@ -62,16 +62,17 @@ export class CategoryRepository extends Repository<Category> {
         where: { id },
       });
 
-      if (!category) {
+      if (!category || !id) {
         return BaseResponseDto.Error('Категория не найдена!');
       }
 
-      const res: unknown = await this.query(query, [
-        this.tableName,
-        String(id),
-      ]);
+      const [res] = (await this.query(query, [this.tableName, String(id)])) as [
+        { deleterows: boolean },
+      ];
 
-      new Logger().log(res);
+      if (!res.deleterows) {
+        return BaseResponseDto.Error('Не удалось удалить категорию!');
+      }
 
       return BaseResponseDto.Success();
     } catch (e: unknown) {

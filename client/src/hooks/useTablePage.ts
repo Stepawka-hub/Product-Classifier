@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { RootState, useDispatch, useSelector } from "@store";
-import { TFetchEntitiesThunk } from "@thunks/types/types";
+import { TDeleteEntityThunk, TFetchEntitiesThunk } from "@thunks/types/types";
 import { TPagination } from "@utils/types";
 import { useEffect } from "react";
 import { Selector } from "react-redux";
@@ -16,7 +16,8 @@ export const useTablePage = <T>(
     Omit<TPagination, "setCurrentPage">
   >,
   setCurrentPage: ActionCreatorWithPayload<number, string>,
-  getElementsAsync: TFetchEntitiesThunk<T>
+  getElementsAsync: TFetchEntitiesThunk<T>,
+  deleteElementAsync: TDeleteEntityThunk
 ) => {
   const dispatch = useDispatch();
   const { showModal, handleShowModal, handleCloseModal } = useModal();
@@ -33,7 +34,9 @@ export const useTablePage = <T>(
 
   const handleEdit = () => {};
 
-  const handleDelete = () => {};
+  const handleDelete = (id: number) => {
+    dispatch(deleteElementAsync(id))
+  };
 
   useEffect(() => {
     dispatch(getElementsAsync({ page: currentPage, limit: pageSize }));

@@ -1,28 +1,30 @@
-export type TCategory = {
+// Сущность
+export type TEntity = {
   id: number;
+}
+
+// Категория
+export type TCategory = TEntity & {
   name: string;
   unitName: string;
   parentName: string;
 };
 
+// Продукт
 export type TProduct = TCategory;
 
-export type TUnit = {
-  id: number;
+// ЕИ
+export type TUnit = TEntity & {
   name: string;
 };
 
+// Сущность для пагинации
 export type TPaginatedData<T> = {
   items: T[];
   total: number;
 };
 
-export type TAppData = {
-  categories: TPaginatedData<TCategory>;
-  products: TPaginatedData<TProduct>;
-  units: TPaginatedData<TUnit>;
-};
-
+// Тосты
 export type TToast = {
   id: string;
   message: string;
@@ -30,7 +32,8 @@ export type TToast = {
   duration: number;
 };
 
-export type TNewToastData = Omit<TToast, "id">;
+// Данные, необходимые для создания сущностей
+export type TCreateToastData = Omit<TToast, "id">;
 
 export type TCreateUnitData = Pick<TUnit, "name">;
 
@@ -46,6 +49,7 @@ export type TCreateCategoryData = {
   unitName: string;
 };
 
+// Пагинация
 export type TPagination = {
   totalCount: number;
   pageSize: number;

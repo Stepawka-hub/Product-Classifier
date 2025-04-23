@@ -8,6 +8,7 @@ import { refreshTable } from "../helpers/pagination";
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
+const DELETE_PRODUCT = "products/delete";
 
 export const getAllProductsAsync = createAsyncThunk<
   TPaginatedData<TProduct>,
@@ -20,7 +21,7 @@ export const getAllProductsAsync = createAsyncThunk<
 export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
   ADD_PRODUCT,
   async (createProductData, { dispatch, getState }) => {
-    const res = await api.products.create(createProductData);
+    const res = await api.products.createProduct(createProductData);
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
@@ -29,9 +30,29 @@ export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
         getAllProductsAsync,
         state.products.pagination
       );
-      dispatchSuccessToast(dispatch, "Продукт успешно добавлен!");
+      dispatchSuccessToast(dispatch, "Изделие успешно добавлено!");
     } else {
       dispatchErrorToast(dispatch, res.message);
     }
   }
 );
+
+export const deleteProductAsync = createAsyncThunk<void, number>(
+  DELETE_PRODUCT,
+  async (id, { dispatch, getState }) => {
+    const res = await api.products.deleteProduct(id);
+
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TProduct>(
+        dispatch,
+        getAllProductsAsync,
+        state.products.pagination
+      );
+      dispatchSuccessToast(dispatch, "Изделие успешно удалено!");
+    } else {
+      dispatchErrorToast(dispatch, res.message);
+    }
+  }
+);
+

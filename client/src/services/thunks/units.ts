@@ -8,6 +8,7 @@ import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 
 const GET_UNITS = "units/get";
 const ADD_UNIT = "units/add";
+const DELETE_UNIT = "units/delete";
 
 export const getAllUnitsAsync = createAsyncThunk<
   TPaginatedData<TUnit>,
@@ -20,11 +21,25 @@ export const getAllUnitsAsync = createAsyncThunk<
 export const addUnitAsync = createAsyncThunk<void, TCreateUnitData>(
   ADD_UNIT,
   async (createUnitData, { dispatch, getState }) => {
-    const res = await api.units.create(createUnitData);
+    const res = await api.units.createUnit(createUnitData);
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
       refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
       dispatchSuccessToast(dispatch, "ЕИ успешно добавлена!");
+    } else {
+      dispatchErrorToast(dispatch, res.message);
+    }
+  }
+);
+
+export const deleteUnitAsync = createAsyncThunk<void, number>(
+  DELETE_UNIT,
+  async (id, { dispatch, getState }) => {
+    const res = await api.units.deleteUnit(id);
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
+      dispatchSuccessToast(dispatch, "ЕИ успешно удалена!");
     } else {
       dispatchErrorToast(dispatch, res.message);
     }

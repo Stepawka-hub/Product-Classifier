@@ -2,24 +2,25 @@ import { Pagination } from "@components/pagination/pagination";
 import s from "./table.module.css";
 import { TableUIProps } from "./type";
 import { TableHeader, TableRow } from "@components/table-elements";
+import { TEntity } from "@utils/types";
 
-export const TableUI = <T extends object>({
+export const TableUI = <T extends TEntity>({
   headers,
   data,
   pagination,
   onEdit,
-  onDelete
+  onDelete,
 }: TableUIProps<T>) => (
   <>
     <div className={s.tableContainer}>
       <table className={s.table}>
         <TableHeader headers={Object.values(headers)} />
         <tbody className={s.tbody}>
-          {data.map((row, rowIndex) => (
+          {data.map((rowData, rowIndex) => (
             <TableRow
               key={rowIndex}
               headers={headers}
-              rowData={row}
+              rowData={rowData}
               onEdit={onEdit}
               onDelete={onDelete}
             />

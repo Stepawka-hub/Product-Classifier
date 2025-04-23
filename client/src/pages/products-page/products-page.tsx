@@ -7,7 +7,7 @@ import {
   getProductsSelector,
   setCurrentPage,
 } from "@slices/products";
-import { getAllProductsAsync } from "@thunks/products";
+import { deleteProductAsync, getAllProductsAsync } from "@thunks/products";
 import { ProductsPageUI } from "@ui/pages";
 import { productsHeaders } from "@utils/constants";
 import { TProduct } from "@utils/types";
@@ -20,7 +20,8 @@ export const ProductsPage = () => {
       getIsLoadingSelector,
       getPaginationSelector,
       setCurrentPage,
-      getAllProductsAsync
+      getAllProductsAsync,
+      deleteProductAsync
     );
 
   if (isLoading) return <Loader />;

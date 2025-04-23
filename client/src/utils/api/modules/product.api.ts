@@ -8,10 +8,14 @@ export class ProductApi extends BaseApi {
   }
 
   getAll(params: PaginationParams): Promise<TPaginatedData<TProduct>> {
-    return this.get("", params);
+    return this.get(params);
   }
 
-  create(productData: TCreateProductData): Promise<TServerResponse> {
-    return this.post("", productData);
+  createProduct(productData: TCreateProductData): Promise<TServerResponse> {
+    return this.post(productData);
+  }
+
+  deleteProduct(id: number): Promise<TServerResponse> {
+    return this.delete(id);
   }
 }

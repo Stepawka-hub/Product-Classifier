@@ -7,7 +7,7 @@ import {
   getUnitsSelector,
   setCurrentPage,
 } from "@slices/units";
-import { getAllUnitsAsync } from "@thunks/units";
+import { deleteUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { UnitsPageUI } from "@ui/pages";
 import { unitsHeaders } from "@utils/constants";
 import { TUnit } from "@utils/types";
@@ -20,7 +20,8 @@ export const UnitsPage = () => {
       getIsLoadingSelector,
       getPaginationSelector,
       setCurrentPage,
-      getAllUnitsAsync
+      getAllUnitsAsync,
+      deleteUnitAsync
     );
 
   if (isLoading) return <Loader />;

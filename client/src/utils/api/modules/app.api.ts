@@ -1,6 +1,5 @@
-import { TAppData } from '@utils/types';
 import { BaseApi } from './base/base.api';
-import { TServerResponse } from '../types/types';
+import { TAppData, TServerResponse } from '../types/types';
 
 export class AppApi extends BaseApi {
   fillData(): Promise<TAppData> {

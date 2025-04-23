@@ -1,6 +1,5 @@
-export type TableRowProps<T> = {
+import { TTableConfig } from '@components/types';
+
+export type TableRowProps<T> = Omit<TTableConfig<T>, 'data'> & {
   rowData: T;
-  headers: Record<keyof T, string>;
-  onEdit?: () => void;
-  onDelete?: () => void;
 };

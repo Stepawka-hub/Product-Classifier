@@ -2,8 +2,9 @@ import s from "@ui/table/table.module.css";
 import { TableCell } from "@components/table-elements";
 import { Button } from "@components/common/buttons";
 import { TableRowProps } from "./type";
+import { TEntity } from "@utils/types";
 
-export const TableRow = <T extends object>({
+export const TableRow = <T extends TEntity>({
   rowData,
   headers,
   onEdit,
@@ -23,7 +24,11 @@ export const TableRow = <T extends object>({
       {cellElements}
       <td className={s.actions}>
         <Button type="edit" size="small" onClick={onEdit} />
-        <Button type="cross" size="small" onClick={onDelete} />
+        <Button
+          type="cross"
+          size="small"
+          onClick={() => onDelete(rowData.id)}
+        />
       </td>
     </tr>
   );

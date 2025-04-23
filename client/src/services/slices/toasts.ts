@@ -1,6 +1,6 @@
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { TToastsState } from "./types/types";
-import { TNewToastData, TToast } from "@utils/types";
+import { TCreateToastData, TToast } from "@utils/types";
 
 const initialState: TToastsState = {
   toasts: [],
@@ -18,10 +18,10 @@ const toastsSlice = createSlice({
           state.toasts = state.toasts.slice(1);
         }
       },
-      prepare: (newToast: TNewToastData) => ({
+      prepare: (newToast: TCreateToastData) => ({
         payload: {
           id: nanoid(),
-          ...newToast
+          ...newToast,
         },
       }),
     },

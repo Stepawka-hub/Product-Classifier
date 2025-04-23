@@ -7,7 +7,7 @@ import {
   getPaginationSelector,
   setCurrentPage,
 } from "@slices/categories";
-import { getAllCategoriesAsync } from "@thunks/categories";
+import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { CategoriesPageUI } from "@ui/pages";
 import { categoriesHeaders } from "@utils/constants";
 import { TCategory } from "@utils/types";
@@ -20,7 +20,8 @@ export const CategoriesPage = () => {
       getIsLoadingSelector,
       getPaginationSelector,
       setCurrentPage,
-      getAllCategoriesAsync
+      getAllCategoriesAsync,
+      deleteCategoryAsync
     );
 
   if (isLoading) return <Loader />;
