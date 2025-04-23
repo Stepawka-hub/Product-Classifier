@@ -3,6 +3,7 @@ import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductRepository } from 'src/product/repositories/product.repository';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
+import { BaseResponseDto } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class ProductService {
@@ -26,13 +27,7 @@ export class ProductService {
     );
   }
 
-  async createProduct(dto: CreateProductDto): Promise<ProductDto> {
-    const product = await this.productRepository.createWithAddRow(dto);
-
-    if (!product?.id) {
-      throw new Error('Product creation failed');
-    }
-
-    return product;
+  async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
+    return await this.productRepository.createWithAddRow(dto);
   }
 }
