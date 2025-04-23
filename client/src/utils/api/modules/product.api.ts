@@ -1,6 +1,6 @@
 import { TCreateProductData, TPaginatedData, TProduct } from "@utils/types";
 import { BaseApi } from "./base/base.api";
-import { PaginationParams } from "../types/types";
+import { PaginationParams, TServerResponse } from "../types/types";
 
 export class ProductApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {
@@ -11,7 +11,7 @@ export class ProductApi extends BaseApi {
     return this.get("", params);
   }
 
-  create(productData: TCreateProductData): Promise<TProduct> {
+  create(productData: TCreateProductData): Promise<TServerResponse> {
     return this.post("", productData);
   }
 }

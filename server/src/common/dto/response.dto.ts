@@ -1,8 +1,8 @@
 export class BaseResponseDto {
   resultCode: number;
-  message?: string;
+  message: string;
 
-  constructor(resultCode: number, message?: string) {
+  constructor(resultCode: number, message: string = '') {
     this.resultCode = resultCode;
     this.message = message;
   }

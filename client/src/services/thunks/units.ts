@@ -1,8 +1,10 @@
-import { api } from "@api";
+import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "@store";
 import { PaginationParams } from "@utils/api/types/types";
 import { TCreateUnitData, TPaginatedData, TUnit } from "@utils/types";
-import { dispatchSuccessToast } from "../helpers/toast";
+import { refreshTable } from "../helpers/pagination";
+import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 
 const GET_UNITS = "units/get";
 const ADD_UNIT = "units/add";
@@ -15,13 +17,16 @@ export const getAllUnitsAsync = createAsyncThunk<
   return res;
 });
 
-export const addUnitAsync = createAsyncThunk<TUnit, TCreateUnitData>(
+export const addUnitAsync = createAsyncThunk<void, TCreateUnitData>(
   ADD_UNIT,
-  async (createUnitData, { dispatch }) => {
+  async (createUnitData, { dispatch, getState }) => {
     const res = await api.units.create(createUnitData);
-
-    dispatchSuccessToast(dispatch, "ЕИ успешно добавлена!");
-
-    return res;
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
+      dispatchSuccessToast(dispatch, "ЕИ успешно добавлена!");
+    } else {
+      dispatchErrorToast(dispatch, res.message);
+    }
   }
 );

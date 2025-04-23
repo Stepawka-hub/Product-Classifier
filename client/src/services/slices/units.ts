@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
-import { TUnit } from "@utils/types";
-import { TPaginatedData } from "@utils/api/types/types";
+import { TPaginatedData, TUnit } from "@utils/types";
 
 const initialState: TInitialUnitState = {
   units: [],
@@ -55,13 +54,9 @@ const unitsSlice = createSlice({
       .addCase(addUnitAsync.pending, (state) => {
         state.isAdding = true;
       })
-      .addCase(
-        addUnitAsync.fulfilled,
-        (state, { payload }: PayloadAction<TUnit>) => {
-          state.isAdding = false;
-          state.units = [...state.units, payload];
-        }
-      )
+      .addCase(addUnitAsync.fulfilled, (state) => {
+        state.isAdding = false;
+      })
       .addCase(addUnitAsync.rejected, (state) => {
         state.isAdding = false;
       });

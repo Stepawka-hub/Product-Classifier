@@ -10,7 +10,8 @@ import {
   setCurrentPage as setCurrentUnitPage,
   setTotalCount as setTotalUnitsCount,
 } from "@slices/units";
-import { AppThunkDispatch } from "@thunks/types/types";
+import { AppThunkDispatch, TFetchEntitiesThunk } from "@thunks/types/types";
+import { TPagination } from "@utils/types";
 
 type TEntityTotal = {
   products: number;
@@ -36,4 +37,18 @@ export const resetAllPaginationState = (dispatch: AppThunkDispatch) => {
     categories: 1,
     units: 1,
   });
+};
+
+export const refreshTable = <T>(
+  dispatch: AppThunkDispatch,
+  getAllEntities: TFetchEntitiesThunk<T>,
+  pagination: Pick<TPagination, "currentPage" | "pageSize">
+) => {
+  const { currentPage, pageSize } = pagination;
+  dispatch(
+    getAllEntities({
+      page: currentPage,
+      limit: pageSize,
+    })
+  );
 };

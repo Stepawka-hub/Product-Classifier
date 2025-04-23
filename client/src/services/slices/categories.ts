@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialCategoryState } from "./types/types";
 import { addCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
-import { TCategory } from "@utils/types";
-import { TPaginatedData } from "@utils/api/types/types";
+import { TCategory, TPaginatedData } from "@utils/types";
 
 const initialState: TInitialCategoryState = {
   categories: [],
@@ -55,13 +54,9 @@ const categoriesSlice = createSlice({
       .addCase(addCategoryAsync.pending, (state) => {
         state.isAdding = true;
       })
-      .addCase(
-        addCategoryAsync.fulfilled,
-        (state, { payload }: PayloadAction<TCategory>) => {
-          state.isAdding = false;
-          state.categories = [...state.categories, payload];
-        }
-      )
+      .addCase(addCategoryAsync.fulfilled, (state) => {
+        state.isAdding = false;
+      })
       .addCase(addCategoryAsync.rejected, (state) => {
         state.isAdding = false;
       });

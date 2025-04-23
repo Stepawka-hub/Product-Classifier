@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
 import { addProductAsync, getAllProductsAsync } from "@thunks/products";
-import { TProduct } from "@utils/types";
-import { TPaginatedData } from "@utils/api/types/types";
+import { TPaginatedData, TProduct } from "@utils/types";
 
 const initialState: TInitialProductState = {
   products: [],
@@ -55,13 +54,9 @@ const productsSlice = createSlice({
       .addCase(addProductAsync.pending, (state) => {
         state.isAdding = true;
       })
-      .addCase(
-        addProductAsync.fulfilled,
-        (state, { payload }: PayloadAction<TProduct>) => {
-          state.isAdding = false;
-          state.products = [...state.products, payload];
-        }
-      )
+      .addCase(addProductAsync.fulfilled, (state) => {
+        state.isAdding = false;
+      })
       .addCase(addProductAsync.rejected, (state) => {
         state.isAdding = false;
       });

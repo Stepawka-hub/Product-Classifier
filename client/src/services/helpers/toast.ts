@@ -13,3 +13,16 @@ export const dispatchSuccessToast = (
     })
   );
 };
+
+export const dispatchErrorToast = (
+  dispatch: AppThunkDispatch,
+  message: string
+) => {
+  dispatch(
+    addToast({
+      message,
+      type: "error",
+      duration: 3000,
+    })
+  );
+};

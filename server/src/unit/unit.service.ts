@@ -3,6 +3,7 @@ import { CreateUnitDto } from './dto/create-unit.dto';
 import { Unit } from './entities/unit.entity';
 import { UnitRepository } from './repositories/entity.repository';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
+import { BaseResponseDto } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class UnitService {
@@ -21,13 +22,7 @@ export class UnitService {
     return new PaginatedResponseDto(units, total);
   }
 
-  async createUnit(dto: CreateUnitDto): Promise<Unit> {
-    const unit = await this.unitRepository.createWithAddRow(dto);
-
-    if (!unit?.id) {
-      throw new Error('Unit creation failed');
-    }
-
-    return unit;
+  async createUnit(dto: CreateUnitDto): Promise<BaseResponseDto> {
+    return await this.unitRepository.createWithAddRow(dto);
   }
 }

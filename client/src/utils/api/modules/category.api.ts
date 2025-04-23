@@ -1,6 +1,6 @@
 import { TCategory, TCreateCategoryData, TPaginatedData } from "@utils/types";
 import { BaseApi } from "./base/base.api";
-import { PaginationParams } from "../types/types";
+import { PaginationParams, TServerResponse } from "../types/types";
 
 export class CategoryApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {
@@ -11,7 +11,7 @@ export class CategoryApi extends BaseApi {
     return this.get("", params);
   }
 
-  create(categoryData: TCreateCategoryData): Promise<TCategory> {
+  create(categoryData: TCreateCategoryData): Promise<TServerResponse> {
     return this.post("", categoryData);
   }
 }
