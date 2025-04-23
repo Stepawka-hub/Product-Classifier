@@ -28,6 +28,10 @@ export class CategoryService {
   }
 
   async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
-    return await this.categoryRepository.createWithAddRow(dto);
+    return await this.categoryRepository.createCategory(dto);
+  }
+
+  async deleteCategory(id: number): Promise<BaseResponseDto> {
+    return await this.categoryRepository.deleteCategory(id);
   }
 }

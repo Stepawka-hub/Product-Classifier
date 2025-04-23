@@ -1,45 +1,38 @@
 import { Loader } from "@components/common/loader";
-import { useModal } from "@hooks/useModal";
-import { usePagination } from "@hooks/usePagination";
+import { AddCategoryForm } from "@components/forms";
+import { useTablePage } from "@hooks/useTablePage";
 import {
   getCategoriesSelector,
   getIsLoadingSelector,
   getPaginationSelector,
   setCurrentPage,
 } from "@slices/categories";
-import { useDispatch, useSelector } from "@store";
 import { getAllCategoriesAsync } from "@thunks/categories";
 import { CategoriesPageUI } from "@ui/pages";
-import { useEffect } from "react";
+import { categoriesHeaders } from "@utils/constants";
+import { TCategory } from "@utils/types";
 
 export const CategoriesPage = () => {
-  const dispatch = useDispatch();
-  const { showModal, handleShowModal, handleCloseModal } = useModal();
-  const { pagination, currentPage, pageSize, setPageNumber } = usePagination(
-    getPaginationSelector,
-    setCurrentPage
-  );
-  const categories = useSelector(getCategoriesSelector);
-  const isLoading = useSelector(getIsLoadingSelector);
-
-  useEffect(() => {
-    dispatch(
-      getAllCategoriesAsync({
-        page: currentPage,
-        limit: pageSize,
-      })
+  const { isLoading, tableConfig, modalConfig, pagination } =
+    useTablePage<TCategory>(
+      categoriesHeaders,
+      getCategoriesSelector,
+      getIsLoadingSelector,
+      getPaginationSelector,
+      setCurrentPage,
+      getAllCategoriesAsync
     );
-  }, [currentPage, pageSize]);
 
   if (isLoading) return <Loader />;
 
   return (
     <CategoriesPageUI
-      categories={categories}
-      showModal={showModal}
-      pagination={{ ...pagination, setCurrentPage: setPageNumber }}
-      handleShowModal={handleShowModal}
-      handleCloseModal={handleCloseModal}
+      tableConfig={tableConfig}
+      modalConfig={{
+        renderModal: <AddCategoryForm onClose={modalConfig.onClose} />,
+        ...modalConfig,
+      }}
+      pagination={pagination}
     />
   );
 };

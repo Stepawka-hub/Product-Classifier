@@ -1,46 +1,38 @@
 import { Loader } from "@components/common/loader";
-import { useModal } from "@hooks/useModal";
-import { usePagination } from '@hooks/usePagination';
+import { AddUnitForm } from "@components/forms";
+import { useTablePage } from "@hooks/useTablePage";
 import {
   getIsLoadingSelector,
   getPaginationSelector,
   getUnitsSelector,
   setCurrentPage,
 } from "@slices/units";
-import { useDispatch, useSelector } from "@store";
 import { getAllUnitsAsync } from "@thunks/units";
-import { UnitsPageUI } from "@ui-pages";
-import { useEffect } from "react";
+import { UnitsPageUI } from "@ui/pages";
+import { unitsHeaders } from "@utils/constants";
+import { TUnit } from "@utils/types";
 
 export const UnitsPage = () => {
-  const dispatch = useDispatch();
-  const { showModal, handleShowModal, handleCloseModal } = useModal();
-  const { pagination, currentPage, pageSize, setPageNumber } = usePagination(
-    getPaginationSelector,
-    setCurrentPage
-  );
-  const units = useSelector(getUnitsSelector);
-  const isLoading = useSelector(getIsLoadingSelector);
-  console.log('Render');
-
-  useEffect(() => {
-    dispatch(
-      getAllUnitsAsync({
-        page: currentPage,
-        limit: pageSize,
-      })
+  const { isLoading, tableConfig, modalConfig, pagination } =
+    useTablePage<TUnit>(
+      unitsHeaders,
+      getUnitsSelector,
+      getIsLoadingSelector,
+      getPaginationSelector,
+      setCurrentPage,
+      getAllUnitsAsync
     );
-  }, [currentPage, pageSize]);
 
   if (isLoading) return <Loader />;
 
   return (
     <UnitsPageUI
-      units={units}
-      showModal={showModal}
-      pagination={{ ...pagination, setCurrentPage: setPageNumber }}
-      handleShowModal={handleShowModal}
-      handleCloseModal={handleCloseModal}
+      tableConfig={tableConfig}
+      modalConfig={{
+        renderModal: <AddUnitForm onClose={modalConfig.onClose} />,
+        ...modalConfig,
+      }}
+      pagination={pagination}
     />
   );
 };

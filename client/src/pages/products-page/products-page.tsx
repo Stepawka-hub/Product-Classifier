@@ -1,45 +1,38 @@
 import { Loader } from "@components/common/loader";
-import { useModal } from "@hooks/useModal";
-import { usePagination } from "@hooks/usePagination";
+import { AddProductForm } from "@components/forms";
+import { useTablePage } from "@hooks/useTablePage";
 import {
   getIsLoadingSelector,
   getPaginationSelector,
   getProductsSelector,
   setCurrentPage,
 } from "@slices/products";
-import { useDispatch, useSelector } from "@store";
 import { getAllProductsAsync } from "@thunks/products";
 import { ProductsPageUI } from "@ui/pages";
-import { useEffect } from "react";
+import { productsHeaders } from "@utils/constants";
+import { TProduct } from "@utils/types";
 
 export const ProductsPage = () => {
-  const dispatch = useDispatch();
-  const { showModal, handleShowModal, handleCloseModal } = useModal();
-  const { pagination, currentPage, pageSize, setPageNumber } = usePagination(
-    getPaginationSelector,
-    setCurrentPage
-  );
-  const products = useSelector(getProductsSelector);
-  const isLoading = useSelector(getIsLoadingSelector);
-
-  useEffect(() => {
-    dispatch(
-      getAllProductsAsync({
-        page: currentPage,
-        limit: pageSize,
-      })
+  const { isLoading, tableConfig, modalConfig, pagination } =
+    useTablePage<TProduct>(
+      productsHeaders,
+      getProductsSelector,
+      getIsLoadingSelector,
+      getPaginationSelector,
+      setCurrentPage,
+      getAllProductsAsync
     );
-  }, [currentPage, pageSize]);
 
   if (isLoading) return <Loader />;
 
   return (
     <ProductsPageUI
-      products={products}
-      showModal={showModal}
-      pagination={{ ...pagination, setCurrentPage: setPageNumber }}
-      handleShowModal={handleShowModal}
-      handleCloseModal={handleCloseModal}
+      tableConfig={tableConfig}
+      modalConfig={{
+        renderModal: <AddProductForm onClose={modalConfig.onClose} />,
+        ...modalConfig,
+      }}
+      pagination={pagination}
     />
   );
 };

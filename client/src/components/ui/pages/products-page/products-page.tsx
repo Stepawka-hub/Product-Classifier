@@ -1,26 +1,12 @@
-import { AddProductForm } from '@components/forms';
 import { TablePage } from "@pages";
-import { productsHeaders } from '@utils/constants';
 import { TProduct } from "@utils/types";
 import { FC } from "react";
 import { ProductsPageUIProps } from "./type";
 
-export const ProductsPageUI: FC<ProductsPageUIProps> = ({
-  products,
-  showModal,
-  pagination,
-  handleShowModal,
-  handleCloseModal,
-}) => (
+export const ProductsPageUI: FC<ProductsPageUIProps> = (props) => (
   <TablePage<TProduct>
     title="Изделия"
-    headers={productsHeaders}
-    data={products}
     addButtonLabel="Добавить изделие"
-    pagination={pagination}
-    renderModal={<AddProductForm onClose={handleCloseModal} />}
-    isModalOpen={showModal}
-    onOpenModal={handleShowModal}
-    onCloseModal={handleCloseModal}
+    {...props}
   />
 );

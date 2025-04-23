@@ -1,26 +1,18 @@
-import { AddCategoryForm } from '@components/forms';
 import { TablePage } from "@pages";
 import { TCategory } from "@utils/types";
-import { FC } from 'react';
-import { CategoriesPageUIProps } from './type';
-import { categoriesHeaders } from '@utils/constants';
+import { FC } from "react";
+import { CategoriesPageUIProps } from "./type";
 
 export const CategoriesPageUI: FC<CategoriesPageUIProps> = ({
-  categories,
-  showModal,
+  tableConfig,
+  modalConfig,
   pagination,
-  handleShowModal,
-  handleCloseModal,
 }) => (
   <TablePage<TCategory>
     title="Категории"
-    headers={categoriesHeaders}
-    data={categories}
     addButtonLabel="Добавить категорию"
+    tableConfig={tableConfig}
+    modalConfig={modalConfig}
     pagination={pagination}
-    renderModal={<AddCategoryForm onClose={handleCloseModal} />}
-    isModalOpen={showModal}
-    onOpenModal={handleShowModal}
-    onCloseModal={handleCloseModal}
   />
 );

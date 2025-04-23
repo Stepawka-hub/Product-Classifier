@@ -14,7 +14,7 @@ export const categoriesHeaders: Record<keyof TCategory, string> = {
   unitName: "Единица измерения",
 };
 
-export const unitHeaders: Record<keyof TUnit, string> = {
+export const unitsHeaders: Record<keyof TUnit, string> = {
   id: "ID Единицы измерения",
   name: "Название",
 };

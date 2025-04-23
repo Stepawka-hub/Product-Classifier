@@ -7,6 +7,8 @@ export const TableUI = <T extends object>({
   headers,
   data,
   pagination,
+  onEdit,
+  onDelete
 }: TableUIProps<T>) => (
   <>
     <div className={s.tableContainer}>
@@ -18,8 +20,8 @@ export const TableUI = <T extends object>({
               key={rowIndex}
               headers={headers}
               rowData={row}
-              onEdit={() => null}
-              onDelete={() => null}
+              onEdit={onEdit}
+              onDelete={onDelete}
             />
           ))}
         </tbody>

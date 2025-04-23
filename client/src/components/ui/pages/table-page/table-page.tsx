@@ -7,20 +7,22 @@ import s from "./table-page.module.css";
 
 export const TablePageUI = <T extends object>({
   title,
-  headers,
-  data,
   addButtonLabel,
-  renderModal,
-  isModalOpen,
+  tableConfig,
+  modalConfig,
   pagination,
-  onOpenModal,
-  onCloseModal,
 }: TablePageUIProps<T>) => (
   <>
     <BasePage title={title}>
       <div className={s.content}>
-        {data.length ? (
-          <Table<T> headers={headers} data={data} pagination={pagination} />
+        {tableConfig.data.length ? (
+          <Table<T>
+            headers={tableConfig.headers}
+            data={tableConfig.data}
+            pagination={pagination}
+            onEdit={tableConfig.onEdit}
+            onDelete={tableConfig.onDelete}
+          />
         ) : (
           <span className={s.noData}>Данных не найдено!</span>
         )}
@@ -29,11 +31,13 @@ export const TablePageUI = <T extends object>({
             type="plus"
             children={addButtonLabel}
             className={s.actionButton}
-            onClick={onOpenModal}
+            onClick={modalConfig.onOpen}
           />
         </div>
       </div>
     </BasePage>
-    {isModalOpen && <Modal onClose={onCloseModal}>{renderModal}</Modal>}
+    {modalConfig.isOpen && (
+      <Modal onClose={modalConfig.onClose}>{modalConfig.renderModal}</Modal>
+    )}
   </>
 );

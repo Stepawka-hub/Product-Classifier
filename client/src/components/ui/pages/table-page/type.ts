@@ -1,14 +1,6 @@
-import { TPagination } from '@utils/types';
-import { ReactElement } from 'react';
+import { TEntityPageUI } from '@components/types';
 
-export type TablePageUIProps<T> = {
+export type TablePageUIProps<T> = TEntityPageUI<T> & {
   title: string;
-  headers: Record<keyof T, string>;
-  data: T[];
   addButtonLabel: string;
-  renderModal: ReactElement;
-  isModalOpen: boolean;
-  pagination?: TPagination;
-  onOpenModal: () => void;
-  onCloseModal: () => void;
 };

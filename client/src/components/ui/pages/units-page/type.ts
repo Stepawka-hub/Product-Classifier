@@ -1,8 +1,4 @@
-import { TUnit } from '@utils/types';
-import { ModalHandlers } from '../types/types';
-import { TPagination } from '@components/pagination/type';
+import { TEntityPageUI } from "@components/types";
+import { TUnit } from "@utils/types";
 
-export type UnitsPageUIProps = ModalHandlers & {
-  units: TUnit[];
-  pagination?: TPagination;
-};
+export type UnitsPageUIProps = TEntityPageUI<TUnit>;

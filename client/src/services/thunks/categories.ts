@@ -14,7 +14,6 @@ export const getAllCategoriesAsync = createAsyncThunk<
   PaginationParams
 >(GET_CATEGORIES, async (paginationParams) => {
   const res = await api.categories.getAll(paginationParams);
-  console.log(res);
   return res;
 });
 

@@ -1,7 +1,4 @@
-import { TPagination, TProduct } from "@utils/types";
-import { ModalHandlers } from "../types/types";
+import { TEntityPageUI } from "@components/types";
+import { TProduct } from "@utils/types";
 
-export type ProductsPageUIProps = ModalHandlers & {
-  products: TProduct[];
-  pagination?: TPagination;
-};
+export type ProductsPageUIProps = TEntityPageUI<TProduct>;

@@ -14,7 +14,6 @@ export const getAllProductsAsync = createAsyncThunk<
   PaginationParams
 >(GET_PRODUCTS, async (paginationParams) => {
   const res = await api.products.getAll(paginationParams);
-  console.log(res);
   return res;
 });
 

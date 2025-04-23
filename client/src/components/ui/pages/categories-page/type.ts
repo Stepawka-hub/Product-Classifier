@@ -1,7 +1,4 @@
-import { TCategory, TPagination } from '@utils/types';
-import { ModalHandlers } from '../types/types';
+import { TEntityPageUI } from "@components/types";
+import { TCategory } from "@utils/types";
 
-export type CategoriesPageUIProps = ModalHandlers & {
-  categories: TCategory[];
-  pagination?: TPagination;
-};
+export type CategoriesPageUIProps = TEntityPageUI<TCategory>;
