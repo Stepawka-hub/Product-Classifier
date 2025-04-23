@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { UnitService } from './unit.service';
 import { CreateUnitDto } from './dto/create-unit.dto';
 @Controller('units')
@@ -13,5 +21,10 @@ export class UnitController {
   @Post()
   createUnit(@Body() createUnitDto: CreateUnitDto) {
     return this.unitService.createUnit(createUnitDto);
+  }
+
+  @Delete(':id')
+  deleteUnit(@Param('id') id: number) {
+    return this.unitService.deleteUnit(id);
   }
 }

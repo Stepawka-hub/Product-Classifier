@@ -56,7 +56,6 @@ export class BaseApi {
       headers: { Accept: "application/json" },
       ...init,
     });
-    console.log(url);
 
     if (!res.ok) {
       throw new Error(`Ошибка при запросе: ${url.pathname}`);

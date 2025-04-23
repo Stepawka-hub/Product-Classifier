@@ -5,7 +5,6 @@ import { ModalUI } from "@ui/modal";
 
 export const Modal: FC<ModalProps> = memo(({ children, onClose }) => {
   const modalRoot = document.getElementById("root");
-  console.log('Render');
 
   useEffect(() => {
     document.addEventListener("keydown", closeByEsc);

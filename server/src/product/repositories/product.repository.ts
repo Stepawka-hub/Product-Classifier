@@ -8,19 +8,53 @@ import { getErrorMessage } from 'src/utils/error-handler';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
+  private tableName: string;
+
   constructor(@InjectDataSource() dataSource: DataSource) {
     super(Product, dataSource.createEntityManager());
+    this.tableName = 'product';
   }
 
   async createWithAddRow(dto: CreateProductDto): Promise<BaseResponseDto> {
     const query = `
       SELECT AddRow(
-        'product',
+        $1::text,
         ARRAY['name', 'parentid', 'umid'],
-        ARRAY[quote_literal($1), $2::text, $3::text])`;
+        ARRAY[quote_literal($2), $3::text, $4::text])`;
 
     try {
-      await this.query(query, [dto.name, dto.parentId, dto.unitId]);
+      await this.query(query, [
+        this.tableName,
+        dto.name,
+        dto.parentId,
+        dto.unitId,
+      ]);
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async deleteProduct(id: number): Promise<BaseResponseDto> {
+    const query = `SELECT DeleteRows($1, 'id', $2)`;
+
+    try {
+      const product = await this.findOne({
+        where: { id },
+      });
+
+      if (!product || !id) {
+        return BaseResponseDto.Error('Изделие не найдено!');
+      }
+
+      const [res] = (await this.query(query, [this.tableName, String(id)])) as [
+        { deleterows: boolean },
+      ];
+
+      if (!res.deleterows) {
+        return BaseResponseDto.Error('Не удалось удалить изделие!');
+      }
+
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));

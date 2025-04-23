@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUnitDto } from './dto/create-unit.dto';
 import { Unit } from './entities/unit.entity';
-import { UnitRepository } from './repositories/entity.repository';
+import { UnitRepository } from './repositories/unit.repository';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 
@@ -25,5 +25,9 @@ export class UnitService {
 
   async createUnit(dto: CreateUnitDto): Promise<BaseResponseDto> {
     return await this.unitRepository.createWithAddRow(dto);
+  }
+
+  async deleteUnit(id: number): Promise<BaseResponseDto> {
+    return await this.unitRepository.deleteUnit(id);
   }
 }

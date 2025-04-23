@@ -31,4 +31,8 @@ export class ProductService {
   async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
     return await this.productRepository.createWithAddRow(dto);
   }
+
+  async deleteProduct(id: number): Promise<BaseResponseDto> {
+    return await this.productRepository.deleteProduct(id);
+  }
 }
