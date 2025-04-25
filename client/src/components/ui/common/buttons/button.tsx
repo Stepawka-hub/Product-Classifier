@@ -33,15 +33,15 @@ const iconMap = {
 };
 
 export const ButtonUI: FC<ButtonUIProps> = ({
-  type = "default",
+  variant = "default",
+  type = "button",
   size = "medium",
-  children,
-  disabled,
   className,
   extraClass,
-  onClick,
+  children,
+  ...props
 }) => {
-  const icon = iconMap[type];
+  const icon = iconMap[variant];
   const baseButtonClass = icon
     ? clsx(s.btnWithIcon, s[`btnWithIcon__${size}`])
     : clsx(s.button, s[`button__${size}`]);
@@ -50,13 +50,9 @@ export const ButtonUI: FC<ButtonUIProps> = ({
     className || clsx(baseButtonClass, icon?.buttonClassName, extraClass);
 
   return (
-    <button className={buttonClass} disabled={disabled} onClick={onClick}>
+    <button type={type} className={buttonClass} {...props}>
       {icon && (
-        <img
-          className={s[`icon__${size}`]}
-          src={icon.src}
-          alt={icon.alt}
-        />
+        <img className={s[`icon__${size}`]} src={icon.src} alt={icon.alt} />
       )}
       {children}
     </button>

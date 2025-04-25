@@ -1,11 +1,9 @@
-import { MouseEventHandler } from "react";
-
 export interface ButtonUIProps
   extends React.PropsWithChildren<
-    Omit<React.HTMLProps<HTMLButtonElement>, "type" | "size">
+    Omit<React.HTMLProps<HTMLButtonElement>, "size">
   > {
-  type?: 'default' | 'edit' | 'cross' | 'done' | 'plus';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "default" | "edit" | "cross" | "done" | "plus";
+  size?: "small" | "medium" | "large";
+  type?: "button" | "reset" | "submit";
   extraClass?: string;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
 }

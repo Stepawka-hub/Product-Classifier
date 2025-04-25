@@ -29,7 +29,7 @@ export const TablePageUI = <T extends TEntity>({
         )}
         <div>
           <Button
-            type="plus"
+            variant="plus"
             children={addButtonLabel}
             className={s.actionButton}
             onClick={modalConfig.onOpen}

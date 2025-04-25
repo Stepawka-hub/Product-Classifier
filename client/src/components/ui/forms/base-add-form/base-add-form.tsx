@@ -24,6 +24,7 @@ export const BaseAddFormUI: FC<BaseAddFormUIProps> = ({
         <div className={s.buttons}>
           <Button
             children={isAdding ? "Добавление..." : "Добавить"}
+            type='submit'
             disabled={isAdding}
             extraClass={clsx(s.btn, s.addBtn)}
           />

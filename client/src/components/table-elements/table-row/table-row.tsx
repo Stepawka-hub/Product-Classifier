@@ -23,9 +23,9 @@ export const TableRow = <T extends TEntity>({
     <tr className={s.trow}>
       {cellElements}
       <td className={s.actions}>
-        <Button type="edit" size="small" onClick={onEdit} />
+        <Button variant="edit" size="small" onClick={onEdit} />
         <Button
-          type="cross"
+          variant="cross"
           size="small"
           onClick={() => onDelete(rowData.id)}
         />
