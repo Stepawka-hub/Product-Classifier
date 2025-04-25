@@ -1,9 +1,11 @@
+import { useAddForm } from "@hooks/useAddForm";
+import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingSelector } from "@slices/categories";
+import { addCategoryAsync } from "@thunks/categories";
 import { AddCategoryFormUI } from "@ui/forms";
 import { FC } from "react";
 import { AddFormProps, TCreateCategoryForm } from "../types/types";
-import { useAddForm } from "@hooks/useAddForm";
-import { addCategoryAsync } from "@thunks/categories";
+import { getErrorMessage } from "@utils/error";
 
 export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
   const initialState: TCreateCategoryForm = {
@@ -14,16 +16,20 @@ export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
   const { dispatch, formData, setFormData, handleChange, isAdding } =
     useAddForm<TCreateCategoryForm>(getIsAddingSelector, initialState);
 
-  const handleSubmit = () => {
-    dispatch(
-      addCategoryAsync({
-        name: formData.name,
-        parentName: formData.parentName,
-        unitName: formData.unitName,
-      })
-    );
+  const handleSubmit = async () => {
+    try {
+      await dispatch(
+        addCategoryAsync({
+          name: formData.name,
+          parentName: formData.parentName,
+          unitName: formData.unitName,
+        })
+      ).unwrap();
 
-    setFormData(initialState);
+      setFormData(initialState);
+    } catch (err: unknown) {
+      dispatchErrorToast(dispatch, getErrorMessage(err));
+    }
   };
 
   return (

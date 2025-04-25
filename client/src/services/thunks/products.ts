@@ -32,7 +32,7 @@ export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
       );
       dispatchSuccessToast(dispatch, "Изделие успешно добавлено!");
     } else {
-      dispatchErrorToast(dispatch, res.message);
+      return Promise.reject(res.message);
     }
   }
 );
@@ -55,4 +55,3 @@ export const deleteProductAsync = createAsyncThunk<void, number>(
     }
   }
 );
-

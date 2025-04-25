@@ -27,7 +27,7 @@ export const addUnitAsync = createAsyncThunk<void, TCreateUnitData>(
       refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
       dispatchSuccessToast(dispatch, "ЕИ успешно добавлена!");
     } else {
-      dispatchErrorToast(dispatch, res.message);
+      return Promise.reject(res.message);
     }
   }
 );

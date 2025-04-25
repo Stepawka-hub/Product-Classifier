@@ -5,6 +5,8 @@ import { AddProductFormUI } from "@ui/forms";
 import { FC } from "react";
 import { AddFormProps, TCreateProductForm } from "../types/types";
 import { getNumber } from "@utils/validation";
+import { dispatchErrorToast } from "@services/helpers/toast";
+import { getErrorMessage } from '@utils/error';
 
 export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
   const initialState: TCreateProductForm = {
@@ -15,18 +17,22 @@ export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
   const { dispatch, formData, setFormData, handleChange, isAdding } =
     useAddForm<TCreateProductForm>(getIsAddingSelector, initialState);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const { name, parentId, unitId } = formData;
 
-    dispatch(
-      addProductAsync({
-        name,
-        parentId: getNumber(parentId),
-        unitId: getNumber(unitId),
-      })
-    );
+    try {
+      await dispatch(
+        addProductAsync({
+          name,
+          parentId: getNumber(parentId),
+          unitId: getNumber(unitId),
+        })
+      ).unwrap();
 
-    setFormData(initialState);
+      setFormData(initialState);
+    } catch (err: unknown) {
+      dispatchErrorToast(dispatch, getErrorMessage(err));
+    }
   };
 
   return (

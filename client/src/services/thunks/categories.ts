@@ -32,7 +32,7 @@ export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
       );
       dispatchSuccessToast(dispatch, "Категория успешно добавлена!");
     } else {
-      dispatchErrorToast(dispatch, res.message);
+      return Promise.reject(res.message);
     }
   }
 );
