@@ -1,21 +1,26 @@
+.formContainer {
+  width: 100%;
+}
+
 .form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
-  width: 100%;
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--orange-color);
+  text-align: center;
+  margin-bottom: 1.25rem;
 }
 
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-}
-
-.inputs input {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.25rem;
+  gap: 1.25rem;
 }
 
 .buttons {

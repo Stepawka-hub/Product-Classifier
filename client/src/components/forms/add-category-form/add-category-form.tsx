@@ -28,6 +28,7 @@ export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
 
   return (
     <AddCategoryFormUI
+      title="Добавление категории"
       isAdding={isAdding}
       formData={formData}
       onChange={handleChange}

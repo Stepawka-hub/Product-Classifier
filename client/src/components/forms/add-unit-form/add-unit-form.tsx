@@ -24,6 +24,7 @@ export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
 
   return (
     <AddUnitFormUI
+      title='Добавление ЕИ'
       isAdding={isAdding}
       formData={formData}
       onChange={handleChange}

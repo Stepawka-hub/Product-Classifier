@@ -6,6 +6,7 @@ export type AddEntityFormUIProps<T> = AddFormUIProps & {
 };
 
 export type AddFormUIProps = {
+  title: string;
   isAdding: boolean;
   onSubmit: () => void;
   onClose: () => void;

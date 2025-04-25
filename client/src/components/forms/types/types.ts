@@ -1,4 +1,6 @@
 export type AddFormProps = {
+  title: string;
+  isAdding: boolean;
   onClose: () => void;
 };
 

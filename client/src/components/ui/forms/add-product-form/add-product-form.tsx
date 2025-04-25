@@ -1,7 +1,7 @@
-import { BaseAddForm } from "@components/forms";
+import { BaseAddForm, Input } from "@components/forms";
 import { FC } from "react";
 import { AddEntityFormUIProps } from "../types/types";
-import { TCreateProductForm } from '@components/forms/types/types';
+import { TCreateProductForm } from "@components/forms/types/types";
 
 export const AddProductFormUI: FC<AddEntityFormUIProps<TCreateProductForm>> = ({
   formData,
@@ -10,22 +10,24 @@ export const AddProductFormUI: FC<AddEntityFormUIProps<TCreateProductForm>> = ({
 }) => (
   <BaseAddForm {...props}>
     <>
-      <input
+      <Input
+        label="Название продукта"
         value={formData.name}
         onChange={onChange("name")}
-        placeholder="Название продукта"
         required
       />
-      <input
+      <Input
+        label="ID категории"
         value={formData.parentId}
         onChange={onChange("parentId")}
-        placeholder="ID категории"
+        type="number"
         required
       />
-      <input
+      <Input
+        label="ID ЕИ"
         value={formData.unitId}
         onChange={onChange("unitId")}
-        placeholder="ID ЕИ"
+        type="number"
         required
       />
     </>

@@ -1,4 +1,4 @@
-import { BaseAddForm } from "@components/forms";
+import { BaseAddForm, Input } from "@components/forms";
 import { FC } from "react";
 import { AddEntityFormUIProps } from "../types/types";
 import { TCreateUnitForm } from "@components/forms/types/types";
@@ -9,10 +9,10 @@ export const AddUnitFormUI: FC<AddEntityFormUIProps<TCreateUnitForm>> = ({
   ...props
 }) => (
   <BaseAddForm {...props}>
-    <input
+    <Input
+      label="Название ЕИ"
       value={formData.name}
       onChange={onChange("name")}
-      placeholder="Название ЕИ"
       required
     />
   </BaseAddForm>

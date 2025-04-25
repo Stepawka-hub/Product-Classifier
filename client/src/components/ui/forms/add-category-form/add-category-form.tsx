@@ -1,29 +1,28 @@
-import { BaseAddForm } from "@components/forms";
+import { BaseAddForm, Input } from "@components/forms";
 import { FC } from "react";
-import { AddCategoryFormUIProps } from "./type";
+import { AddEntityFormUIProps } from "../types/types";
+import { TCreateCategoryForm } from "@components/forms/types/types";
 
-export const AddCategoryFormUI: FC<AddCategoryFormUIProps> = ({
-  formData,
-  onChange,
-  ...props
-}) => (
+export const AddCategoryFormUI: FC<
+  AddEntityFormUIProps<TCreateCategoryForm>
+> = ({ formData, onChange, ...props }) => (
   <BaseAddForm {...props}>
     <>
-      <input
+      <Input
+        label="Название категории"
         value={formData.name}
         onChange={onChange("name")}
-        placeholder="Название категории"
         required
       />
-      <input
+      <Input
+        label="Название родительской категории"
         value={formData.parentName}
         onChange={onChange("parentName")}
-        placeholder="Название родительской категории"
       />
-      <input
+      <Input
+        label="Название ЕИ"
         value={formData.unitName}
         onChange={onChange("unitName")}
-        placeholder="Название ЕИ"
       />
     </>
   </BaseAddForm>
