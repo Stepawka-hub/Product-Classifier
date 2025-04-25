@@ -19,6 +19,13 @@ export class CategoryRepository extends Repository<Category> {
     const { name, parentName, unitName } = dto;
 
     try {
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данная категория уже существует!'),
+        );
+      }
+
       // Без parentName и unitName
       if (!parentName && !unitName) {
         await this.query(`SELECT AddTreeClass($1::TEXT, $2::VARCHAR)`, [

@@ -4,7 +4,7 @@ import { Table } from "@components/table";
 import { TablePageUIProps } from "./type";
 import { Modal } from "@components/modal";
 import s from "./table-page.module.css";
-import { TEntity } from '@utils/types';
+import { TEntity } from "@utils/types";
 
 export const TablePageUI = <T extends TEntity>({
   title,

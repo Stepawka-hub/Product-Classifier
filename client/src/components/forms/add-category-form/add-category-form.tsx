@@ -1,28 +1,27 @@
+import { getIsAddingSelector } from "@slices/categories";
 import { AddCategoryFormUI } from "@ui/forms";
-import { ChangeEventHandler, FC, useState } from "react";
-import { AddFormProps } from "../types/types";
-import { getIsAddingSeletor } from "@slices/categories";
+import { FC } from "react";
+import { AddFormProps, TCreateCategoryForm } from "../types/types";
+import { useAddForm } from "@hooks/useAddForm";
 import { addCategoryAsync } from "@thunks/categories";
-import { useDispatch, useSelector } from "@store";
 
 export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const isAdding = useSelector(getIsAddingSeletor);
-  const initialState = {
+  const initialState: TCreateCategoryForm = {
     name: "",
     parentName: "",
     unitName: "",
   };
-  const [formData, setFormData] = useState(initialState);
-
-  const handleChange =
-    (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
-    };
+  const { dispatch, formData, setFormData, handleChange, isAdding } =
+    useAddForm<TCreateCategoryForm>(getIsAddingSelector, initialState);
 
   const handleSubmit = () => {
-    dispatch(addCategoryAsync(formData));
+    dispatch(
+      addCategoryAsync({
+        name: formData.name,
+        parentName: formData.parentName,
+        unitName: formData.unitName,
+      })
+    );
 
     setFormData(initialState);
   };

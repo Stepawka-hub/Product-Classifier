@@ -31,7 +31,7 @@ const unitsSlice = createSlice({
   selectors: {
     getUnitsSelector: (state) => state.units,
     getIsLoadingSelector: (state) => state.isLoading,
-    getIsAddingSeletor: (state) => state.isAdding,
+    getIsAddingSelector: (state) => state.isAdding,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -67,7 +67,7 @@ export const reducer = unitsSlice.reducer;
 export const {
   getUnitsSelector,
   getIsLoadingSelector,
-  getIsAddingSeletor,
+  getIsAddingSelector,
   getPaginationSelector,
 } = unitsSlice.selectors;
 export const { setUnits, setCurrentPage, setTotalCount } = unitsSlice.actions;

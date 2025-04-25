@@ -1,8 +1,9 @@
 import { BaseAddForm } from "@components/forms";
 import { FC } from "react";
-import { AddProductFormUIProps } from "./type";
+import { AddEntityFormUIProps } from "../types/types";
+import { TCreateProductForm } from '@components/forms/types/types';
 
-export const AddProductFormUI: FC<AddProductFormUIProps> = ({
+export const AddProductFormUI: FC<AddEntityFormUIProps<TCreateProductForm>> = ({
   formData,
   onChange,
   ...props

@@ -1,25 +1,18 @@
-import { getIsAddingSeletor } from "@slices/products";
-import { useDispatch, useSelector } from "@store";
+import { useAddForm } from "@hooks/useAddForm";
+import { getIsAddingSelector } from "@slices/products";
 import { addProductAsync } from "@thunks/products";
 import { AddProductFormUI } from "@ui/forms";
-import { ChangeEventHandler, FC, useState } from "react";
-import { AddFormProps } from "../types/types";
+import { FC } from "react";
+import { AddFormProps, TCreateProductForm } from "../types/types";
 
 export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const isAdding = useSelector(getIsAddingSeletor);
-  const initialState = {
+  const initialState: TCreateProductForm = {
     name: "",
     parentId: "",
     unitId: "",
   };
-  const [formData, setFormData] = useState(initialState);
-
-  const handleChange =
-    (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
-    };
+  const { dispatch, formData, setFormData, handleChange, isAdding } =
+    useAddForm<TCreateProductForm>(getIsAddingSelector, initialState);
 
   const handleSubmit = () => {
     dispatch(

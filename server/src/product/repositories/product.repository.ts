@@ -21,14 +21,16 @@ export class ProductRepository extends Repository<Product> {
         $1::text,
         ARRAY['name', 'parentid', 'umid'],
         ARRAY[quote_literal($2), $3::text, $4::text])`;
+    const { name, parentId, unitId } = dto;
 
     try {
-      await this.query(query, [
-        this.tableName,
-        dto.name,
-        dto.parentId,
-        dto.unitId,
-      ]);
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данный продукт уже существует!'),
+        );
+      }
+      await this.query(query, [this.tableName, name, parentId, unitId]);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));

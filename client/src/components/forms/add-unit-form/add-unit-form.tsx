@@ -1,33 +1,32 @@
-import { useDispatch, useSelector } from "@store";
+import { useAddForm } from "@hooks/useAddForm";
+import { getIsAddingSelector } from "@slices/units";
 import { addUnitAsync } from "@thunks/units";
 import { AddUnitFormUI } from "@ui/forms";
-import { ChangeEvent, FC, useState } from "react";
-import { AddFormProps } from "../types/types";
-import { getIsAddingSeletor } from "@slices/units";
+import { FC } from "react";
+import { AddFormProps, TCreateUnitForm } from "../types/types";
 
 export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const isAdding = useSelector(getIsAddingSeletor);
-  const [unitName, setUnitName] = useState("");
-
-  const onChangeUnitName = (evt: ChangeEvent<HTMLInputElement>) => {
-    setUnitName(evt.target.value);
+  const initialState: TCreateUnitForm = {
+    name: "",
   };
+  const { dispatch, formData, setFormData, handleChange, isAdding } =
+    useAddForm<TCreateUnitForm>(getIsAddingSelector, initialState);
 
   const handleSubmit = () => {
     dispatch(
       addUnitAsync({
-        name: unitName,
+        name: formData.name,
       })
     );
-    setUnitName("");
+
+    setFormData(initialState);
   };
 
   return (
     <AddUnitFormUI
       isAdding={isAdding}
-      unitName={unitName}
-      onChangeUnitName={onChangeUnitName}
+      formData={formData}
+      onChange={handleChange}
       onSubmit={handleSubmit}
       onClose={onClose}
     />

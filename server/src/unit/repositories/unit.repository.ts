@@ -1,10 +1,10 @@
-import { DataSource, Repository } from 'typeorm';
-import { Unit } from '../entities/unit.entity';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { CreateUnitDto } from '../dto/create-unit.dto';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
+import { DataSource, Repository } from 'typeorm';
+import { CreateUnitDto } from '../dto/create-unit.dto';
+import { Unit } from '../entities/unit.entity';
 
 @Injectable()
 export class UnitRepository extends Repository<Unit> {
@@ -22,9 +22,17 @@ export class UnitRepository extends Repository<Unit> {
       ARRAY['name'],
       ARRAY[quote_literal($2)]
     )`;
+    const { name } = dto;
 
     try {
-      await this.query(query, [dto.name]);
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данная ЕИ уже существует!'),
+        );
+      }
+
+      await this.query(query, [this.tableName, name]);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));

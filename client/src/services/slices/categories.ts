@@ -31,7 +31,7 @@ const categoriesSlice = createSlice({
   selectors: {
     getCategoriesSelector: (state) => state.categories,
     getIsLoadingSelector: (state) => state.isLoading,
-    getIsAddingSeletor: (state) => state.isAdding,
+    getIsAddingSelector: (state) => state.isAdding,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -67,7 +67,7 @@ export const reducer = categoriesSlice.reducer;
 export const {
   getCategoriesSelector,
   getIsLoadingSelector,
-  getIsAddingSeletor,
+  getIsAddingSelector,
   getPaginationSelector,
 } = categoriesSlice.selectors;
 export const { setCategories, setCurrentPage, setTotalCount } =
