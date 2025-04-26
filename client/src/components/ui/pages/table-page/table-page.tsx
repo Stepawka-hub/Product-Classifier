@@ -2,15 +2,14 @@ import { Button } from "@components/common/buttons";
 import { BasePage } from "@pages";
 import { Table } from "@components/table";
 import { TablePageUIProps } from "./type";
-import { Modal } from "@components/modal";
 import s from "./table-page.module.css";
 import { TEntity } from "@utils/types";
 
 export const TablePageUI = <T extends TEntity>({
   title,
   addButtonLabel,
+  openModal,
   tableConfig,
-  modalConfig,
   pagination,
 }: TablePageUIProps<T>) => (
   <>
@@ -32,13 +31,10 @@ export const TablePageUI = <T extends TEntity>({
             variant="plus"
             children={addButtonLabel}
             className={s.actionButton}
-            onClick={modalConfig.onOpen}
+            onClick={openModal}
           />
         </div>
       </div>
     </BasePage>
-    {modalConfig.isOpen && (
-      <Modal onClose={modalConfig.onClose}>{modalConfig.renderModal}</Modal>
-    )}
   </>
 );

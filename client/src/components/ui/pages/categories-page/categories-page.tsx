@@ -3,16 +3,10 @@ import { TCategory } from "@utils/types";
 import { FC } from "react";
 import { CategoriesPageUIProps } from "./type";
 
-export const CategoriesPageUI: FC<CategoriesPageUIProps> = ({
-  tableConfig,
-  modalConfig,
-  pagination,
-}) => (
+export const CategoriesPageUI: FC<CategoriesPageUIProps> = (props) => (
   <TablePage<TCategory>
     title="Категории"
     addButtonLabel="Добавить категорию"
-    tableConfig={tableConfig}
-    modalConfig={modalConfig}
-    pagination={pagination}
+    {...props}
   />
 );

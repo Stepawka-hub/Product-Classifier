@@ -2,12 +2,12 @@ import { useAddForm } from "@hooks/useAddForm";
 import { getIsAddingSelector } from "@slices/units";
 import { addUnitAsync } from "@thunks/units";
 import { AddUnitFormUI } from "@ui/forms";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { AddFormProps, TCreateUnitForm } from "../types/types";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getErrorMessage } from "@utils/error";
 
-export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
+export const AddUnitForm: FC<AddFormProps> = memo(({ onClose }) => {
   const initialState: TCreateUnitForm = {
     name: "",
   };
@@ -38,4 +38,4 @@ export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
       onClose={onClose}
     />
   );
-};
+});

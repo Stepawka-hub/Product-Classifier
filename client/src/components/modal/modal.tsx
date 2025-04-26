@@ -1,16 +1,11 @@
+import { ModalUI } from "@ui/modal";
 import { FC, memo, MouseEventHandler, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { ModalProps } from "./type";
-import { ModalUI } from "@ui/modal";
+import { TModalProps } from "./type";
 
-export const Modal: FC<ModalProps> = memo(({ children, onClose }) => {
-  const modalRoot = document.getElementById("root");
+const modalRoot = document.getElementById("modals");
 
-  useEffect(() => {
-    document.addEventListener("keydown", closeByEsc);
-    return () => document.removeEventListener("keydown", closeByEsc);
-  }, []);
-
+export const Modal: FC<TModalProps> = memo(({ isOpen, children, onClose }) => {
   const closeByEsc = (evt: KeyboardEvent) => {
     if (evt.key === "Escape") {
       onClose();
@@ -22,6 +17,13 @@ export const Modal: FC<ModalProps> = memo(({ children, onClose }) => {
       onClose();
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("keydown", closeByEsc);
+    return () => document.removeEventListener("keydown", closeByEsc);
+  }, []);
+
+  if (!isOpen) return null;
 
   return createPortal(
     <ModalUI onOverlayClick={handleOverlayClick} onClose={onClose}>

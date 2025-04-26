@@ -1,4 +1,5 @@
 import { TCategory, TPagination, TProduct, TToast, TUnit } from "@utils/types";
+import { ReactNode } from 'react';
 
 export type TInitialAppState = {
   isInitialized: boolean;
@@ -23,6 +24,11 @@ export type TInitialCategoryState = TCommonInitialState & {
 export type TInitialUnitState = TCommonInitialState & {
   units: TUnit[];
 };
+
+export type TInitialModalState = {
+  isOpen: boolean;
+  content: ReactNode | null;
+}
 
 export type TToastsState = {
   toasts: TToast[];

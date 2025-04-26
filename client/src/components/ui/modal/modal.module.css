@@ -39,7 +39,6 @@
   height: 2rem;
   top: -0.75rem;
   right: -0.75rem;
-  z-index: 15;
 
   background-color: var(--modal-btn-bg-color);
   border-radius: 50%;

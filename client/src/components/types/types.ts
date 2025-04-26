@@ -1,10 +1,9 @@
 import { TPagination } from "@utils/types";
-import { ReactElement } from "react";
 
 export type TEntityPageUI<T> = {
   tableConfig: TTableConfig<T>;
-  modalConfig: TModalConfig;
   pagination: TPagination;
+  openModal: () => void;
 };
 
 export type TTableConfig<T> = {
@@ -12,11 +11,4 @@ export type TTableConfig<T> = {
   data: T[];
   onEdit: () => void;
   onDelete: (id: number) => void;
-};
-
-export type TModalConfig = {
-  renderModal: ReactElement;
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
 };

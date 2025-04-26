@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   products: productsReducer,
   categories: categoriesReducer,
   units: unitsReducer,
-  toasts: toastsReducer
+  toasts: toastsReducer,
 });
 
 export const store = configureStore({

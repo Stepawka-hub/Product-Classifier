@@ -11,28 +11,32 @@ import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { CategoriesPageUI } from "@ui/pages";
 import { categoriesHeaders } from "@utils/constants";
 import { TCategory } from "@utils/types";
+import { useMemo } from "react";
 
 export const CategoriesPage = () => {
   const { isLoading, tableConfig, modalConfig, pagination } =
-    useTablePage<TCategory>(
-      categoriesHeaders,
-      getCategoriesSelector,
+    useTablePage<TCategory>({
+      headers: categoriesHeaders,
+      dataSelector: getCategoriesSelector,
       getIsLoadingSelector,
       getPaginationSelector,
       setCurrentPage,
-      getAllCategoriesAsync,
-      deleteCategoryAsync
-    );
+      getElementsAsync: getAllCategoriesAsync,
+      deleteElementAsync: deleteCategoryAsync,
+    });
+  const { showModal, hideModal } = modalConfig;
+
+  const modalContent = useMemo(
+    () => <AddCategoryForm onClose={hideModal} />,
+    [hideModal]
+  );
 
   if (isLoading) return <Loader />;
 
   return (
     <CategoriesPageUI
       tableConfig={tableConfig}
-      modalConfig={{
-        renderModal: <AddCategoryForm onClose={modalConfig.onClose} />,
-        ...modalConfig,
-      }}
+      openModal={() => showModal(modalContent)}
       pagination={pagination}
     />
   );

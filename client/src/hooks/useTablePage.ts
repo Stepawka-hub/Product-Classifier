@@ -6,37 +6,41 @@ import { TPagination } from "@utils/types";
 import { useEffect } from "react";
 import { Selector } from "react-redux";
 import { useModal } from "./useModal";
+import { usePagination } from "./usePagination";
+import { useTableActions } from "./useTableActions";
 
-export const useTablePage = <T>(
-  headers: Record<keyof T, string>,
-  dataSelector: (state: RootState) => T[],
-  isLoadingSelector: (state: RootState) => boolean,
+type TUseTableParams<T> = {
+  headers: Record<keyof T, string>;
+  dataSelector: (state: RootState) => T[];
+  getIsLoadingSelector: (state: RootState) => boolean;
   getPaginationSelector: Selector<
     RootState,
     Omit<TPagination, "setCurrentPage">
-  >,
-  setCurrentPage: ActionCreatorWithPayload<number, string>,
-  getElementsAsync: TFetchEntitiesThunk<T>,
-  deleteElementAsync: TDeleteEntityThunk
-) => {
-  const dispatch = useDispatch();
-  const { showModal, handleShowModal, handleCloseModal } = useModal();
+  >;
+  setCurrentPage: ActionCreatorWithPayload<number, string>;
+  getElementsAsync: TFetchEntitiesThunk<T>;
+  deleteElementAsync: TDeleteEntityThunk;
+};
 
-  const pagination = useSelector(getPaginationSelector);
-  const { currentPage, pageSize } = pagination;
+export const useTablePage = <T>({
+  headers,
+  getIsLoadingSelector,
+  dataSelector,
+  getPaginationSelector,
+  setCurrentPage,
+  getElementsAsync,
+  deleteElementAsync,
+}: TUseTableParams<T>) => {
+  const dispatch = useDispatch();
+  const { showModal, hideModal } = useModal();
+  const { pagination, currentPage, pageSize, setPageNumber } = usePagination(
+    getPaginationSelector,
+    setCurrentPage
+  );
+  const { onEdit, onDelete } = useTableActions(deleteElementAsync);
 
   const data = useSelector(dataSelector);
-  const isLoading = useSelector(isLoadingSelector);
-
-  const setPageNumber = (page: number) => {
-    dispatch(setCurrentPage(page));
-  };
-
-  const handleEdit = () => {};
-
-  const handleDelete = (id: number) => {
-    dispatch(deleteElementAsync(id))
-  };
+  const isLoading = useSelector(getIsLoadingSelector);
 
   useEffect(() => {
     dispatch(getElementsAsync({ page: currentPage, limit: pageSize }));
@@ -45,15 +49,14 @@ export const useTablePage = <T>(
   return {
     isLoading,
     tableConfig: {
-      headers: headers,
-      data: data,
-      onEdit: handleEdit,
-      onDelete: handleDelete,
+      headers,
+      data,
+      onEdit,
+      onDelete,
     },
     modalConfig: {
-      isOpen: showModal,
-      onOpen: handleShowModal,
-      onClose: handleCloseModal,
+      showModal,
+      hideModal,
     },
     pagination: { ...pagination, setCurrentPage: setPageNumber },
   };
