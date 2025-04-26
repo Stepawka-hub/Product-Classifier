@@ -1,36 +1,41 @@
-import { useDispatch, useSelector } from "@store";
+import { useAddForm } from "@hooks/useAddForm";
+import { getIsAddingSelector } from "@slices/units";
 import { addUnitAsync } from "@thunks/units";
 import { AddUnitFormUI } from "@ui/forms";
-import { ChangeEvent, FC, useState } from "react";
-import { AddFormProps } from "../types/types";
-import { getIsAddingSeletor } from "@slices/units";
+import { FC, memo } from "react";
+import { AddFormProps, TCreateUnitForm } from "../types/types";
+import { dispatchErrorToast } from "@services/helpers/toast";
+import { getErrorMessage } from "@utils/helpers/error";
 
-export const AddUnitForm: FC<AddFormProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const isAdding = useSelector(getIsAddingSeletor);
-  const [unitName, setUnitName] = useState("");
-
-  const onChangeUnitName = (evt: ChangeEvent<HTMLInputElement>) => {
-    setUnitName(evt.target.value);
+export const AddUnitForm: FC<AddFormProps> = memo(({ onClose }) => {
+  const initialState: TCreateUnitForm = {
+    name: "",
   };
+  const { dispatch, formData, setFormData, handleChange, isAdding } =
+    useAddForm<TCreateUnitForm>(getIsAddingSelector, initialState);
 
-  const handleSubmit = () => {
-    dispatch(
-      addUnitAsync({
-        name: unitName,
-      })
-    );
-    setUnitName('');
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      await dispatch(
+        addUnitAsync({
+          name: formData.name,
+        })
+      ).unwrap();
+
+      setFormData(initialState);
+    } catch (err: unknown) {
+      dispatchErrorToast(dispatch, getErrorMessage(err));
+    }
   };
 
   return (
     <AddUnitFormUI
+      title="Добавление ЕИ"
       isAdding={isAdding}
-      unitName={unitName}
-      onChangeUnitName={onChangeUnitName}
+      formData={formData}
+      onChange={handleChange}
       onSubmit={handleSubmit}
       onClose={onClose}
     />
   );
-};
+});

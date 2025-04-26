@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 
@@ -7,12 +15,17 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.categoryService.findAllWithPagination(page, limit);
   }
 
   @Post()
-  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.createCategory(createCategoryDto);
+  createCategory(@Body() dto: CreateCategoryDto) {
+    return this.categoryService.createCategory(dto);
+  }
+
+  @Delete(':id')
+  deleteCategory(@Param('id') id: number) {
+    return this.categoryService.deleteCategory(id);
   }
 }

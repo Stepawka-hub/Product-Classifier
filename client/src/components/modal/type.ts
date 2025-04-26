@@ -1,6 +1,6 @@
-import { ReactElement } from "react";
+import { PropsWithChildren } from 'react';
 
-export type ModalProps = {
-  children?: ReactElement;
+export type TModalProps = PropsWithChildren & {
+  isOpen: boolean;
   onClose: () => void;
-};
+}

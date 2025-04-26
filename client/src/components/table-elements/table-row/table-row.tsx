@@ -1,11 +1,13 @@
-import s from "@ui/table/table.module.css";
-import { TableCell } from "@components/table-elements";
 import { Button } from "@components/common/buttons";
+import { TableCell } from "@components/table-elements";
+import s from "@ui/table/table.module.css";
+import { TEntity } from "@utils/types";
 import { TableRowProps } from "./type";
 
-export const TableRow = <T extends object>({
+export const TableRow = <T extends TEntity>({
   rowData,
   headers,
+  isRemoving,
   onEdit,
   onDelete,
 }: TableRowProps<T>) => {
@@ -22,8 +24,13 @@ export const TableRow = <T extends object>({
     <tr className={s.trow}>
       {cellElements}
       <td className={s.actions}>
-        <Button type="edit" size="small" onClick={onEdit} />
-        <Button type="cross" size="small" onClick={onDelete} />
+        <Button variant="edit" size="small" onClick={onEdit} />
+        <Button
+          variant="cross"
+          size="small"
+          disabled={isRemoving}
+          onClick={() => onDelete(rowData.id)}
+        />
       </td>
     </tr>
   );

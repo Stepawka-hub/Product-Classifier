@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { ProductService } from '../product/product.service';
 import { UnitService } from '../unit/unit.service';
-import { IAppData } from './types/app-data.dto';
+import { IAppData } from './dto/app-data.dto';
 
 @Injectable()
 export class AppService {
@@ -19,9 +19,9 @@ export class AppService {
     await this.seedDatabase();
 
     const [products, categories, units] = await Promise.all([
-      this.productService.findAll(),
-      this.categoryService.findAll(),
-      this.unitService.findAll(),
+      this.productService.findAllWithPagination(),
+      this.categoryService.findAllWithPagination(),
+      this.unitService.findAllWithPagination(),
     ]);
 
     return { products, categories, units };

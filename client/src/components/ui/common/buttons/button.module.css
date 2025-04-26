@@ -54,6 +54,7 @@
   opacity: 0.8;
 }
 
+.button:disabled,
 .btnWithIcon:disabled {
   background-color: var(--disabled-btn-color);
 }

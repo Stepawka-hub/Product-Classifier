@@ -1,12 +1,6 @@
-import { ReactElement } from 'react';
+import { TEntityPageUI } from '@components/types';
 
-export type TablePageProps<T> = {
+export type TablePageProps<T> = TEntityPageUI<T> & {
   title: string;
-  headers: Record<keyof T, string>;
-  data: T[];
   addButtonLabel: string;
-  renderModal: ReactElement;
-  isModalOpen: boolean;
-  onOpenModal: () => void;
-  onCloseModal: () => void;
 };

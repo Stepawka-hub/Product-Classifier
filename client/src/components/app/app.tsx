@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Routes, Route } from "react-router";
 import { FC, useEffect } from "react";
+import { Route, Routes } from "react-router";
 
-import s from "./app.module.css";
-import { useDispatch, useSelector } from "@store";
-import { getIsInitializedSelector } from "@slices/app";
-import { initialize } from "@thunks/app";
 import { AppPreloader } from "@components/app-preloader";
-import { Sidebar } from "@components/sidebar/sidebar";
-import { HomePage, ProductsPage, CategoriesPage, UnitsPage } from "@pages";
+import { ModalProvider } from "@components/modal-provider/modal-provider";
 import { NotFound } from "@components/not-found";
-import { ToastList } from '@components/toast-list';
+import { Sidebar } from "@components/sidebar/sidebar";
+import { ToastList } from "@components/toast-list";
+import { CategoriesPage, HomePage, ProductsPage, UnitsPage } from "@pages";
+import { getIsInitializedSelector } from "@slices/app";
+import { useDispatch, useSelector } from "@store";
+import { initialize } from "@thunks/app";
+import s from "./app.module.css";
 
 export const App: FC = () => {
   const dispatch = useDispatch();
@@ -30,15 +31,17 @@ export const App: FC = () => {
         <Sidebar />
       </div>
 
-      <div className={s.content}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
-          <Route path="/units" element={<UnitsPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
+      <ModalProvider>
+        <div className={s.content}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/units" element={<UnitsPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </ModalProvider>
 
       <ToastList />
     </div>

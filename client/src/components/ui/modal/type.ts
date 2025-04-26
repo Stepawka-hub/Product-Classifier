@@ -1,7 +1,8 @@
-import { MouseEventHandler, ReactElement } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 
 export type ModalPropsUI = {
-  children?: ReactElement;
+  isOpen: boolean;
+  children: ReactNode | null;
   onOverlayClick: MouseEventHandler;
   onClose: () => void;
 };

@@ -1,31 +1,61 @@
+import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { TCreateProductData, TProduct } from "@utils/types";
-import { addToast } from "@slices/toasts";
-import { api } from '@api';
+import { PaginationParams } from "@utils/api/types/types";
+import { TCreateProductData, TPaginatedData, TProduct } from "@utils/types";
+import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
+import { RootState } from "@store";
+import { refreshTable } from "../helpers/pagination";
+import { setIsRemoving } from "@slices/products";
 
-const GET_ALL_PRODUCTS = "products/getAll";
+const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
+const DELETE_PRODUCT = "products/delete";
 
-export const getAllProductsAsync = createAsyncThunk(
-  GET_ALL_PRODUCTS,
-  async () => {
-    const res = await api.products.getAll();
-    return res;
+export const getAllProductsAsync = createAsyncThunk<
+  TPaginatedData<TProduct>,
+  PaginationParams
+>(GET_PRODUCTS, async (paginationParams) => {
+  const res = await api.products.getAll(paginationParams);
+  return res;
+});
+
+export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
+  ADD_PRODUCT,
+  async (createProductData, { dispatch, getState }) => {
+    const res = await api.products.createProduct(createProductData);
+
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TProduct>(
+        dispatch,
+        getAllProductsAsync,
+        state.products.pagination
+      );
+      dispatchSuccessToast(dispatch, "Изделие успешно добавлено!");
+    } else {
+      return Promise.reject(res.message);
+    }
   }
 );
 
-export const addProductAsync = createAsyncThunk<TProduct, TCreateProductData>(
-  ADD_PRODUCT,
-  async (createProductData, { dispatch }) => {
-    const res = await api.products.create(createProductData);
+export const deleteProductAsync = createAsyncThunk<void, number>(
+  DELETE_PRODUCT,
+  async (id, { dispatch, getState }) => {
+    dispatch(setIsRemoving(id));
+    const res = await api.products.deleteProduct(id);
 
-    dispatch(
-      addToast({
-        message: "Продукт успешно добавлен!",
-        type: "success",
-        duration: 2000,
-      })
-    );
-    return res;
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TProduct>(
+        dispatch,
+        getAllProductsAsync,
+        state.products.pagination
+      );
+      dispatchSuccessToast(dispatch, "Изделие успешно удалено!");
+    } else {
+      dispatchErrorToast(dispatch, res.message);
+    }
+    
+    dispatch(setIsRemoving(id));
   }
 );

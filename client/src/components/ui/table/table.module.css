@@ -3,6 +3,7 @@
   border-radius: 1.25rem;
   overflow: hidden;
   margin-top: 1rem;
+  overflow-x: auto;
 }
 
 .table {

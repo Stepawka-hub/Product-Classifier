@@ -3,42 +3,63 @@ import { Product } from '../entities/product.entity';
 import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { ProductDto } from '../dto/product.dto';
+import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { getErrorMessage } from 'src/utils/error-handler';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
+  private tableName: string;
+
   constructor(@InjectDataSource() dataSource: DataSource) {
     super(Product, dataSource.createEntityManager());
+    this.tableName = 'product';
   }
 
-  async createWithAddRow(dto: CreateProductDto): Promise<ProductDto> {
+  async createWithAddRow(dto: CreateProductDto): Promise<BaseResponseDto> {
     const query = `
-      SELECT * FROM AddRow(
-        'product',
+      SELECT AddRow(
+        $1::text,
         ARRAY['name', 'parentid', 'umid'],
-        ARRAY[quote_literal($1), $2::text, $3::text]
-      ) AS t(id INTEGER, name VARCHAR, umid INTEGER, parentid INTEGER)`;
+        ARRAY[quote_literal($2), $3::text, $4::text])`;
+    const { name, parentId, unitId } = dto;
 
-    const result = (await this.query(query, [
-      dto.name,
-      dto.parentId,
-      dto.unitId,
-    ])) as Product[];
-
-    const createdProduct = result[0];
-    if (createdProduct?.id === null) {
-      throw new Error('Product creation failed');
+    try {
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данный продукт уже существует!'),
+        );
+      }
+      await this.query(query, [this.tableName, name, parentId, unitId]);
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
     }
+  }
 
-    const productWithRelations = await this.findOne({
-      where: { id: createdProduct.id },
-      relations: ['unit', 'parent'],
-    });
+  async deleteProduct(id: number): Promise<BaseResponseDto> {
+    const query = `SELECT DeleteRows($1, 'id', $2)`;
 
-    if (!productWithRelations) {
-      throw new Error('Product not found after creation');
+    try {
+      const product = await this.findOne({
+        where: { id },
+      });
+
+      if (!product || !id) {
+        return BaseResponseDto.Error('Изделие не найдено!');
+      }
+
+      const [res] = (await this.query(query, [this.tableName, String(id)])) as [
+        { deleterows: boolean },
+      ];
+
+      if (!res.deleterows) {
+        return BaseResponseDto.Error('Не удалось удалить изделие!');
+      }
+
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
     }
-
-    return new ProductDto(productWithRelations);
   }
 }

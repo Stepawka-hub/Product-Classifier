@@ -1,4 +1,5 @@
-import { TCreateUnitData, TUnit } from "@utils/types";
+import { TCreateUnitData, TPaginatedData, TUnit } from "@utils/types";
+import { PaginationParams, TServerResponse } from "../types/types";
 import { BaseApi } from "./base/base.api";
 
 export class UnitApi extends BaseApi {
@@ -6,11 +7,15 @@ export class UnitApi extends BaseApi {
     super(baseUrl, baseEndpoint);
   }
 
-  getAll(): Promise<TUnit[]> {
-    return this.get();
+  getAll(params: PaginationParams): Promise<TPaginatedData<TUnit>> {
+    return this.get(params);
   }
 
-  create(unitData: TCreateUnitData): Promise<TUnit> {
-    return this.post('', unitData);
+  createUnit(unitData: TCreateUnitData): Promise<TServerResponse> {
+    return this.post(unitData);
+  }
+
+  deleteUnit(id: number): Promise<TServerResponse> {
+    return this.delete(id);
   }
 }

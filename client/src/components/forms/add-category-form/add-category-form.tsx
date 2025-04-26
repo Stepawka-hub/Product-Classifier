@@ -1,35 +1,40 @@
-import { AddCategoryFormUI } from "@ui/forms";
-import { ChangeEventHandler, FC, useState } from "react";
-import { AddFormProps } from "../types/types";
-import { getIsAddingSeletor } from "@slices/categories";
+import { useAddForm } from "@hooks/useAddForm";
+import { dispatchErrorToast } from "@services/helpers/toast";
+import { getIsAddingSelector } from "@slices/categories";
 import { addCategoryAsync } from "@thunks/categories";
-import { useDispatch, useSelector } from "@store";
+import { AddCategoryFormUI } from "@ui/forms";
+import { FC } from "react";
+import { AddFormProps, TCreateCategoryForm } from "../types/types";
+import { getErrorMessage } from "@utils/helpers/error";
 
 export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const isAdding = useSelector(getIsAddingSeletor);
-  const initialState = {
+  const initialState: TCreateCategoryForm = {
     name: "",
     parentName: "",
     unitName: "",
   };
-  const [formData, setFormData] = useState(initialState);
+  const { dispatch, formData, setFormData, handleChange, isAdding } =
+    useAddForm<TCreateCategoryForm>(getIsAddingSelector, initialState);
 
-  const handleChange =
-    (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
-    };
+  const handleSubmit = async () => {
+    try {
+      await dispatch(
+        addCategoryAsync({
+          name: formData.name,
+          parentName: formData.parentName,
+          unitName: formData.unitName,
+        })
+      ).unwrap();
 
-  const handleSubmit = () => {
-    dispatch(addCategoryAsync(formData));
-
-    setFormData(initialState);
-    onClose();
+      setFormData(initialState);
+    } catch (err: unknown) {
+      dispatchErrorToast(dispatch, getErrorMessage(err));
+    }
   };
 
   return (
     <AddCategoryFormUI
+      title="Добавление категории"
       isAdding={isAdding}
       formData={formData}
       onChange={handleChange}

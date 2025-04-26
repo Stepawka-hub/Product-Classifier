@@ -1,41 +1,43 @@
-import { getIsAddingSeletor } from "@slices/products";
-import { useDispatch, useSelector } from "@store";
+import { useAddForm } from "@hooks/useAddForm";
+import { getIsAddingSelector } from "@slices/products";
 import { addProductAsync } from "@thunks/products";
 import { AddProductFormUI } from "@ui/forms";
-import { ChangeEventHandler, FC, useState } from "react";
-import { AddFormProps } from "../types/types";
+import { FC } from "react";
+import { AddFormProps, TCreateProductForm } from "../types/types";
+import { getNumber } from "@utils/helpers/validation";
+import { dispatchErrorToast } from "@services/helpers/toast";
+import { getErrorMessage } from '@utils/helpers/error';
 
 export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const isAdding = useSelector(getIsAddingSeletor);
-  const initialState = {
+  const initialState: TCreateProductForm = {
     name: "",
     parentId: "",
     unitId: "",
   };
-  const [formData, setFormData] = useState(initialState);
+  const { dispatch, formData, setFormData, handleChange, isAdding } =
+    useAddForm<TCreateProductForm>(getIsAddingSelector, initialState);
 
-  const handleChange =
-    (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
-    };
+  const handleSubmit = async () => {
+    const { name, parentId, unitId } = formData;
 
-  const handleSubmit = () => {
-    dispatch(
-      addProductAsync({
-        name: formData.name,
-        parentId: Number(formData.parentId),
-        unitId: Number(formData.unitId),
-      })
-    );
+    try {
+      await dispatch(
+        addProductAsync({
+          name,
+          parentId: getNumber(parentId),
+          unitId: getNumber(unitId),
+        })
+      ).unwrap();
 
-    setFormData(initialState);
-    onClose();
+      setFormData(initialState);
+    } catch (err: unknown) {
+      dispatchErrorToast(dispatch, getErrorMessage(err));
+    }
   };
 
   return (
     <AddProductFormUI
+      title="Добавление изделия"
       isAdding={isAdding}
       formData={formData}
       onChange={handleChange}

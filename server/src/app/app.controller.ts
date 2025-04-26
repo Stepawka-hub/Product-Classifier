@@ -1,6 +1,6 @@
 import { Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { IAppData } from './types/app-data.dto';
+import { IAppData } from './dto/app-data.dto';
 
 @Controller()
 export class AppController {

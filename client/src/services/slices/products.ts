@@ -1,12 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
 import { addProductAsync, getAllProductsAsync } from "@thunks/products";
-import { TProduct } from "@utils/types";
+import { TPaginatedData, TProduct } from "@utils/types";
+import { toggleArrayItem } from '@utils/helpers/array';
 
 const initialState: TInitialProductState = {
   products: [],
   isLoading: false,
   isAdding: false,
+  isRemoving: [],
+  pagination: {
+    totalCount: 1,
+    pageSize: 10,
+    currentPage: 1,
+  },
 };
 
 const productsSlice = createSlice({
@@ -16,11 +23,22 @@ const productsSlice = createSlice({
     setProducts: (state, { payload }: PayloadAction<TProduct[]>) => {
       state.products = payload;
     },
+    setCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.currentPage = payload;
+    },
+    setTotalCount: (state, { payload }: PayloadAction<number>) => {
+      state.pagination.totalCount = payload;
+    },
+    setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
+      state.isRemoving= toggleArrayItem(state.isRemoving, payload);
+    },
   },
   selectors: {
     getProductsSelector: (state) => state.products,
     getIsLoadingSelector: (state) => state.isLoading,
-    getIsAddingSeletor: (state) => state.isAdding,
+    getIsAddingSelector: (state) => state.isAdding,
+    getIsRemovingSelector: (state) => state.isRemoving,
+    getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
     builder
@@ -29,9 +47,10 @@ const productsSlice = createSlice({
       })
       .addCase(
         getAllProductsAsync.fulfilled,
-        (state, { payload }: PayloadAction<TProduct[]>) => {
+        (state, { payload }: PayloadAction<TPaginatedData<TProduct>>) => {
           state.isLoading = false;
-          state.products = payload;
+          state.products = payload.items;
+          state.pagination.totalCount = payload.total;
         }
       )
       .addCase(getAllProductsAsync.rejected, (state) => {
@@ -41,13 +60,9 @@ const productsSlice = createSlice({
       .addCase(addProductAsync.pending, (state) => {
         state.isAdding = true;
       })
-      .addCase(
-        addProductAsync.fulfilled,
-        (state, { payload }: PayloadAction<TProduct>) => {
-          state.isAdding = false;
-          state.products = [...state.products, payload];
-        }
-      )
+      .addCase(addProductAsync.fulfilled, (state) => {
+        state.isAdding = false;
+      })
       .addCase(addProductAsync.rejected, (state) => {
         state.isAdding = false;
       });
@@ -55,6 +70,12 @@ const productsSlice = createSlice({
 });
 
 export const reducer = productsSlice.reducer;
-export const { getProductsSelector, getIsLoadingSelector, getIsAddingSeletor } =
-  productsSlice.selectors;
-export const { setProducts } = productsSlice.actions;
+export const {
+  getProductsSelector,
+  getIsLoadingSelector,
+  getIsAddingSelector,
+  getIsRemovingSelector,
+  getPaginationSelector,
+} = productsSlice.selectors;
+export const { setProducts, setCurrentPage, setTotalCount, setIsRemoving } =
+  productsSlice.actions;
