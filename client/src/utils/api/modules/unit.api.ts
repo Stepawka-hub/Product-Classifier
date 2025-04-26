@@ -1,4 +1,4 @@
-import { TCreateUnitData, TPaginatedData, TUnit } from "@utils/types";
+import { TCreateUnitData, TPaginatedData, TUnit, TUpdateUnitData } from "@utils/types";
 import { PaginationParams, TServerResponse } from "../types/types";
 import { BaseApi } from "./base/base.api";
 
@@ -13,6 +13,10 @@ export class UnitApi extends BaseApi {
 
   createUnit(unitData: TCreateUnitData): Promise<TServerResponse> {
     return this.post(unitData);
+  }
+
+  updateUnit(unitData: TUpdateUnitData): Promise<TServerResponse> {
+    return this.update(unitData);
   }
 
   deleteUnit(id: number): Promise<TServerResponse> {

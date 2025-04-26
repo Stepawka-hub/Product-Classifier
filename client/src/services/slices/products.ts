@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
 import { addProductAsync, getAllProductsAsync } from "@thunks/products";
 import { TPaginatedData, TProduct } from "@utils/types";
-import { toggleArrayItem } from '@utils/helpers/array';
+import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialProductState = {
   products: [],
   isLoading: false,
   isAdding: false,
+  isUpdating: [],
   isRemoving: [],
   pagination: {
     totalCount: 1,
@@ -30,7 +31,10 @@ const productsSlice = createSlice({
       state.pagination.totalCount = payload;
     },
     setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving= toggleArrayItem(state.isRemoving, payload);
+      state.isRemoving = toggleArrayItem(state.isRemoving, payload);
+    },
+    setIsUpdating: (state, { payload }: PayloadAction<string | number>) => {
+      state.isUpdating = toggleArrayItem(state.isUpdating, payload);
     },
   },
   selectors: {
@@ -38,6 +42,7 @@ const productsSlice = createSlice({
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
+    getIsUpdatingSelector: (state) => state.isUpdating,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -75,6 +80,7 @@ export const {
   getIsLoadingSelector,
   getIsAddingSelector,
   getIsRemovingSelector,
+  getIsUpdatingSelector,
   getPaginationSelector,
 } = productsSlice.selectors;
 export const { setProducts, setCurrentPage, setTotalCount, setIsRemoving } =

@@ -1,7 +1,7 @@
 // Сущность
 export type TEntity = {
   id: number;
-}
+};
 
 // Категория
 export type TCategory = TEntity & {
@@ -32,9 +32,10 @@ export type TToast = {
   duration: number;
 };
 
-// Данные, необходимые для создания сущностей
+// Данные, необходимые для создания тостов
 export type TCreateToastData = Omit<TToast, "id">;
 
+// Данные, необходимые для создания сущностей
 export type TCreateUnitData = Pick<TUnit, "name">;
 
 export type TCreateProductData = {
@@ -48,6 +49,11 @@ export type TCreateCategoryData = {
   parentName: string;
   unitName: string;
 };
+
+// Данные, необходимые для обновления сущностей
+export type TUpdateUnitData = TUnit;
+export type TUpdateProductData = TEntity & Partial<TCreateProductData>;
+export type TUpdateCategoryData = TEntity & Partial<TCreateCategoryData>;
 
 // Пагинация
 export type TPagination = {

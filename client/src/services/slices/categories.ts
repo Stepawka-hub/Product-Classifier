@@ -8,6 +8,7 @@ const initialState: TInitialCategoryState = {
   categories: [],
   isLoading: false,
   isAdding: false,
+  isUpdating: [],
   isRemoving: [],
   pagination: {
     totalCount: 1,
@@ -32,12 +33,16 @@ const categoriesSlice = createSlice({
     setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
       state.isRemoving = toggleArrayItem(state.isRemoving, payload);
     },
+    setIsUpdating: (state, { payload }: PayloadAction<string | number>) => {
+      state.isUpdating = toggleArrayItem(state.isUpdating, payload);
+    },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
+    getIsUpdatingSelector: (state) => state.isUpdating,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -75,6 +80,7 @@ export const {
   getIsLoadingSelector,
   getIsAddingSelector,
   getIsRemovingSelector,
+  getIsUpdatingSelector,
   getPaginationSelector,
 } = categoriesSlice.selectors;
 export const { setCategories, setCurrentPage, setTotalCount, setIsRemoving } =

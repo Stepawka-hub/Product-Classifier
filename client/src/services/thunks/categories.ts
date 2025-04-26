@@ -1,14 +1,20 @@
 import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PaginationParams } from "@utils/api/types/types";
-import { TCategory, TCreateCategoryData, TPaginatedData } from "@utils/types";
+import {
+  TCategory,
+  TCreateCategoryData,
+  TPaginatedData,
+  TUpdateCategoryData,
+} from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { refreshTable } from "../helpers/pagination";
 import { RootState } from "@store";
-import { setIsRemoving } from '@slices/categories';
+import { setIsRemoving } from "@slices/categories";
 
 const GET_CATEGORIES = "categories/get";
 const ADD_CATEGORY = "categories/add";
+const UPDATE_CATEGORY = "categories/update";
 const DELETE_CATEGORY = "categories/delete";
 
 export const getAllCategoriesAsync = createAsyncThunk<
@@ -32,6 +38,25 @@ export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
         state.products.pagination
       );
       dispatchSuccessToast(dispatch, "Категория успешно добавлена!");
+    } else {
+      return Promise.reject(res.message);
+    }
+  }
+);
+
+export const updateCategoryAsync = createAsyncThunk<void, TUpdateCategoryData>(
+  UPDATE_CATEGORY,
+  async (updateCategoryData, { dispatch, getState }) => {
+    const res = await api.categories.updateCategory(updateCategoryData);
+
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refreshTable<TCategory>(
+        dispatch,
+        getAllCategoriesAsync,
+        state.products.pagination
+      );
+      dispatchSuccessToast(dispatch, "Категория успешно обновлена!");
     } else {
       return Promise.reject(res.message);
     }

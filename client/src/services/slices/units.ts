@@ -2,13 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
 import { TPaginatedData, TUnit } from "@utils/types";
-import { toggleArrayItem } from '@utils/helpers/array';
+import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialUnitState = {
   units: [],
   isLoading: false,
   isAdding: false,
   isRemoving: [],
+  isUpdating: [],
   pagination: {
     totalCount: 1,
     pageSize: 10,
@@ -30,7 +31,10 @@ const unitsSlice = createSlice({
       state.pagination.totalCount = payload;
     },
     setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving= toggleArrayItem(state.isRemoving, payload);
+      state.isRemoving = toggleArrayItem(state.isRemoving, payload);
+    },
+    setIsUpdating: (state, { payload }: PayloadAction<string | number>) => {
+      state.isUpdating = toggleArrayItem(state.isUpdating, payload);
     },
   },
   selectors: {
@@ -38,6 +42,7 @@ const unitsSlice = createSlice({
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
+    getIsUpdatingSelector: (state) => state.isUpdating,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -75,6 +80,7 @@ export const {
   getIsLoadingSelector,
   getIsAddingSelector,
   getIsRemovingSelector,
+  getIsUpdatingSelector,
   getPaginationSelector,
 } = unitsSlice.selectors;
 export const { setUnits, setCurrentPage, setTotalCount, setIsRemoving } =

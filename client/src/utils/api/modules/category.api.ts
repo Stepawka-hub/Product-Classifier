@@ -1,4 +1,9 @@
-import { TCategory, TCreateCategoryData, TPaginatedData } from "@utils/types";
+import {
+  TCategory,
+  TCreateCategoryData,
+  TPaginatedData,
+  TUpdateCategoryData,
+} from "@utils/types";
 import { BaseApi } from "./base/base.api";
 import { PaginationParams, TServerResponse } from "../types/types";
 
@@ -13,6 +18,10 @@ export class CategoryApi extends BaseApi {
 
   createCategory(categoryData: TCreateCategoryData): Promise<TServerResponse> {
     return this.post(categoryData);
+  }
+
+  updateCategory(categoryData: TUpdateCategoryData): Promise<TServerResponse> {
+    return this.update(categoryData);
   }
 
   deleteCategory(id: number): Promise<TServerResponse> {
