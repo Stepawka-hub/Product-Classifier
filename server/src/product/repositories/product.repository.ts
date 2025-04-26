@@ -5,6 +5,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
+import { UpdateProductDto } from '../dto/update-product.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -15,7 +16,7 @@ export class ProductRepository extends Repository<Product> {
     this.tableName = 'product';
   }
 
-  async createWithAddRow(dto: CreateProductDto): Promise<BaseResponseDto> {
+  async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
     const query = `
       SELECT AddRow(
         $1::text,
@@ -31,6 +32,30 @@ export class ProductRepository extends Repository<Product> {
         );
       }
       await this.query(query, [this.tableName, name, parentId, unitId]);
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async updateProduct(dto: UpdateProductDto): Promise<BaseResponseDto> {
+    const query = `
+      SELECT AddRow(
+        $1::text,
+        ARRAY['name'],
+        ARRAY[quote_literal($2)]
+      )`;
+    const { name } = dto;
+
+    try {
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данная ЕИ уже существует!'),
+        );
+      }
+
+      await this.query(query, [this.tableName, name]);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));

@@ -5,6 +5,7 @@ import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { DataSource, Repository } from 'typeorm';
 import { Category } from '../entities/category.entity';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
 
 @Injectable()
 export class CategoryRepository extends Repository<Category> {
@@ -55,6 +56,30 @@ export class CategoryRepository extends Repository<Category> {
         );
       }
 
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+    const query = `
+        SELECT AddRow(
+          $1::text,
+          ARRAY['name'],
+          ARRAY[quote_literal($2)]
+        )`;
+    const { name } = dto;
+
+    try {
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данная ЕИ уже существует!'),
+        );
+      }
+
+      await this.query(query, [this.tableName, name]);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));

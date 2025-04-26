@@ -4,6 +4,7 @@ import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryRepository } from './repositores/category.repository';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -29,6 +30,10 @@ export class CategoryService {
 
   async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
     return await this.categoryRepository.createCategory(dto);
+  }
+
+  async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+    return await this.categoryRepository.updateCategory(dto);
   }
 
   async deleteCategory(id: number): Promise<BaseResponseDto> {

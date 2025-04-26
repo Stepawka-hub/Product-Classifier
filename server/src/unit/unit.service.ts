@@ -4,6 +4,7 @@ import { Unit } from './entities/unit.entity';
 import { UnitRepository } from './repositories/unit.repository';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { UpdateProductDto } from 'src/product/dto/update-product.dto';
 
 @Injectable()
 export class UnitService {
@@ -24,7 +25,11 @@ export class UnitService {
   }
 
   async createUnit(dto: CreateUnitDto): Promise<BaseResponseDto> {
-    return await this.unitRepository.createWithAddRow(dto);
+    return await this.unitRepository.createUnit(dto);
+  }
+
+  async updateUnit(dto: UpdateProductDto): Promise<BaseResponseDto> {
+    return await this.unitRepository.updateUnit(dto);
   }
 
   async deleteUnit(id: number): Promise<BaseResponseDto> {

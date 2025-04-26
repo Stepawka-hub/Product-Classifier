@@ -5,6 +5,7 @@ import { getErrorMessage } from 'src/utils/error-handler';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUnitDto } from '../dto/create-unit.dto';
 import { Unit } from '../entities/unit.entity';
+import { UpdateUnitDto } from '../dto/update-unit.dto';
 
 @Injectable()
 export class UnitRepository extends Repository<Unit> {
@@ -15,7 +16,31 @@ export class UnitRepository extends Repository<Unit> {
     this.tableName = 'unitmeasurement';
   }
 
-  async createWithAddRow(dto: CreateUnitDto): Promise<BaseResponseDto> {
+  async createUnit(dto: CreateUnitDto): Promise<BaseResponseDto> {
+    const query = `
+    SELECT AddRow(
+      $1::text,
+      ARRAY['name'],
+      ARRAY[quote_literal($2)]
+    )`;
+    const { name } = dto;
+
+    try {
+      const isExist = await this.findOne({ where: { name } });
+      if (isExist) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Данная ЕИ уже существует!'),
+        );
+      }
+
+      await this.query(query, [this.tableName, name]);
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async updateUnit(dto: UpdateUnitDto): Promise<BaseResponseDto> {
     const query = `
     SELECT AddRow(
       $1::text,
