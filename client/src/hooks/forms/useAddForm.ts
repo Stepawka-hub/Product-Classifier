@@ -10,11 +10,11 @@ export const useAddForm = <T>(
   const isAdding = useSelector(getIsAddingSelector);
   const [formData, setFormData] = useState(initialState);
 
-  const handleChange =
+  const onChange =
     (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
     (e) => {
       setFormData((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
-  return { dispatch, formData, setFormData, handleChange, isAdding };
+  return { dispatch, formData, setFormData, onChange, isAdding };
 };

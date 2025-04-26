@@ -37,7 +37,7 @@
   color: var(--primary-color);
 }
 
-.addBtn {
+.submitBtn {
   background-color: var(--success-color);
 }
 

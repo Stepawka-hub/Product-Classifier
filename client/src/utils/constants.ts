@@ -18,3 +18,13 @@ export const unitsHeaders: Record<keyof TUnit, string> = {
   id: "ID Единицы измерения",
   name: "Название",
 };
+
+export const addBtnLabel = {
+  default: "Добавить",
+  disabled: "Добавление...",
+};
+
+export const editBtnLabel = {
+  default: "Обновить",
+  disabled: "Обновление...",
+};

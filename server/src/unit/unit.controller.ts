@@ -21,7 +21,7 @@ export class UnitController {
   }
 
   @Post()
-  createUnit(@Body() dDto: CreateUnitDto) {
+  createUnit(@Body() dto: CreateUnitDto) {
     return this.unitService.createUnit(dto);
   }
 
