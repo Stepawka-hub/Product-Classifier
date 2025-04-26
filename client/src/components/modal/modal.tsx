@@ -23,10 +23,14 @@ export const Modal: FC<TModalProps> = memo(({ isOpen, children, onClose }) => {
     return () => document.removeEventListener("keydown", closeByEsc);
   }, []);
 
-  if (!isOpen) return null;
+  console.log(isOpen);
 
   return createPortal(
-    <ModalUI onOverlayClick={handleOverlayClick} onClose={onClose}>
+    <ModalUI
+      isOpen={isOpen}
+      onOverlayClick={handleOverlayClick}
+      onClose={onClose}
+    >
       {children}
     </ModalUI>,
     modalRoot!

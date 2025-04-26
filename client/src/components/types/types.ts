@@ -9,6 +9,7 @@ export type TEntityPageUI<T> = {
 export type TTableConfig<T> = {
   headers: Record<keyof T, string>;
   data: T[];
+  isRemoving: (string | number)[];
   onEdit: () => void;
   onDelete: (id: number) => void;
 };

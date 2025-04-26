@@ -10,7 +10,16 @@
   bottom: 0;
   left: 0;
   right: 0;
+
+  opacity: 0;
+  transition: opacity .5s;
+  pointer-events: none;
   z-index: 10;
+}
+
+.modalOverlay.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .modal {
@@ -28,7 +37,6 @@
   padding: 2rem;
   border-radius: 1rem;
   z-index: 15;
-  animation: appearance 0.35s ease-in-out;
 }
 
 .modalClose { 
@@ -76,14 +84,4 @@
 .modalClose:hover::after,
 .modalClose:hover::before { 
   background-color: var(--orange-color);
-}
-
-@keyframes appearance {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
 }

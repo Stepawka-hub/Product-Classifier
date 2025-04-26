@@ -16,13 +16,7 @@ export const TablePageUI = <T extends TEntity>({
     <BasePage title={title}>
       <div className={s.content}>
         {tableConfig.data.length ? (
-          <Table<T>
-            headers={tableConfig.headers}
-            data={tableConfig.data}
-            pagination={pagination}
-            onEdit={tableConfig.onEdit}
-            onDelete={tableConfig.onDelete}
-          />
+          <Table<T> pagination={pagination} {...tableConfig} />
         ) : (
           <span className={s.noData}>Данных не найдено!</span>
         )}

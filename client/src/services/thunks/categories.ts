@@ -5,6 +5,7 @@ import { TCategory, TCreateCategoryData, TPaginatedData } from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { refreshTable } from "../helpers/pagination";
 import { RootState } from "@store";
+import { setIsRemoving } from '@slices/categories';
 
 const GET_CATEGORIES = "categories/get";
 const ADD_CATEGORY = "categories/add";
@@ -40,6 +41,7 @@ export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
 export const deleteCategoryAsync = createAsyncThunk<void, number>(
   DELETE_CATEGORY,
   async (id, { dispatch, getState }) => {
+    dispatch(setIsRemoving(id));
     const res = await api.categories.deleteCategory(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -53,5 +55,7 @@ export const deleteCategoryAsync = createAsyncThunk<void, number>(
     } else {
       dispatchErrorToast(dispatch, res.message);
     }
+
+    dispatch(setIsRemoving(id));
   }
 );

@@ -5,7 +5,7 @@ import { AddUnitFormUI } from "@ui/forms";
 import { FC, memo } from "react";
 import { AddFormProps, TCreateUnitForm } from "../types/types";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import { getErrorMessage } from "@utils/error";
+import { getErrorMessage } from "@utils/helpers/error";
 
 export const AddUnitForm: FC<AddFormProps> = memo(({ onClose }) => {
   const initialState: TCreateUnitForm = {

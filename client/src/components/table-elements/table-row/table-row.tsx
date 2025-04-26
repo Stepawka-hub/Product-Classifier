@@ -1,12 +1,13 @@
-import s from "@ui/table/table.module.css";
-import { TableCell } from "@components/table-elements";
 import { Button } from "@components/common/buttons";
-import { TableRowProps } from "./type";
+import { TableCell } from "@components/table-elements";
+import s from "@ui/table/table.module.css";
 import { TEntity } from "@utils/types";
+import { TableRowProps } from "./type";
 
 export const TableRow = <T extends TEntity>({
   rowData,
   headers,
+  isRemoving,
   onEdit,
   onDelete,
 }: TableRowProps<T>) => {
@@ -27,6 +28,7 @@ export const TableRow = <T extends TEntity>({
         <Button
           variant="cross"
           size="small"
+          disabled={isRemoving}
           onClick={() => onDelete(rowData.id)}
         />
       </td>

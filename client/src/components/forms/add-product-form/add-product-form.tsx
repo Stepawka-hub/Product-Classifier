@@ -4,9 +4,9 @@ import { addProductAsync } from "@thunks/products";
 import { AddProductFormUI } from "@ui/forms";
 import { FC } from "react";
 import { AddFormProps, TCreateProductForm } from "../types/types";
-import { getNumber } from "@utils/validation";
+import { getNumber } from "@utils/helpers/validation";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import { getErrorMessage } from '@utils/error';
+import { getErrorMessage } from '@utils/helpers/error';
 
 export const AddProductForm: FC<AddFormProps> = ({ onClose }) => {
   const initialState: TCreateProductForm = {

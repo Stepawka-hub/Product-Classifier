@@ -5,7 +5,7 @@ import { addCategoryAsync } from "@thunks/categories";
 import { AddCategoryFormUI } from "@ui/forms";
 import { FC } from "react";
 import { AddFormProps, TCreateCategoryForm } from "../types/types";
-import { getErrorMessage } from "@utils/error";
+import { getErrorMessage } from "@utils/helpers/error";
 
 export const AddCategoryForm: FC<AddFormProps> = ({ onClose }) => {
   const initialState: TCreateCategoryForm = {

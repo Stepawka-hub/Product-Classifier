@@ -1,30 +1,34 @@
 import { Loader } from "@components/common/loader";
 import { AddCategoryForm } from "@components/forms";
-import { useTablePage } from "@hooks/useTablePage";
+import { useTableActions } from "@hooks/table/useTableActions";
+import { useTableData } from "@hooks/table/useTableData";
+import { useModal } from "@hooks/useModal";
 import {
   getCategoriesSelector,
   getIsLoadingSelector,
+  getIsRemovingSelector,
   getPaginationSelector,
   setCurrentPage,
 } from "@slices/categories";
 import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
-import { CategoriesPageUI } from "@ui/pages";
-import { categoriesHeaders } from "@utils/constants";
+import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { useMemo } from "react";
+import { TablePage } from "../table-page";
 
 export const CategoriesPage = () => {
-  const { isLoading, tableConfig, modalConfig, pagination } =
-    useTablePage<TCategory>({
-      headers: categoriesHeaders,
-      dataSelector: getCategoriesSelector,
-      getIsLoadingSelector,
-      getPaginationSelector,
-      setCurrentPage,
-      getElementsAsync: getAllCategoriesAsync,
-      deleteElementAsync: deleteCategoryAsync,
-    });
-  const { showModal, hideModal } = modalConfig;
+  const { data, isLoading, pagination } = useTableData<TCategory>({
+    dataSelector: getCategoriesSelector,
+    getIsLoadingSelector,
+    getPaginationSelector,
+    getElementsAsync: getAllCategoriesAsync,
+    setCurrentPage,
+  });
+  const actions = useTableActions({
+    deleteElementAsync: deleteCategoryAsync,
+    getIsRemovingSelector,
+  });
+  const { showModal, hideModal } = useModal();
 
   const modalContent = useMemo(
     () => <AddCategoryForm onClose={hideModal} />,
@@ -34,8 +38,10 @@ export const CategoriesPage = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <CategoriesPageUI
-      tableConfig={tableConfig}
+    <TablePage<TCategory>
+      title="Категории"
+      addButtonLabel="Добавить категорию"
+      tableConfig={{ headers, data, ...actions }}
       openModal={() => showModal(modalContent)}
       pagination={pagination}
     />

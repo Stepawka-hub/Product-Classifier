@@ -3,11 +3,13 @@ import s from "./table.module.css";
 import { TableUIProps } from "./type";
 import { TableHeader, TableRow } from "@components/table-elements";
 import { TEntity } from "@utils/types";
+import { checkInProgress } from "@utils/helpers/array";
 
 export const TableUI = <T extends TEntity>({
   headers,
   data,
   pagination,
+  isRemoving,
   onEdit,
   onDelete,
 }: TableUIProps<T>) => (
@@ -16,11 +18,12 @@ export const TableUI = <T extends TEntity>({
       <table className={s.table}>
         <TableHeader headers={Object.values(headers)} />
         <tbody className={s.tbody}>
-          {data.map((rowData, rowIndex) => (
+          {data.map((rowData) => (
             <TableRow
-              key={rowIndex}
+              key={rowData.id}
               headers={headers}
               rowData={rowData}
+              isRemoving={checkInProgress(isRemoving, rowData.id)}
               onEdit={onEdit}
               onDelete={onDelete}
             />

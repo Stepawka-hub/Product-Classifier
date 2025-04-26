@@ -10,6 +10,7 @@ export type TInitialAppState = {
 export type TCommonInitialState = {
   isLoading: boolean;
   isAdding: boolean;
+  isRemoving: (string | number)[];
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 

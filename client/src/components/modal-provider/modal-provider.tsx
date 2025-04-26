@@ -13,7 +13,6 @@ export const ModalProvider = memo(({ children }: React.PropsWithChildren) => {
 
   const hideModal = useCallback(() => {
     setIsOpen(false);
-    setContent(null);
   }, []);
 
   const contextValue = useMemo(
@@ -23,15 +22,13 @@ export const ModalProvider = memo(({ children }: React.PropsWithChildren) => {
     }),
     [showModal, hideModal]
   );
-  
+
   return (
     <ModalContext.Provider value={contextValue}>
       {children}
-      {isOpen && (
-        <Modal isOpen={isOpen} onClose={hideModal}>
-          {content}
-        </Modal>
-      )}
+      <Modal isOpen={isOpen} onClose={hideModal}>
+        {content}
+      </Modal>
     </ModalContext.Provider>
   );
 });
