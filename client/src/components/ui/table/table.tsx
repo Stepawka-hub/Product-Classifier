@@ -24,7 +24,7 @@ export const TableUI = <T extends TEntity>({
               headers={headers}
               rowData={rowData}
               isRemoving={checkInProgress(isRemoving, rowData.id)}
-              onEdit={onEdit}
+              onEdit={() => onEdit(rowData)}
               onDelete={onDelete}
             />
           ))}

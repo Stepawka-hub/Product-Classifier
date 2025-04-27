@@ -6,10 +6,14 @@ import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialProductState = {
   products: [],
+
   isLoading: false,
   isAdding: false,
-  isUpdating: [],
   isRemoving: [],
+
+  editingItem: null,
+  isUpdating: false,
+
   pagination: {
     totalCount: 1,
     pageSize: 10,
@@ -33,8 +37,8 @@ const productsSlice = createSlice({
     setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
       state.isRemoving = toggleArrayItem(state.isRemoving, payload);
     },
-    setIsUpdating: (state, { payload }: PayloadAction<string | number>) => {
-      state.isUpdating = toggleArrayItem(state.isUpdating, payload);
+    setEditingItem: (state, { payload }: PayloadAction<TProduct | null>) => {
+      state.editingItem = payload;
     },
   },
   selectors: {
@@ -83,5 +87,10 @@ export const {
   getIsUpdatingSelector,
   getPaginationSelector,
 } = productsSlice.selectors;
-export const { setProducts, setCurrentPage, setTotalCount, setIsRemoving } =
-  productsSlice.actions;
+export const {
+  setProducts,
+  setCurrentPage,
+  setTotalCount,
+  setIsRemoving,
+  setEditingItem,
+} = productsSlice.actions;

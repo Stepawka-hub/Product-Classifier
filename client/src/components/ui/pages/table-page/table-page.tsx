@@ -8,8 +8,8 @@ import { TEntity } from "@utils/types";
 export const TablePageUI = <T extends TEntity>({
   title,
   addButtonLabel,
-  openModal,
   tableConfig,
+  openAddForm,
   pagination,
 }: TablePageUIProps<T>) => (
   <>
@@ -25,7 +25,7 @@ export const TablePageUI = <T extends TEntity>({
             variant="plus"
             children={addButtonLabel}
             className={s.actionButton}
-            onClick={openModal}
+            onClick={openAddForm}
           />
         </div>
       </div>

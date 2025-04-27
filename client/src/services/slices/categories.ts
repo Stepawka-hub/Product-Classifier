@@ -6,10 +6,14 @@ import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
   categories: [],
+
   isLoading: false,
   isAdding: false,
-  isUpdating: [],
   isRemoving: [],
+
+  editingItem: null,
+  isUpdating: false,
+
   pagination: {
     totalCount: 1,
     pageSize: 10,
@@ -33,8 +37,11 @@ const categoriesSlice = createSlice({
     setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
       state.isRemoving = toggleArrayItem(state.isRemoving, payload);
     },
-    setIsUpdating: (state, { payload }: PayloadAction<string | number>) => {
-      state.isUpdating = toggleArrayItem(state.isUpdating, payload);
+    setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
+      state.isUpdating = payload;
+    },
+    setEditingItem: (state, { payload }: PayloadAction<TCategory | null>) => {
+      state.editingItem = payload;
     },
   },
   selectors: {
@@ -83,5 +90,10 @@ export const {
   getIsUpdatingSelector,
   getPaginationSelector,
 } = categoriesSlice.selectors;
-export const { setCategories, setCurrentPage, setTotalCount, setIsRemoving } =
-  categoriesSlice.actions;
+export const {
+  setCategories,
+  setCurrentPage,
+  setTotalCount,
+  setIsRemoving,
+  setEditingItem,
+} = categoriesSlice.actions;

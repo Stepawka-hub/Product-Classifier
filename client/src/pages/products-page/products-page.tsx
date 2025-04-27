@@ -1,20 +1,23 @@
 import { Loader } from "@components/common/loader";
-import { AddProductForm } from "@components/forms";
+import {
+  AddProductForm as AddForm,
+  EditProductForm as EditForm,
+} from "@components/forms";
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
-import { useModal } from "@hooks/useModal";
+import { useTableForms } from "@hooks/table/useTableForms";
 import {
   getIsLoadingSelector,
   getIsRemovingSelector,
   getPaginationSelector,
   getProductsSelector,
   setCurrentPage,
+  setEditingItem,
 } from "@slices/products";
 import { deleteProductAsync, getAllProductsAsync } from "@thunks/products";
 import { productsHeaders as headers } from "@utils/constants";
 import { TProduct } from "@utils/types";
-import { useMemo } from "react";
-import { TablePage } from '../table-page';
+import { TablePage } from "../table-page";
 
 export const ProductsPage = () => {
   const { data, isLoading, pagination } = useTableData<TProduct>({
@@ -24,16 +27,13 @@ export const ProductsPage = () => {
     getElementsAsync: getAllProductsAsync,
     setCurrentPage,
   });
+  const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
   const actions = useTableActions({
-    deleteElementAsync: deleteProductAsync,
     getIsRemovingSelector,
+    setEditingItem,
+    deleteElementAsync: deleteProductAsync,
+    openEditForm: showEditForm,
   });
-  const { showModal, hideModal } = useModal();
-
-  const modalContent = useMemo(
-    () => <AddProductForm onClose={hideModal} />,
-    [hideModal]
-  );
 
   if (isLoading) return <Loader />;
 
@@ -42,7 +42,7 @@ export const ProductsPage = () => {
       title="Изделия"
       addButtonLabel="Добавить изделие"
       tableConfig={{ headers, data, ...actions }}
-      openModal={() => showModal(modalContent)}
+      openAddForm={showAddForm}
       pagination={pagination}
     />
   );

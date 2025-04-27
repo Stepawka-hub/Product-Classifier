@@ -1,19 +1,22 @@
 import { Loader } from "@components/common/loader";
-import { AddUnitForm } from "@components/forms";
+import {
+  AddUnitForm as AddForm,
+  EditUnitForm as EditForm,
+} from "@components/forms";
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
-import { useModal } from "@hooks/useModal";
+import { useTableForms } from "@hooks/table/useTableForms";
 import {
   getIsLoadingSelector,
   getIsRemovingSelector,
   getPaginationSelector,
   getUnitsSelector,
   setCurrentPage,
+  setEditingItem,
 } from "@slices/units";
 import { deleteUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { unitsHeaders as headers } from "@utils/constants";
 import { TUnit } from "@utils/types";
-import { useMemo } from "react";
 import { TablePage } from "../table-page";
 
 export const UnitsPage = () => {
@@ -24,16 +27,13 @@ export const UnitsPage = () => {
     getElementsAsync: getAllUnitsAsync,
     setCurrentPage,
   });
+  const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
   const actions = useTableActions({
-    deleteElementAsync: deleteUnitAsync,
     getIsRemovingSelector,
+    setEditingItem,
+    deleteElementAsync: deleteUnitAsync,
+    openEditForm: showEditForm,
   });
-  const { showModal, hideModal } = useModal();
-
-  const modalContent = useMemo(
-    () => <AddUnitForm onClose={hideModal} />,
-    [hideModal]
-  );
 
   if (isLoading) return <Loader />;
 
@@ -42,7 +42,7 @@ export const UnitsPage = () => {
       title="Единицы измерения"
       addButtonLabel="Добавить ЕИ"
       tableConfig={{ headers, data, ...actions }}
-      openModal={() => showModal(modalContent)}
+      openAddForm={showAddForm}
       pagination={pagination}
     />
   );

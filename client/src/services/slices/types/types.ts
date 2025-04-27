@@ -1,5 +1,5 @@
 import { TCategory, TPagination, TProduct, TToast, TUnit } from "@utils/types";
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 export type TInitialAppState = {
   isInitialized: boolean;
@@ -10,27 +10,34 @@ export type TInitialAppState = {
 export type TCommonInitialState = {
   isLoading: boolean;
   isAdding: boolean;
-  isUpdating: (string | number)[];
   isRemoving: (string | number)[];
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 
-export type TInitialProductState = TCommonInitialState & {
-  products: TProduct[];
+export type TEditingState<T> = {
+  editingItem: T | null;
+  isUpdating: boolean;
 };
 
-export type TInitialCategoryState = TCommonInitialState & {
-  categories: TCategory[];
-};
+export type TInitialProductState = TCommonInitialState &
+  TEditingState<TProduct> & {
+    products: TProduct[];
+  };
 
-export type TInitialUnitState = TCommonInitialState & {
-  units: TUnit[];
-};
+export type TInitialCategoryState = TCommonInitialState &
+  TEditingState<TCategory> & {
+    categories: TCategory[];
+  };
+
+export type TInitialUnitState = TCommonInitialState &
+  TEditingState<TUnit> & {
+    units: TUnit[];
+  };
 
 export type TInitialModalState = {
   isOpen: boolean;
   content: ReactNode | null;
-}
+};
 
 export type TToastsState = {
   toasts: TToast[];

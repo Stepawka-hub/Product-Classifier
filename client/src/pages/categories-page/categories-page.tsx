@@ -1,19 +1,22 @@
 import { Loader } from "@components/common/loader";
-import { AddCategoryForm } from "@components/forms";
+import {
+  AddCategoryForm as AddForm,
+  EditCategoryForm as EditForm,
+} from "@components/forms";
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
-import { useModal } from "@hooks/useModal";
+import { useTableForms } from "@hooks/table/useTableForms";
 import {
   getCategoriesSelector,
   getIsLoadingSelector,
   getIsRemovingSelector,
   getPaginationSelector,
   setCurrentPage,
+  setEditingItem,
 } from "@slices/categories";
 import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
-import { useMemo } from "react";
 import { TablePage } from "../table-page";
 
 export const CategoriesPage = () => {
@@ -24,16 +27,13 @@ export const CategoriesPage = () => {
     getElementsAsync: getAllCategoriesAsync,
     setCurrentPage,
   });
+  const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
   const actions = useTableActions({
-    deleteElementAsync: deleteCategoryAsync,
     getIsRemovingSelector,
+    setEditingItem,
+    deleteElementAsync: deleteCategoryAsync,
+    openEditForm: showEditForm,
   });
-  const { showModal, hideModal } = useModal();
-
-  const modalContent = useMemo(
-    () => <AddCategoryForm onClose={hideModal} />,
-    [hideModal]
-  );
 
   if (isLoading) return <Loader />;
 
@@ -42,7 +42,7 @@ export const CategoriesPage = () => {
       title="Категории"
       addButtonLabel="Добавить категорию"
       tableConfig={{ headers, data, ...actions }}
-      openModal={() => showModal(modalContent)}
+      openAddForm={showAddForm}
       pagination={pagination}
     />
   );
