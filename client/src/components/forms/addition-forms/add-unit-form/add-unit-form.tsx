@@ -44,6 +44,7 @@ export const AddUnitForm: FC<FormProps> = memo(({ onClose }) => {
         label="Название ЕИ"
         value={formData.name}
         onChange={onChange("name")}
+        maxLength={64}
         required
       />
     </BaseForm>

@@ -28,9 +28,7 @@ export class UnitRepository extends Repository<Unit> {
     try {
       const isExist = await this.findOne({ where: { name } });
       if (isExist) {
-        return BaseResponseDto.Error(
-          getErrorMessage('Данная ЕИ уже существует!'),
-        );
+        return BaseResponseDto.Error('Данная ЕИ уже существует!');
       }
 
       await this.query(query, [this.tableName, name]);

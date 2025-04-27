@@ -49,17 +49,20 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
           label="Название категории"
           value={formData.name}
           onChange={onChange("name")}
+          maxLength={128}
           required
         />
         <Input
           label="Название родительской категории"
           value={formData.parentName}
           onChange={onChange("parentName")}
+          maxLength={128}
         />
         <Input
           label="Название ЕИ"
           value={formData.unitName}
           onChange={onChange("unitName")}
+          maxLength={64}
         />
       </>
     </BaseForm>

@@ -52,6 +52,7 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
           label="Название изделия"
           value={formData.name}
           onChange={onChange("name")}
+          maxLength={128}
           required
         />
         <Input
@@ -59,6 +60,7 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
           value={formData.parentId}
           onChange={onChange("parentId")}
           type="number"
+          maxLength={32}
           required
         />
         <Input
@@ -66,6 +68,7 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
           value={formData.unitId}
           onChange={onChange("unitId")}
           type="number"
+          maxLength={32}
           required
         />
       </>

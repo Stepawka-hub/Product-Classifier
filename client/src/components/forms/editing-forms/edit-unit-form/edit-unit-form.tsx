@@ -8,7 +8,11 @@ import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateUnitForm } from "../../types";
 import { useSelector } from "@store";
-import { getEditingItemSelector, getIsUpdatingSelector } from "@slices/units";
+import {
+  getEditingItemSelector,
+  getIsUpdatingSelector,
+  setEditingItem,
+} from "@slices/units";
 
 export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
   const editingUnit = useSelector(getEditingItemSelector);
@@ -31,6 +35,8 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
         })
       ).unwrap();
 
+      onClose();
+      dispatch(setEditingItem(null));
       setFormData(initialState);
     } catch (err: unknown) {
       dispatchErrorToast(dispatch, getErrorMessage(err));
@@ -50,6 +56,7 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
           label="Название ЕИ"
           value={formData.name}
           onChange={onChange("name")}
+          maxLength={64}
           required
         />
       </>

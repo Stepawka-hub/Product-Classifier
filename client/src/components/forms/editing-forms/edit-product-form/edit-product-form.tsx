@@ -10,18 +10,19 @@ import { FormProps, TUpdateProductForm } from "../../types";
 import {
   getEditingItemSelector,
   getIsUpdatingSelector,
+  setEditingItem,
 } from "@slices/products";
 import { useSelector } from "@store";
 
 export const EditProductForm: FC<FormProps> = ({ onClose }) => {
   const editingProduct = useSelector(getEditingItemSelector);
+  const isUpdating = useSelector(getIsUpdatingSelector);
+
   const initialState: TUpdateProductForm = {
     name: editingProduct?.name || "",
     parentName: editingProduct?.parentName || "",
     unitName: editingProduct?.unitName || "",
   };
-
-  const isUpdating = useSelector(getIsUpdatingSelector);
   const { dispatch, formData, setFormData, onChange } =
     useForm<TUpdateProductForm>(initialState, [editingProduct]);
 
@@ -38,6 +39,8 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
         })
       ).unwrap();
 
+      onClose();
+      dispatch(setEditingItem(null));
       setFormData(initialState);
     } catch (err: unknown) {
       dispatchErrorToast(dispatch, getErrorMessage(err));
@@ -57,18 +60,21 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
           label="Название изделия"
           value={formData.name}
           onChange={onChange("name")}
+          maxLength={128}
           required
         />
         <Input
           label="Название категории"
           value={formData.parentName}
           onChange={onChange("parentName")}
+          maxLength={128}
           required
         />
         <Input
           label="Название ЕИ"
           value={formData.unitName}
           onChange={onChange("unitName")}
+          maxLength={64}
           required
         />
       </>
