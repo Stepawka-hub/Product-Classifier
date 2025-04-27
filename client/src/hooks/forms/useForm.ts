@@ -1,9 +1,15 @@
 import { useDispatch } from "@store";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 
-export const useForm = <T>(initialState: T) => {
+export const useForm = <T>(initialState: T, deps?: unknown[]) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialState);
+
+  useEffect(() => {
+    if (deps !== undefined) {
+      setFormData(initialState);
+    }
+  }, deps);
 
   const onChange =
     (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>

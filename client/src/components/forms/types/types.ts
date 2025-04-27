@@ -1,3 +1,5 @@
+import { TProduct } from "@utils/types";
+
 export interface BaseFormProps
   extends React.PropsWithChildren<React.HTMLProps<HTMLFormElement>> {
   title: string;
@@ -37,5 +39,5 @@ export type TUpdateCategoryForm = {
   needInheritInLeaves: boolean;
 };
 
-export type TUpdateProductForm = TCreateProductForm;
+export type TUpdateProductForm = Omit<TProduct, "id">;
 export type TUpdateUnitForm = TCreateUnitForm;

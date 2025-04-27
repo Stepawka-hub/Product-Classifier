@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialCategoryState } from "./types/types";
-import { addCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
+import {
+  addCategoryAsync,
+  getAllCategoriesAsync,
+  updateCategoryAsync,
+} from "@thunks/categories";
 import { TCategory, TPaginatedData } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
@@ -50,6 +54,7 @@ const categoriesSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
+    getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -77,6 +82,16 @@ const categoriesSlice = createSlice({
       })
       .addCase(addCategoryAsync.rejected, (state) => {
         state.isAdding = false;
+      })
+
+      .addCase(updateCategoryAsync.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateCategoryAsync.fulfilled, (state) => {
+        state.isUpdating = false;
+      })
+      .addCase(updateCategoryAsync.rejected, (state) => {
+        state.isUpdating = false;
       });
   },
 });
@@ -88,6 +103,7 @@ export const {
   getIsAddingSelector,
   getIsRemovingSelector,
   getIsUpdatingSelector,
+  getEditingItemSelector,
   getPaginationSelector,
 } = categoriesSlice.selectors;
 export const {

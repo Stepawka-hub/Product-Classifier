@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
+import { addUnitAsync, getAllUnitsAsync, updateUnitAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
 import { TPaginatedData, TUnit } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
@@ -47,6 +47,7 @@ const unitsSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
+    getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -74,6 +75,16 @@ const unitsSlice = createSlice({
       })
       .addCase(addUnitAsync.rejected, (state) => {
         state.isAdding = false;
+      })
+
+      .addCase(updateUnitAsync.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateUnitAsync.fulfilled, (state) => {
+        state.isUpdating = false;
+      })
+      .addCase(updateUnitAsync.rejected, (state) => {
+        state.isUpdating = false;
       });
   },
 });
@@ -85,6 +96,7 @@ export const {
   getIsAddingSelector,
   getIsRemovingSelector,
   getIsUpdatingSelector,
+  getEditingItemSelector,
   getPaginationSelector,
 } = unitsSlice.selectors;
 export const {

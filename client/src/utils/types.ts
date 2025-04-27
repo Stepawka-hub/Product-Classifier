@@ -52,9 +52,9 @@ export type TCreateCategoryData = {
 
 // Данные, необходимые для обновления сущностей
 export type TUpdateUnitData = TUnit;
-export type TUpdateProductData = TEntity & Partial<TCreateProductData>;
+export type TUpdateProductData = TProduct;
 export type TUpdateCategoryData = TEntity &
-  Partial<TCreateCategoryData> & {
+  TCreateCategoryData & {
     needInheritInLeaves: boolean;
   };
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
-import { addProductAsync, getAllProductsAsync } from "@thunks/products";
+import { addProductAsync, getAllProductsAsync, updateProductAsync } from "@thunks/products";
 import { TPaginatedData, TProduct } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
@@ -47,6 +47,7 @@ const productsSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
+    getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -74,6 +75,16 @@ const productsSlice = createSlice({
       })
       .addCase(addProductAsync.rejected, (state) => {
         state.isAdding = false;
+      })
+
+      .addCase(updateProductAsync.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateProductAsync.fulfilled, (state) => {
+        state.isUpdating = false;
+      })
+      .addCase(updateProductAsync.rejected, (state) => {
+        state.isUpdating = false;
       });
   },
 });
@@ -85,6 +96,7 @@ export const {
   getIsAddingSelector,
   getIsRemovingSelector,
   getIsUpdatingSelector,
+  getEditingItemSelector,
   getPaginationSelector,
 } = productsSlice.selectors;
 export const {

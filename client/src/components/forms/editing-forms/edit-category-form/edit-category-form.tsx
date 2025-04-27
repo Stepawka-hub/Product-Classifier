@@ -7,16 +7,23 @@ import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateCategoryForm } from "../../types";
+import { useSelector } from "@store";
+import { getEditingItemSelector, getIsUpdatingSelector } from "@slices/categories";
 
 export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
+  const editingCategory = useSelector(getEditingItemSelector);
+  const isUpdating = useSelector(getIsUpdatingSelector);
+  
   const initialState: TUpdateCategoryForm = {
-    name: "",
-    parentName: "",
-    unitName: "",
+    name: editingCategory?.name || "",
+    parentName: editingCategory?.parentName || "",
+    unitName: editingCategory?.unitName || "",
     needInheritInLeaves: false,
   };
   const { dispatch, formData, setFormData, onChange } =
-    useForm<TUpdateCategoryForm>(initialState);
+    useForm<TUpdateCategoryForm>(initialState, [editingCategory]);
+
+  if (!editingCategory) return null;
 
   const handleSubmit = async () => {
     const { name, parentName, unitName, needInheritInLeaves } = formData;
@@ -24,7 +31,7 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
     try {
       await dispatch(
         updateCategoryAsync({
-          id: 1,
+          id: editingCategory.id,
           name,
           parentName,
           unitName,
@@ -42,7 +49,7 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
     <BaseForm
       title="Обновление категории"
       btnLabel={editBtnLabel}
-      isProgress={true}
+      isProgress={isUpdating}
       onClose={onClose}
       onSubmit={handleSubmit}
     >

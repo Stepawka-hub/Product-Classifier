@@ -7,19 +7,26 @@ import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateUnitForm } from "../../types";
+import { useSelector } from "@store";
+import { getEditingItemSelector, getIsUpdatingSelector } from "@slices/units";
 
 export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
+  const editingUnit = useSelector(getEditingItemSelector);
+  const isUpdating = useSelector(getIsUpdatingSelector);
+
   const initialState: TUpdateUnitForm = {
-    name: "",
+    name: editingUnit?.name || "",
   };
   const { dispatch, formData, setFormData, onChange } =
-    useForm<TUpdateUnitForm>(initialState);
+    useForm<TUpdateUnitForm>(initialState, [editingUnit]);
+
+  if (!editingUnit) return null;
 
   const handleSubmit = async () => {
     try {
       await dispatch(
         updateUnitAsync({
-          id: 1,
+          id: editingUnit.id,
           name: formData.name,
         })
       ).unwrap();
@@ -34,7 +41,7 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
     <BaseForm
       title="Обновление ЕИ"
       btnLabel={editBtnLabel}
-      isProgress={true}
+      isProgress={isUpdating}
       onClose={onClose}
       onSubmit={handleSubmit}
     >

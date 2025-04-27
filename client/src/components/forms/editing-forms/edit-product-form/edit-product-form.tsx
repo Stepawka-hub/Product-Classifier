@@ -7,24 +7,34 @@ import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateProductForm } from "../../types";
+import {
+  getEditingItemSelector,
+  getIsUpdatingSelector,
+} from "@slices/products";
+import { useSelector } from "@store";
 
 export const EditProductForm: FC<FormProps> = ({ onClose }) => {
+  const editingProduct = useSelector(getEditingItemSelector);
   const initialState: TUpdateProductForm = {
-    name: "",
-    parentId: "",
-    unitId: "",
+    name: editingProduct?.name || "",
+    parentName: editingProduct?.parentName || "",
+    unitName: editingProduct?.unitName || "",
   };
+
+  const isUpdating = useSelector(getIsUpdatingSelector);
   const { dispatch, formData, setFormData, onChange } =
-    useForm<TUpdateProductForm>(initialState);
+    useForm<TUpdateProductForm>(initialState, [editingProduct]);
+
+  if (!editingProduct) return null;
 
   const handleSubmit = async () => {
     try {
       await dispatch(
         updateProductAsync({
-          id: 1,
+          id: editingProduct.id,
           name: formData.name,
-          parentId: Number(formData.parentId),
-          unitId: Number(formData.unitId),
+          parentName: formData.parentName,
+          unitName: formData.unitName,
         })
       ).unwrap();
 
@@ -38,7 +48,7 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
     <BaseForm
       title="Обновление изделия"
       btnLabel={editBtnLabel}
-      isProgress={true}
+      isProgress={isUpdating}
       onClose={onClose}
       onSubmit={handleSubmit}
     >
@@ -50,15 +60,15 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
           required
         />
         <Input
-          label="ID категории"
-          value={formData.parentId}
-          onChange={onChange("parentId")}
+          label="Название категории"
+          value={formData.parentName}
+          onChange={onChange("parentName")}
           required
         />
         <Input
-          label="ID ЕИ"
-          value={formData.unitId}
-          onChange={onChange("unitId")}
+          label="Название ЕИ"
+          value={formData.unitName}
+          onChange={onChange("unitName")}
           required
         />
       </>
