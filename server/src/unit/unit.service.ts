@@ -6,6 +6,7 @@ import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
 import { Unit } from './entities/unit.entity';
 import { UnitRepository } from './repositories/unit.repository';
+import { Not } from 'typeorm';
 
 @Injectable()
 export class UnitService {
@@ -32,7 +33,9 @@ export class UnitService {
   async updateUnit(dto: UpdateUnitDto): Promise<BaseResponseDto> {
     try {
       const { id, name } = dto;
-      const isExist = await this.unitRepository.findOne({ where: { name } });
+      const isExist = await this.unitRepository.findOne({
+        where: { name, id: Not(id) },
+      });
 
       if (isExist) {
         return BaseResponseDto.Error('ЕИ с таким названием уже существует!');

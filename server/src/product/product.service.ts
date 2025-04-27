@@ -8,6 +8,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { CategoryRepository } from 'src/category/repositores/category.repository';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
+import { Not } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -44,7 +45,10 @@ export class ProductService {
     try {
       const { id, name, parentName, unitName } = dto;
       const isProductExist = await this.productRepository.findOne({
-        where: { name },
+        where: {
+          name,
+          id: Not(id),
+        },
       });
 
       if (isProductExist) {
