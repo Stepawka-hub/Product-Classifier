@@ -53,7 +53,10 @@ export type TCreateCategoryData = {
 // Данные, необходимые для обновления сущностей
 export type TUpdateUnitData = TUnit;
 export type TUpdateProductData = TEntity & Partial<TCreateProductData>;
-export type TUpdateCategoryData = TEntity & Partial<TCreateCategoryData>;
+export type TUpdateCategoryData = TEntity &
+  Partial<TCreateCategoryData> & {
+    needInheritInLeaves: boolean;
+  };
 
 // Пагинация
 export type TPagination = {

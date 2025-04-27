@@ -1,5 +1,5 @@
 import { Input } from "@components/forms/form-elements";
-import { useAddForm } from "@hooks/forms/useAddForm";
+import { useForm } from "@hooks/forms/useForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingSelector } from "@slices/categories";
 import { addCategoryAsync } from "@thunks/categories";
@@ -8,6 +8,7 @@ import { FC } from "react";
 import { FormProps, TCreateCategoryForm } from "../../types";
 import { BaseForm } from "@components/forms/base-form";
 import { addBtnLabel } from "@utils/constants";
+import { useSelector } from "react-redux";
 
 export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
   const initialState: TCreateCategoryForm = {
@@ -15,8 +16,9 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
     parentName: "",
     unitName: "",
   };
-  const { dispatch, formData, setFormData, onChange, isAdding } =
-    useAddForm<TCreateCategoryForm>(getIsAddingSelector, initialState);
+  const isAdding = useSelector(getIsAddingSelector);
+  const { dispatch, formData, setFormData, onChange } =
+    useForm<TCreateCategoryForm>(initialState);
 
   const handleSubmit = async () => {
     try {

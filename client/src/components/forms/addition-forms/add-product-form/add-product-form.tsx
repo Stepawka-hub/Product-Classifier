@@ -1,5 +1,4 @@
 import { Input } from "@components/forms/form-elements";
-import { useAddForm } from "@hooks/forms/useAddForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingSelector } from "@slices/products";
 import { addProductAsync } from "@thunks/products";
@@ -9,6 +8,8 @@ import { FC } from "react";
 import { FormProps, TCreateProductForm } from "../../types";
 import { BaseForm } from "@components/forms/base-form";
 import { addBtnLabel } from "@utils/constants";
+import { useForm } from "@hooks/forms/useForm";
+import { useSelector } from "@store";
 
 export const AddProductForm: FC<FormProps> = ({ onClose }) => {
   const initialState: TCreateProductForm = {
@@ -16,8 +17,9 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
     parentId: "",
     unitId: "",
   };
-  const { dispatch, formData, setFormData, onChange, isAdding } =
-    useAddForm<TCreateProductForm>(getIsAddingSelector, initialState);
+  const isAdding = useSelector(getIsAddingSelector);
+  const { dispatch, formData, setFormData, onChange } =
+    useForm<TCreateProductForm>(initialState);
 
   const handleSubmit = async () => {
     const { name, parentId, unitId } = formData;

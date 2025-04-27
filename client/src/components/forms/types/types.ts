@@ -12,18 +12,30 @@ export interface BaseFormProps
 
 export type FormProps = Pick<BaseFormProps, "onClose">;
 
+// Create Data Form
 export type TCreateCategoryForm = {
-  name: "";
-  parentName: "";
-  unitName: "";
+  name: string;
+  parentName: string;
+  unitName: string;
 };
 
 export type TCreateProductForm = {
-  name: "";
-  parentId: "";
-  unitId: "";
+  name: string;
+  parentId: string;
+  unitId: string;
 };
 
 export type TCreateUnitForm = {
-  name: "";
+  name: string;
 };
+
+// Update Data Form
+export type TUpdateCategoryForm = {
+  name: string;
+  parentName: string;
+  unitName: string;
+  needInheritInLeaves: boolean;
+};
+
+export type TUpdateProductForm = TCreateProductForm;
+export type TUpdateUnitForm = TCreateUnitForm;
