@@ -38,6 +38,26 @@ export class ProductService {
   }
 
   async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
+    const { parentId, unitId } = dto;
+
+    if (parentId) {
+      const categoryExists = await this.categoryRepository.findOne({
+        where: { id: parentId },
+      });
+      if (!categoryExists) {
+        return BaseResponseDto.Error('Указанная категория не найдена');
+      }
+    }
+
+    if (unitId) {
+      const unitExists = await this.unitRepository.findOne({
+        where: { id: unitId },
+      });
+      if (!unitExists) {
+        return BaseResponseDto.Error('Указанная ЕИ не найдена');
+      }
+    }
+
     return await this.productRepository.createProduct(dto);
   }
 

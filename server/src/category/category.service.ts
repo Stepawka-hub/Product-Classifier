@@ -5,10 +5,14 @@ import { CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryRepository } from './repositores/category.repository';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UnitRepository } from 'src/unit/repositories/unit.repository';
 
 @Injectable()
 export class CategoryService {
-  constructor(private categoryRepository: CategoryRepository) {}
+  constructor(
+    private categoryRepository: CategoryRepository,
+    private unitRepository: UnitRepository,
+  ) {}
 
   async findAllWithPagination(
     page: number = 1,
@@ -29,6 +33,28 @@ export class CategoryService {
   }
 
   async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
+    const { parentName, unitName } = dto;
+
+    if (parentName) {
+      const parentExists = await this.categoryRepository.findOne({
+        where: { name: parentName },
+      });
+      if (!parentExists) {
+        return BaseResponseDto.Error(
+          'Указанная родительская категория не найдена',
+        );
+      }
+    }
+
+    if (unitName) {
+      const unitExists = await this.unitRepository.findOne({
+        where: { name: unitName },
+      });
+      if (!unitExists) {
+        return BaseResponseDto.Error('Указанная ЕИ не найдена');
+      }
+    }
+
     return await this.categoryRepository.createCategory(dto);
   }
 

@@ -63,26 +63,65 @@ export class CategoryRepository extends Repository<Category> {
   }
 
   async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
-    const query = `
-        SELECT AddRow(
-          $1::text,
-          ARRAY['name'],
-          ARRAY[quote_literal($2)]
-        )`;
-    const { name } = dto;
+    const { id, name, parentName, unitName, needInheritInLeaves } = dto;
+
+    // Получаем текущее имя категории
+    const currentCategory = await this.findOne({
+      where: { id },
+      select: ['name'],
+    });
+
+    if (!currentCategory) {
+      return BaseResponseDto.Error('Категория не найдена');
+    }
+
+    // Формируем базовые параметры
+    const params: any[] = ['product', this.tableName, currentCategory.name];
+
+    // Формируем части запроса
+    let query = 'SELECT EditTreeClass($1, $2, $3';
+
+    // Добавляем параметры только если они переданы
+    if (name !== undefined) {
+      query += ', $4';
+      params.push(name);
+    } else {
+      query += ', DEFAULT';
+    }
+
+    // Для named parameters нам нужно использовать другой подход
+    const namedParams: Record<string, any> = {};
+
+    if (parentName !== undefined) {
+      namedParams.parentName = parentName;
+    }
+
+    if (unitName !== undefined) {
+      namedParams.umName = unitName;
+    }
+
+    if (needInheritInLeaves !== undefined) {
+      namedParams.needInheritInLeaves = needInheritInLeaves;
+    }
+
+    // Добавляем named parameters
+    if (Object.keys(namedParams).length > 0) {
+      query += Object.keys(namedParams)
+        .map((key, index) => `, ${key} => $${params.length + index + 1}`)
+        .join('');
+
+      params.push(...Object.values(namedParams));
+    }
+
+    query += ')';
 
     try {
-      const isExist = await this.findOne({ where: { name } });
-      if (isExist) {
-        return BaseResponseDto.Error(
-          getErrorMessage('Данная ЕИ уже существует!'),
-        );
-      }
-
-      await this.query(query, [this.tableName, name]);
+      await this.query(query, params);
       return BaseResponseDto.Success();
-    } catch (e: unknown) {
-      return BaseResponseDto.Error(getErrorMessage(e));
+    } catch (e) {
+      return BaseResponseDto.Error(
+        `Ошибка при обновлении категории: ${getErrorMessage(e)}`,
+      );
     }
   }
 
