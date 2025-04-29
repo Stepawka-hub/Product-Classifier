@@ -18,6 +18,7 @@ import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { TablePage } from "../table-page";
+import { Button } from "@components/common/buttons";
 
 export const CategoriesPage = () => {
   const { data, isLoading, pagination } = useTableData<TCategory>({
@@ -42,8 +43,18 @@ export const CategoriesPage = () => {
       title="Категории"
       addButtonLabel="Добавить категорию"
       tableConfig={{ headers, data, ...actions }}
-      openAddForm={showAddForm}
       pagination={pagination}
+      openAddForm={showAddForm}
+      additionalActions={
+        <>
+          <Button variant="view" onClick={() => alert("Родители")}>
+            Родительские категории
+          </Button>
+          <Button variant="view" onClick={() => alert("Дети")}>
+            Дочерние категории
+          </Button>
+        </>
+      }
     />
   );
 };

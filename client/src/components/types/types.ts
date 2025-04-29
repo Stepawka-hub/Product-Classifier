@@ -1,8 +1,10 @@
 import { TPagination } from "@utils/types";
+import { ReactNode } from 'react';
 
 export type TEntityPageUI<T> = {
   tableConfig: TTableConfig<T>;
   pagination: TPagination;
+  additionalActions?: ReactNode;
   openAddForm: () => void;
 };
 
