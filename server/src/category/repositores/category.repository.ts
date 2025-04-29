@@ -3,10 +3,10 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
+import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 import { DataSource, Repository } from 'typeorm';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { Category } from '../entities/category.entity';
-import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 
 @Injectable()
 export class CategoryRepository extends Repository<Category> {
@@ -88,6 +88,12 @@ export class CategoryRepository extends Repository<Category> {
     const namedParams: Record<string, unknown> = {};
 
     if (parentName) {
+      const isExistCycle = await this.checkCycle(id, parentName);
+      if (isExistCycle) {
+        return BaseResponseDto.Error(
+          'Нельзя выбрать текущую категорию или её подкатегории как родительские',
+        );
+      }
       namedParams.parentName = parentName;
     }
 
@@ -137,5 +143,20 @@ export class CategoryRepository extends Repository<Category> {
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
     }
+  }
+
+  private async checkCycle(id: number, parentName: string): Promise<boolean> {
+    const parent = await this.findOne({
+      where: { name: parentName },
+      select: ['id'],
+    });
+
+    const [result] = (await this.query('SELECT IsExistCycle($1, $2, $3)', [
+      this.tableName,
+      String(id),
+      String(parent?.id),
+    ])) as [{ isexistcycle: boolean }];
+
+    return !!result.isexistcycle;
   }
 }
