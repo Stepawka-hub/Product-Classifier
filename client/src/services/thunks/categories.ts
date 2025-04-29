@@ -35,7 +35,7 @@ export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
       refreshTable<TCategory>(
         dispatch,
         getAllCategoriesAsync,
-        state.products.pagination
+        state.categories.pagination
       );
       dispatchSuccessToast(dispatch, "Категория успешно добавлена!");
     } else {
@@ -54,7 +54,7 @@ export const updateCategoryAsync = createAsyncThunk<void, TUpdateCategoryData>(
       refreshTable<TCategory>(
         dispatch,
         getAllCategoriesAsync,
-        state.products.pagination
+        state.categories.pagination
       );
       dispatchSuccessToast(dispatch, "Категория успешно обновлена!");
     } else {
@@ -74,7 +74,7 @@ export const deleteCategoryAsync = createAsyncThunk<void, number>(
       refreshTable<TCategory>(
         dispatch,
         getAllCategoriesAsync,
-        state.products.pagination
+        state.categories.pagination
       );
       dispatchSuccessToast(dispatch, "Категория успешно удалена!");
     } else {

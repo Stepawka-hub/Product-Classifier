@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { UnitRepository } from 'src/unit/repositories/unit.repository';
 import { CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { CategoryRepository } from './repositores/category.repository';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { UnitRepository } from 'src/unit/repositories/unit.repository';
+import { CategoryRepository } from './repositores/category.repository';
 
 @Injectable()
 export class CategoryService {

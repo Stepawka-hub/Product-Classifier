@@ -4,8 +4,9 @@ import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { DataSource, Repository } from 'typeorm';
-import { Category } from '../entities/category.entity';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { Category } from '../entities/category.entity';
+import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 
 @Injectable()
 export class CategoryRepository extends Repository<Category> {
@@ -65,7 +66,6 @@ export class CategoryRepository extends Repository<Category> {
   async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
     const { id, name, parentName, unitName, needInheritInLeaves } = dto;
 
-    // Получаем текущее имя категории
     const currentCategory = await this.findOne({
       where: { id },
       select: ['name'],
@@ -75,48 +75,36 @@ export class CategoryRepository extends Repository<Category> {
       return BaseResponseDto.Error('Категория не найдена');
     }
 
-    // Формируем базовые параметры
-    const params: any[] = ['product', this.tableName, currentCategory.name];
+    const params: any[] = [
+      'product',
+      this.tableName,
+      currentCategory.name,
+      name,
+    ];
 
-    // Формируем части запроса
-    let query = 'SELECT EditTreeClass($1, $2, $3';
+    const query = 'SELECT EditTreeClass($1, $2, $3, $4';
 
-    // Добавляем параметры только если они переданы
-    if (name !== undefined) {
-      query += ', $4';
-      params.push(name);
-    } else {
-      query += ', DEFAULT';
-    }
+    // Добавляем оставшиеся параметры
+    const namedParams: Record<string, unknown> = {};
 
-    // Для named parameters нам нужно использовать другой подход
-    const namedParams: Record<string, any> = {};
-
-    if (parentName !== undefined) {
+    if (parentName) {
       namedParams.parentName = parentName;
     }
 
-    if (unitName !== undefined) {
+    if (unitName) {
       namedParams.umName = unitName;
     }
 
-    if (needInheritInLeaves !== undefined) {
+    if (!needInheritInLeaves) {
       namedParams.needInheritInLeaves = needInheritInLeaves;
     }
 
     // Добавляем named parameters
-    if (Object.keys(namedParams).length > 0) {
-      query += Object.keys(namedParams)
-        .map((key, index) => `, ${key} => $${params.length + index + 1}`)
-        .join('');
-
-      params.push(...Object.values(namedParams));
-    }
-
-    query += ')';
+    const { query: finalQuery, params: finalParams } =
+      addNamedParametersToQuery(query, params, namedParams);
 
     try {
-      await this.query(query, params);
+      await this.query(finalQuery, finalParams);
       return BaseResponseDto.Success();
     } catch (e) {
       return BaseResponseDto.Error(
