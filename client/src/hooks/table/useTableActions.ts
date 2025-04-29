@@ -36,9 +36,11 @@ export const useTableActions = <T>({
 
   return useMemo(
     () => ({
-      removingIds,
+      deletion: {
+        removingIds,
+        onDelete: handleDelete,
+      },
       onEdit: handleEdit,
-      onDelete: handleDelete,
     }),
     [removingIds, handleEdit, handleDelete]
   );

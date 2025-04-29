@@ -1,3 +1,3 @@
-export type TCategoryRelationsModalProps = {
+export type TCategoryRelationsProps = {
   type: "parents" | "children";
 };

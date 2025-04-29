@@ -9,4 +9,4 @@ export const toggleArrayItem = <T>(array: T[], item: T): T[] => {
 export const checkInProgress = (
   array: (number | string)[],
   id: number | string
-) => array.some((e) => e === id);
+) => array.includes(id);

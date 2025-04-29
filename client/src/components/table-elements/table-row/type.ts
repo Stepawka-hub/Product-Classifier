@@ -1,6 +1,6 @@
-import { TTableConfig } from '@components/types';
+import { TTableConfig } from "@components/types";
 
-export type TableRowProps<T> = Omit<TTableConfig<T>, 'data' | 'removingIds'> & {
+export type TableRowProps<T> = Pick<TTableConfig<T>, "headers" | "actions"> & {
   rowData: T;
-  isRemoving: boolean;
+  isRemoving?: boolean;
 };

@@ -42,7 +42,6 @@ export const useTableData = <T, P extends PaginationParams = PaginationParams>({
       limit: pageSize,
       ...additionalParams,
     } as P;
-    console.log(params);
 
     dispatch(getElementsAsync(params));
   }, [dispatch, currentPage, pageSize]);

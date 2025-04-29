@@ -1,1 +1,1 @@
-export { CategoryRelationsModal } from "./category-relations-modal";
+export { CategoryRelationsModal } from "./category-relations";

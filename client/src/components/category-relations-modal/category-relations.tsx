@@ -1,7 +1,5 @@
-import { FC } from "react";
-import { TCategoryRelationsModalProps } from "./type";
+import { Loader } from "@components/common/loader";
 import { Table } from "@components/table";
-import { TCategoryShort, TEntity } from "@utils/types";
 import { useTableData } from "@hooks/table/useTableData";
 import {
   getChildrenSelector,
@@ -17,11 +15,12 @@ import {
 } from "@thunks/categories";
 import { PaginationParams } from "@utils/api/types/types";
 import { shortCategoriesHeaders } from "@utils/constants";
-import { Loader } from "@components/common/loader";
+import { TCategoryShort, TEntity } from "@utils/types";
+import { FC } from "react";
+import { TCategoryRelationsProps } from "./type";
+import s from "./category-relations.module.css";
 
-export const CategoryRelationsModal: FC<TCategoryRelationsModalProps> = ({
-  type,
-}) => {
+export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
   const config = {
     parents: {
       dataSelector: getParentsSelector,
@@ -50,13 +49,12 @@ export const CategoryRelationsModal: FC<TCategoryRelationsModalProps> = ({
   if (isLoading) return <Loader />;
 
   return (
-    <Table<TCategoryShort>
-      headers={shortCategoriesHeaders}
-      data={data}
-      pagination={pagination}
-      removingIds={[]}
-      onEdit={() => null}
-      onDelete={() => null}
-    />
+    <div className={s.container}>
+      <Table<TCategoryShort>
+        headers={shortCategoriesHeaders}
+        data={data}
+        pagination={pagination}
+      />
+    </div>
   );
 };

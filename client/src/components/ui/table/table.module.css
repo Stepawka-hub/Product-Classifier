@@ -1,4 +1,11 @@
-.tableContainer {
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wrapper {
+  color: var(--primary-color);
   border: 1px solid var(--table-color);
   border-radius: 1.25rem;
   overflow: hidden;

@@ -11,7 +11,13 @@ export type TEntityPageUI<T> = {
 export type TTableConfig<T> = {
   headers: Record<keyof T, string>;
   data: T[];
-  removingIds: (string | number)[];
-  onEdit: (e: T) => void;
-  onDelete: (id: number) => void;
+  actions?: TTableActions<T>;
+};
+
+export type TTableActions<T> = {
+  deletion?: {
+    removingIds?: (string | number)[];
+    onDelete?: (id: number) => void;
+  };
+  onEdit?: (item: T) => void;
 };

@@ -9,35 +9,42 @@ export const TableUI = <T extends TEntity>({
   headers,
   data,
   pagination,
-  removingIds,
-  onEdit,
-  onDelete,
-}: TableUIProps<T>) => (
-  <>
-    <div className={s.tableContainer}>
-      <table className={s.table}>
-        <TableHeader headers={Object.values(headers)} />
-        <tbody className={s.tbody}>
-          {data.map((rowData) => (
-            <TableRow
-              key={rowData.id}
-              headers={headers}
-              rowData={rowData}
-              isRemoving={checkInProgress(removingIds, rowData.id)}
-              onEdit={() => onEdit(rowData)}
-              onDelete={onDelete}
-            />
-          ))}
-        </tbody>
-      </table>
+  actions,
+}: TableUIProps<T>) => {
+  const { deletion } = actions || {};
+  const { removingIds } = deletion || {};
+
+  return (
+    <div className={s.container}>
+      <div className={s.wrapper}>
+        <table className={s.table}>
+          <TableHeader
+            headers={[...Object.values(headers)]}
+            showActionsColumn={!!actions}
+          />
+          <tbody className={s.tbody}>
+            {data.map((rowData) => (
+              <TableRow
+                key={rowData.id}
+                headers={headers}
+                rowData={rowData}
+                isRemoving={
+                  removingIds ? checkInProgress(removingIds, rowData.id) : false
+                }
+                actions={actions}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {pagination && (
+        <Pagination
+          totalCount={pagination.totalCount}
+          pageSize={pagination.pageSize}
+          currentPage={pagination.currentPage}
+          setCurrentPage={pagination.setCurrentPage}
+        />
+      )}
     </div>
-    {pagination && (
-      <Pagination
-        totalCount={pagination.totalCount}
-        pageSize={pagination.pageSize}
-        currentPage={pagination.currentPage}
-        setCurrentPage={pagination.setCurrentPage}
-      />
-    )}
-  </>
-);
+  );
+};

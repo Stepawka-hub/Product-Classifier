@@ -41,7 +41,7 @@ export const UnitsPage = () => {
     <TablePage<TUnit>
       title="Единицы измерения"
       addButtonLabel="Добавить ЕИ"
-      tableConfig={{ headers, data, ...actions }}
+      tableConfig={{ headers, data, actions }}
       openAddForm={showAddForm}
       pagination={pagination}
     />

@@ -41,7 +41,7 @@ export const ProductsPage = () => {
     <TablePage<TProduct>
       title="Изделия"
       addButtonLabel="Добавить изделие"
-      tableConfig={{ headers, data, ...actions }}
+      tableConfig={{ headers, data, actions }}
       openAddForm={showAddForm}
       pagination={pagination}
     />
