@@ -59,6 +59,28 @@ export class CategoryService {
   }
 
   async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+    const { parentName, unitName } = dto;
+
+    if (parentName) {
+      const parentExists = await this.categoryRepository.findOne({
+        where: { name: parentName },
+      });
+      if (!parentExists) {
+        return BaseResponseDto.Error(
+          'Указанная родительская категория не найдена',
+        );
+      }
+    }
+
+    if (unitName) {
+      const unitExists = await this.unitRepository.findOne({
+        where: { name: unitName },
+      });
+      if (!unitExists) {
+        return BaseResponseDto.Error('Указанная ЕИ не найдена');
+      }
+    }
+
     return await this.categoryRepository.updateCategory(dto);
   }
 

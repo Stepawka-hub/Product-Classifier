@@ -14,7 +14,11 @@ export const useForm = <T>(initialState: T, deps?: unknown[]) => {
   const onChange =
     (key: keyof typeof formData): ChangeEventHandler<HTMLInputElement> =>
     (e) => {
-      setFormData((prev) => ({ ...prev, [key]: e.target.value }));
+      const value =
+        e.target.type === "checkbox"
+          ? (e.target as HTMLInputElement).checked
+          : e.target.value;
+      setFormData((prev) => ({ ...prev, [key]: value }));
     };
 
   return { dispatch, formData, setFormData, onChange };

@@ -11,6 +11,7 @@ import { addBtnLabel } from "@utils/constants";
 import { useSelector } from "react-redux";
 
 export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
+  const prefix = "category-add";
   const initialState: TCreateCategoryForm = {
     name: "",
     parentName: "",
@@ -46,6 +47,8 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
     >
       <>
         <Input
+          id={`${prefix}_name`}
+          name="name"
           label="Название категории"
           value={formData.name}
           onChange={onChange("name")}
@@ -53,12 +56,16 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
           required
         />
         <Input
+          id={`${prefix}_parentName`}
+          name="parentName"
           label="Название родительской категории"
           value={formData.parentName}
           onChange={onChange("parentName")}
           maxLength={128}
         />
         <Input
+          id={`${prefix}_unitName`}
+          name="unitName"
           label="Название ЕИ"
           value={formData.unitName}
           onChange={onChange("unitName")}

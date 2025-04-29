@@ -18,6 +18,7 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
   const editingUnit = useSelector(getEditingItemSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
+  const prefix = "unit-edit";
   const initialState: TUpdateUnitForm = {
     name: editingUnit?.name || "",
   };
@@ -53,6 +54,8 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
     >
       <>
         <Input
+          id={`${prefix}_name`}
+          name="name"
           label="Название ЕИ"
           value={formData.name}
           onChange={onChange("name")}

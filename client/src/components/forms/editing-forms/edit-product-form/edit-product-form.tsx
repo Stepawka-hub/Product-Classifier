@@ -18,6 +18,7 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
   const editingProduct = useSelector(getEditingItemSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
+  const prefix = "product-edit";
   const initialState: TUpdateProductForm = {
     name: editingProduct?.name || "",
     parentName: editingProduct?.parentName || "",
@@ -57,6 +58,8 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
     >
       <>
         <Input
+          id={`${prefix}_name`}
+          name="name"
           label="Название изделия"
           value={formData.name}
           onChange={onChange("name")}
@@ -64,6 +67,8 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
           required
         />
         <Input
+          id={`${prefix}_parentName`}
+          name="parentName"
           label="Название категории"
           value={formData.parentName}
           onChange={onChange("parentName")}
@@ -71,6 +76,8 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
           required
         />
         <Input
+          id={`${prefix}_unitName`}
+          name="unitName"
           label="Название ЕИ"
           value={formData.unitName}
           onChange={onChange("unitName")}

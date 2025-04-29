@@ -11,6 +11,7 @@ import { FC, memo } from "react";
 import { FormProps, TCreateUnitForm } from "../../types";
 
 export const AddUnitForm: FC<FormProps> = memo(({ onClose }) => {
+  const prefix = "unit-add";
   const initialState: TCreateUnitForm = {
     name: "",
   };
@@ -41,6 +42,8 @@ export const AddUnitForm: FC<FormProps> = memo(({ onClose }) => {
       onSubmit={handleSubmit}
     >
       <Input
+        id={`${prefix}_name`}
+        name="name"
         label="Название ЕИ"
         value={formData.name}
         onChange={onChange("name")}

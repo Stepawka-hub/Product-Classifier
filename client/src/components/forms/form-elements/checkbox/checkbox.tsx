@@ -1,18 +1,23 @@
 import { FC } from "react";
-import { InputProps } from "./type";
-import s from "./input.module.css";
+import { CheckboxProps } from "./type";
+import s from "./checkbox.module.css";
 
-export const Input: FC<InputProps> = ({ id, label, required, ...props }) => (
+export const Checkbox: FC<CheckboxProps> = ({
+  id,
+  label,
+  required,
+  ...props
+}) => (
   <>
-    <div>
+    <div className={s.checkboxContainer}>
       <label className={s.label} htmlFor={id}>
         {label}
         {required === true && <span className={s.required}> *</span>}
       </label>
       <input
         id={id}
-        className={s.input}
-        placeholder={label}
+        type="checkbox"
+        className={s.checkbox}
         required={required}
         {...props}
       />

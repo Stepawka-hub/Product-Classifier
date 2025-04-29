@@ -12,11 +12,13 @@ import { useForm } from "@hooks/forms/useForm";
 import { useSelector } from "@store";
 
 export const AddProductForm: FC<FormProps> = ({ onClose }) => {
+  const prefix = "product-add";
   const initialState: TCreateProductForm = {
     name: "",
     parentId: "",
     unitId: "",
   };
+
   const isAdding = useSelector(getIsAddingSelector);
   const { dispatch, formData, setFormData, onChange } =
     useForm<TCreateProductForm>(initialState);
@@ -49,6 +51,8 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
     >
       <>
         <Input
+          id={`${prefix}_name`}
+          name="name"
           label="Название изделия"
           value={formData.name}
           onChange={onChange("name")}
@@ -56,6 +60,8 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
           required
         />
         <Input
+          id={`${prefix}_parentId`}
+          name="parentId"
           label="ID категории"
           value={formData.parentId}
           onChange={onChange("parentId")}
@@ -64,6 +70,8 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
           required
         />
         <Input
+          id={`${prefix}_unitId`}
+          name="unitId"
           label="ID ЕИ"
           value={formData.unitId}
           onChange={onChange("unitId")}
