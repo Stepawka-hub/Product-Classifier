@@ -1,14 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
-import { addProductAsync, getAllProductsAsync } from "@thunks/products";
+import { addProductAsync, getAllProductsAsync, updateProductAsync } from "@thunks/products";
 import { TPaginatedData, TProduct } from "@utils/types";
-import { toggleArrayItem } from '@utils/helpers/array';
+import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialProductState = {
   products: [],
+
   isLoading: false,
   isAdding: false,
-  isRemoving: [],
+  removingIds: [],
+
+  editingItem: null,
+  isUpdating: false,
+
   pagination: {
     totalCount: 1,
     pageSize: 10,
@@ -29,15 +34,20 @@ const productsSlice = createSlice({
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving= toggleArrayItem(state.isRemoving, payload);
+    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
+      state.removingIds = toggleArrayItem(state.removingIds, payload);
+    },
+    setEditingItem: (state, { payload }: PayloadAction<TProduct | null>) => {
+      state.editingItem = payload;
     },
   },
   selectors: {
     getProductsSelector: (state) => state.products,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getIsRemovingSelector: (state) => state.isRemoving,
+    getRemovingIdsSelector: (state) => state.removingIds,
+    getIsUpdatingSelector: (state) => state.isUpdating,
+    getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -65,6 +75,16 @@ const productsSlice = createSlice({
       })
       .addCase(addProductAsync.rejected, (state) => {
         state.isAdding = false;
+      })
+
+      .addCase(updateProductAsync.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateProductAsync.fulfilled, (state) => {
+        state.isUpdating = false;
+      })
+      .addCase(updateProductAsync.rejected, (state) => {
+        state.isUpdating = false;
       });
   },
 });
@@ -74,8 +94,15 @@ export const {
   getProductsSelector,
   getIsLoadingSelector,
   getIsAddingSelector,
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
+  getIsUpdatingSelector,
+  getEditingItemSelector,
   getPaginationSelector,
 } = productsSlice.selectors;
-export const { setProducts, setCurrentPage, setTotalCount, setIsRemoving } =
-  productsSlice.actions;
+export const {
+  setProducts,
+  setCurrentPage,
+  setTotalCount,
+  setRemovingIds,
+  setEditingItem,
+} = productsSlice.actions;

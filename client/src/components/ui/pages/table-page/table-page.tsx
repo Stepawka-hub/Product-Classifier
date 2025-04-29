@@ -8,9 +8,10 @@ import { TEntity } from "@utils/types";
 export const TablePageUI = <T extends TEntity>({
   title,
   addButtonLabel,
-  openModal,
   tableConfig,
   pagination,
+  openAddForm,
+  additionalActions,
 }: TablePageUIProps<T>) => (
   <>
     <BasePage title={title}>
@@ -20,13 +21,13 @@ export const TablePageUI = <T extends TEntity>({
         ) : (
           <span className={s.noData}>Данных не найдено!</span>
         )}
-        <div>
+        <div className={s.actions}>
           <Button
             variant="plus"
             children={addButtonLabel}
-            className={s.actionButton}
-            onClick={openModal}
+            onClick={openAddForm}
           />
+          {additionalActions}
         </div>
       </div>
     </BasePage>

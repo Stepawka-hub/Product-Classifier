@@ -5,23 +5,40 @@
   margin-top: 1rem;
 }
 
-.actionButton {
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.75rem;
+  column-gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.actions button {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 1rem;
+  flex-basis: calc(25% - 1rem);
+  min-width: max-content;
+
+  padding: 0.5rem;
   border-radius: 0.25rem;
-  transition: all 0.25s linear;
+
   color: var(--primary-color);
   background-color: var(--theme-primary-color);
+  transition: all 0.25s linear;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.actionButton:hover {
-  transform: scale(1.05);
+.actions button:hover {
+  box-shadow: 0 0 10px 1px var(--action-btn-shadow-color);
+  transform: scale(1.02);
 }
 
-.actionButton:active {
-  opacity: 0.8;
+.actions button:active {
+  opacity: 0.7;
 }
 
 .noData {
@@ -29,3 +46,5 @@
   font-weight: 500;
   margin: 0.5rem 0;
 }
+
+@media(max-width: 1024px) {}

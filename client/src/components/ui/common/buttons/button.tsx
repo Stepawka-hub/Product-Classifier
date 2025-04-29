@@ -7,6 +7,7 @@ import editPenIcon from "@images/edit-pen.svg";
 import crossIcon from "@images/cross.svg";
 import doneIcon from "@images/done.svg";
 import plusIcon from "@images/plus.svg";
+import viewIcon from "@images/view.svg";
 
 const iconMap = {
   default: null,
@@ -29,6 +30,11 @@ const iconMap = {
     src: plusIcon,
     alt: "Plus Icon",
     buttonClassName: s.plus,
+  },
+  view: {
+    src: viewIcon,
+    alt: "View Icon",
+    buttonClassName: null,
   },
 };
 

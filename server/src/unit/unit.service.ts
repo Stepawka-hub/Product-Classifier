@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUnitDto } from './dto/create-unit.dto';
-import { Unit } from './entities/unit.entity';
-import { UnitRepository } from './repositories/unit.repository';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { getErrorMessage } from 'src/utils/error-handler';
+import { CreateUnitDto } from './dto/create-unit.dto';
+import { UpdateUnitDto } from './dto/update-unit.dto';
+import { Unit } from './entities/unit.entity';
+import { UnitRepository } from './repositories/unit.repository';
+import { Not } from 'typeorm';
 
 @Injectable()
 export class UnitService {
@@ -24,7 +27,32 @@ export class UnitService {
   }
 
   async createUnit(dto: CreateUnitDto): Promise<BaseResponseDto> {
-    return await this.unitRepository.createWithAddRow(dto);
+    return await this.unitRepository.createUnit(dto);
+  }
+
+  async updateUnit(dto: UpdateUnitDto): Promise<BaseResponseDto> {
+    try {
+      const { id, name } = dto;
+      const isExist = await this.unitRepository.findOne({
+        where: { name, id: Not(id) },
+      });
+
+      if (isExist) {
+        return BaseResponseDto.Error('ЕИ с таким названием уже существует!');
+      }
+
+      const updateResult = await this.unitRepository.update({ id }, { name });
+
+      if (updateResult.affected === 0) {
+        return BaseResponseDto.Error('Запись не найдена или не была изменена!');
+      }
+
+      return BaseResponseDto.Success();
+    } catch (error) {
+      return BaseResponseDto.Error(
+        'Ошибка при обновлении записи: ' + getErrorMessage(error),
+      );
+    }
   }
 
   async deleteUnit(id: number): Promise<BaseResponseDto> {

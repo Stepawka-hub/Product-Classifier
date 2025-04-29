@@ -2,12 +2,13 @@
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { RootState, useDispatch, useSelector } from "@store";
 import { TFetchEntitiesThunk } from "@thunks/types/types";
+import { PaginationParams } from "@utils/api/types/types";
 import { TPagination } from "@utils/types";
 import { useEffect } from "react";
 import { Selector } from "react-redux";
 import { usePagination } from "../usePagination";
 
-type TUseTableDataParams<T> = {
+type TUseTableDataParams<T, P> = {
   dataSelector: Selector<RootState, T[]>;
   getIsLoadingSelector: Selector<RootState, boolean>;
   getPaginationSelector: Selector<
@@ -15,16 +16,18 @@ type TUseTableDataParams<T> = {
     Omit<TPagination, "setCurrentPage">
   >;
   setCurrentPage: ActionCreatorWithPayload<number, string>;
-  getElementsAsync: TFetchEntitiesThunk<T>;
+  getElementsAsync: (params: P) => ReturnType<TFetchEntitiesThunk<T>>;
+  additionalParams?: Omit<P, "page" | "limit">;
 };
 
-export const useTableData = <T>({
+export const useTableData = <T, P extends PaginationParams = PaginationParams>({
   dataSelector,
   getIsLoadingSelector,
   getPaginationSelector,
   setCurrentPage,
   getElementsAsync,
-}: TUseTableDataParams<T>) => {
+  additionalParams,
+}: TUseTableDataParams<T, P>) => {
   const dispatch = useDispatch();
   const { pagination, currentPage, pageSize, setPageNumber } = usePagination(
     getPaginationSelector,
@@ -34,8 +37,14 @@ export const useTableData = <T>({
   const isLoading = useSelector(getIsLoadingSelector);
 
   useEffect(() => {
-    dispatch(getElementsAsync({ page: currentPage, limit: pageSize }));
-  }, [currentPage, pageSize, dispatch]);
+    const params = {
+      page: currentPage,
+      limit: pageSize,
+      ...additionalParams,
+    } as P;
+
+    dispatch(getElementsAsync(params));
+  }, [dispatch, currentPage, pageSize]);
 
   return {
     isLoading,

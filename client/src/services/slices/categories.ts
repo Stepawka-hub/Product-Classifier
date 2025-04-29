@@ -1,17 +1,37 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialCategoryState } from "./types/types";
-import { addCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
-import { TCategory, TPaginatedData } from "@utils/types";
+import {
+  addCategoryAsync,
+  getAllCategoriesAsync,
+  getChildCategoriesAsync,
+  getParentCategoriesAsync,
+  updateCategoryAsync,
+} from "@thunks/categories";
+import { TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
   categories: [],
+  parents: [],
+  children: [],
+  editingItem: null,
+
   isLoading: false,
   isAdding: false,
-  isRemoving: [],
+  isUpdating: false,
+  removingIds: [],
+
+  isFetchParents: false,
+  isFetchChildren: false,
+
   pagination: {
     totalCount: 1,
     pageSize: 10,
+    currentPage: 1,
+  },
+  nodesPagination: {
+    totalCount: 1,
+    pageSize: 5,
     currentPage: 1,
   },
 };
@@ -26,19 +46,38 @@ const categoriesSlice = createSlice({
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
     },
+    setNodeCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.nodesPagination.currentPage = payload;
+    },
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving = toggleArrayItem(state.isRemoving, payload);
+    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
+      state.removingIds = toggleArrayItem(state.removingIds, payload);
+    },
+    setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
+      state.isUpdating = payload;
+    },
+    setEditingItem: (state, { payload }: PayloadAction<TCategory | null>) => {
+      state.editingItem = payload;
     },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
+    getParentsSelector: (state) => state.parents,
+    getChildrenSelector: (state) => state.children,
+    getEditingItemSelector: (state) => state.editingItem,
+
+    getPaginationSelector: (state) => state.pagination,
+    getNodesPaginationSelector: (state) => state.nodesPagination,
+
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getIsRemovingSelector: (state) => state.isRemoving,
-    getPaginationSelector: (state) => state.pagination,
+    getIsUpdatingSelector: (state) => state.isUpdating,
+    getRemovingIdsSelector: (state) => state.removingIds,
+
+    getIsFetchParentsSelector: (state) => state.isFetchParents,
+    getIsFetchChildrenSelector: (state) => state.isFetchChildren,
   },
   extraReducers: (builder) => {
     builder
@@ -65,6 +104,46 @@ const categoriesSlice = createSlice({
       })
       .addCase(addCategoryAsync.rejected, (state) => {
         state.isAdding = false;
+      })
+
+      .addCase(updateCategoryAsync.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateCategoryAsync.fulfilled, (state) => {
+        state.isUpdating = false;
+      })
+      .addCase(updateCategoryAsync.rejected, (state) => {
+        state.isUpdating = false;
+      })
+
+      .addCase(getParentCategoriesAsync.pending, (state) => {
+        state.isFetchParents = true;
+      })
+      .addCase(
+        getParentCategoriesAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TCategoryShort>>) => {
+          state.parents = payload.items;
+          state.nodesPagination.totalCount = payload.total;
+          state.isFetchParents = false;
+        }
+      )
+      .addCase(getParentCategoriesAsync.rejected, (state) => {
+        state.isFetchParents = false;
+      })
+
+      .addCase(getChildCategoriesAsync.pending, (state) => {
+        state.isFetchChildren = true;
+      })
+      .addCase(
+        getChildCategoriesAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TCategoryShort>>) => {
+          state.children = payload.items;
+          state.nodesPagination.totalCount = payload.total;
+          state.isFetchChildren = false;
+        }
+      )
+      .addCase(getChildCategoriesAsync.rejected, (state) => {
+        state.isFetchChildren = false;
       });
   },
 });
@@ -72,10 +151,25 @@ const categoriesSlice = createSlice({
 export const reducer = categoriesSlice.reducer;
 export const {
   getCategoriesSelector,
+  getParentsSelector,
+  getChildrenSelector,
+  getEditingItemSelector,
+
+  getPaginationSelector,
+  getNodesPaginationSelector,
+
   getIsLoadingSelector,
   getIsAddingSelector,
-  getIsRemovingSelector,
-  getPaginationSelector,
+  getIsUpdatingSelector,
+  getRemovingIdsSelector,
+  getIsFetchParentsSelector,
+  getIsFetchChildrenSelector,
 } = categoriesSlice.selectors;
-export const { setCategories, setCurrentPage, setTotalCount, setIsRemoving } =
-  categoriesSlice.actions;
+export const {
+  setCategories,
+  setCurrentPage,
+  setNodeCurrentPage,
+  setTotalCount,
+  setRemovingIds,
+  setEditingItem,
+} = categoriesSlice.actions;

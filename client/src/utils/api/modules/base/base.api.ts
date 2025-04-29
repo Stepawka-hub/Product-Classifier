@@ -2,7 +2,7 @@ export class BaseApi {
   protected baseUrl: URL;
 
   constructor(baseUrl: string, baseEndpoint: string = "") {
-    this.baseUrl = new URL(baseEndpoint, baseUrl + '/');
+    this.baseUrl = new URL(baseEndpoint, baseUrl + "/");
   }
 
   protected async get<T>(
@@ -15,12 +15,24 @@ export class BaseApi {
   }
 
   protected async post<T>(
-    data: unknown = {},
+    data: Record<string, unknown> = {},
     endpoint: string = ""
   ): Promise<T> {
     const url = this.buildUrl(endpoint);
     return this.fetch(url, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  }
+
+  protected async update<T>(
+    data: Record<string, unknown> = {},
+    endpoint: string = ""
+  ): Promise<T> {
+    const url = this.buildUrl(endpoint);
+    return this.fetch(url, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });

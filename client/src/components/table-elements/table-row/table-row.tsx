@@ -7,10 +7,12 @@ import { TableRowProps } from "./type";
 export const TableRow = <T extends TEntity>({
   rowData,
   headers,
-  isRemoving,
-  onEdit,
-  onDelete,
+  isRemoving = false,
+  actions = {},
 }: TableRowProps<T>) => {
+  const { onEdit, deletion = {} } = actions;
+  const { onDelete } = deletion;
+
   // Указываем, что это не просто массив строк, а массив ключей типа T
   const data = Object.keys(headers) as Array<keyof T>;
 
@@ -24,13 +26,17 @@ export const TableRow = <T extends TEntity>({
     <tr className={s.trow}>
       {cellElements}
       <td className={s.actions}>
-        <Button variant="edit" size="small" onClick={onEdit} />
-        <Button
-          variant="cross"
-          size="small"
-          disabled={isRemoving}
-          onClick={() => onDelete(rowData.id)}
-        />
+        {onEdit && (
+          <Button variant="edit" size="small" onClick={() => onEdit(rowData)} />
+        )}
+        {onDelete && (
+          <Button
+            variant="cross"
+            size="small"
+            disabled={isRemoving}
+            onClick={() => onDelete(rowData.id)}
+          />
+        )}
       </td>
     </tr>
   );

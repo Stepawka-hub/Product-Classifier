@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
+import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 import { DataSource, Repository } from 'typeorm';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { Category } from '../entities/category.entity';
 
 @Injectable()
@@ -61,6 +64,62 @@ export class CategoryRepository extends Repository<Category> {
     }
   }
 
+  async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+    const { id, name, parentName, unitName, needInheritInLeaves } = dto;
+
+    const currentCategory = await this.findOne({
+      where: { id },
+      select: ['name'],
+    });
+
+    if (!currentCategory) {
+      return BaseResponseDto.Error('Категория не найдена');
+    }
+
+    const params: any[] = [
+      'product',
+      this.tableName,
+      currentCategory.name,
+      name,
+    ];
+
+    const query = 'SELECT EditTreeClass($1, $2, $3, $4';
+
+    // Добавляем оставшиеся параметры
+    const namedParams: Record<string, unknown> = {};
+
+    if (parentName) {
+      const isExistCycle = await this.checkCycle(id, parentName);
+      if (isExistCycle) {
+        return BaseResponseDto.Error(
+          'Нельзя выбрать текущую категорию или её подкатегории как родительские',
+        );
+      }
+      namedParams.parentName = parentName;
+    }
+
+    if (unitName) {
+      namedParams.umName = unitName;
+    }
+
+    if (!needInheritInLeaves) {
+      namedParams.needInheritInLeaves = needInheritInLeaves;
+    }
+
+    // Добавляем named parameters
+    const { query: finalQuery, params: finalParams } =
+      addNamedParametersToQuery(query, params, namedParams);
+
+    try {
+      await this.query(finalQuery, finalParams);
+      return BaseResponseDto.Success();
+    } catch (e) {
+      return BaseResponseDto.Error(
+        `Ошибка при обновлении категории: ${getErrorMessage(e)}`,
+      );
+    }
+  }
+
   async deleteCategory(id: number): Promise<BaseResponseDto> {
     const query = `SELECT DeleteRows($1, 'id', $2)`;
 
@@ -85,5 +144,41 @@ export class CategoryRepository extends Repository<Category> {
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
     }
+  }
+
+  async findNodes(
+    id: number,
+    page: number,
+    limit: number,
+    direction: boolean = false,
+  ): Promise<PaginatedResponseDto<Category>> {
+    const query = "SELECT * FROM GetTree($1, 'id', $2, $3)";
+
+    const res = (await this.query(query, [
+      this.tableName,
+      String(id),
+      direction,
+    ])) as Category[];
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedData = res.slice(startIndex, endIndex);
+
+    return new PaginatedResponseDto(paginatedData, paginatedData.length);
+  }
+
+  private async checkCycle(id: number, parentName: string): Promise<boolean> {
+    const parent = await this.findOne({
+      where: { name: parentName },
+      select: ['id'],
+    });
+
+    const [result] = (await this.query('SELECT IsExistCycle($1, $2, $3)', [
+      this.tableName,
+      String(id),
+      String(parent?.id),
+    ])) as [{ isexistcycle: boolean }];
+
+    return !!result.isexistcycle;
   }
 }

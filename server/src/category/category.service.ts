@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
-import { CategoryDto } from './dto/category.dto';
+import { UnitRepository } from 'src/unit/repositories/unit.repository';
+import { CategoryBaseDto, CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryRepository } from './repositores/category.repository';
 
 @Injectable()
 export class CategoryService {
-  constructor(private categoryRepository: CategoryRepository) {}
+  constructor(
+    private categoryRepository: CategoryRepository,
+    private unitRepository: UnitRepository,
+  ) {}
 
   async findAllWithPagination(
     page: number = 1,
@@ -27,8 +32,71 @@ export class CategoryService {
     );
   }
 
+  async findNodes(
+    id: number,
+    page: number = 1,
+    limit: number = 10,
+    direction: boolean = false,
+  ): Promise<PaginatedResponseDto<CategoryBaseDto>> {
+    const { items: categories, total } =
+      await this.categoryRepository.findNodes(id, page, limit, direction);
+
+    return new PaginatedResponseDto(
+      categories.map((c) => new CategoryBaseDto(c)),
+      total,
+    );
+  }
+
   async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
+    const { parentName, unitName } = dto;
+
+    if (parentName) {
+      const parentExists = await this.categoryRepository.findOne({
+        where: { name: parentName },
+      });
+      if (!parentExists) {
+        return BaseResponseDto.Error(
+          'Указанная родительская категория не найдена',
+        );
+      }
+    }
+
+    if (unitName) {
+      const unitExists = await this.unitRepository.findOne({
+        where: { name: unitName },
+      });
+      if (!unitExists) {
+        return BaseResponseDto.Error('Указанная ЕИ не найдена');
+      }
+    }
+
     return await this.categoryRepository.createCategory(dto);
+  }
+
+  async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+    const { parentName, unitName } = dto;
+
+    if (parentName) {
+      const parentExists = await this.categoryRepository.findOne({
+        where: { name: parentName },
+      });
+      if (!parentExists) {
+        return BaseResponseDto.Error(
+          'Указанная родительская категория не найдена',
+        );
+      }
+    }
+
+    if (unitName) {
+      const unitExists = await this.unitRepository.findOne({
+        where: { name: unitName },
+      });
+      if (!unitExists) {
+        return BaseResponseDto.Error('Указанная ЕИ не найдена');
+      }
+    }
+
+    return await this.categoryRepository.updateCategory(dto);
   }
 
   async deleteCategory(id: number): Promise<BaseResponseDto> {

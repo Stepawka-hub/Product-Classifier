@@ -1,5 +1,3 @@
-export * from './base-add-form';
-export * from './add-category-form';
-export * from './add-unit-form';
-export * from './add-product-form';
 export * from './form-elements';
+export * from './addition-forms';
+export * from './editing-forms';

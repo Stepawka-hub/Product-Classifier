@@ -1,14 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addUnitAsync, getAllUnitsAsync } from "@thunks/units";
+import { addUnitAsync, getAllUnitsAsync, updateUnitAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
 import { TPaginatedData, TUnit } from "@utils/types";
-import { toggleArrayItem } from '@utils/helpers/array';
+import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialUnitState = {
   units: [],
+
   isLoading: false,
   isAdding: false,
-  isRemoving: [],
+  removingIds: [],
+
+  editingItem: null,
+  isUpdating: false,
+
   pagination: {
     totalCount: 1,
     pageSize: 10,
@@ -29,15 +34,20 @@ const unitsSlice = createSlice({
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving= toggleArrayItem(state.isRemoving, payload);
+    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
+      state.removingIds = toggleArrayItem(state.removingIds, payload);
+    },
+    setEditingItem: (state, { payload }: PayloadAction<TUnit | null>) => {
+      state.editingItem = payload;
     },
   },
   selectors: {
     getUnitsSelector: (state) => state.units,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getIsRemovingSelector: (state) => state.isRemoving,
+    getRemovingIdsSelector: (state) => state.removingIds,
+    getIsUpdatingSelector: (state) => state.isUpdating,
+    getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -65,6 +75,16 @@ const unitsSlice = createSlice({
       })
       .addCase(addUnitAsync.rejected, (state) => {
         state.isAdding = false;
+      })
+
+      .addCase(updateUnitAsync.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateUnitAsync.fulfilled, (state) => {
+        state.isUpdating = false;
+      })
+      .addCase(updateUnitAsync.rejected, (state) => {
+        state.isUpdating = false;
       });
   },
 });
@@ -74,8 +94,15 @@ export const {
   getUnitsSelector,
   getIsLoadingSelector,
   getIsAddingSelector,
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
+  getIsUpdatingSelector,
+  getEditingItemSelector,
   getPaginationSelector,
 } = unitsSlice.selectors;
-export const { setUnits, setCurrentPage, setTotalCount, setIsRemoving } =
-  unitsSlice.actions;
+export const {
+  setUnits,
+  setCurrentPage,
+  setTotalCount,
+  setRemovingIds,
+  setEditingItem,
+} = unitsSlice.actions;
