@@ -21,6 +21,24 @@ export class CategoryController {
     return this.categoryService.findAllWithPagination(page, limit);
   }
 
+  @Get(':id/parents')
+  findParents(
+    @Param('id') id: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.categoryService.findNodes(id, page, limit);
+  }
+
+  @Get(':id/children')
+  findChildren(
+    @Param('id') id: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.categoryService.findNodes(id, page, limit, true);
+  }
+
   @Post()
   createCategory(@Body() dto: CreateCategoryDto) {
     return this.categoryService.createCategory(dto);

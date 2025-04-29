@@ -16,6 +16,20 @@ export class CategoryApi extends BaseApi {
     return this.get(params);
   }
 
+  getParents(
+    id: number,
+    params: PaginationParams
+  ): Promise<TPaginatedData<TCategory>> {
+    return this.get(params, `${id}/parents`);
+  }
+
+  getChildren(
+    id: number,
+    params: PaginationParams
+  ): Promise<TPaginatedData<TCategory>> {
+    return this.get(params, `${id}/children`);
+  }
+
   createCategory(categoryData: TCreateCategoryData): Promise<TServerResponse> {
     return this.post(categoryData);
   }

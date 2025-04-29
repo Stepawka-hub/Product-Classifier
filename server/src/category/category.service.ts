@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
-import { CategoryDto } from './dto/category.dto';
+import { CategoryBaseDto, CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryRepository } from './repositores/category.repository';
@@ -28,6 +28,21 @@ export class CategoryService {
 
     return new PaginatedResponseDto(
       categories.map((c) => new CategoryDto(c)),
+      total,
+    );
+  }
+
+  async findNodes(
+    id: number,
+    page: number = 1,
+    limit: number = 10,
+    direction: boolean = false,
+  ): Promise<PaginatedResponseDto<CategoryBaseDto>> {
+    const { items: categories, total } =
+      await this.categoryRepository.findNodes(id, page, limit, direction);
+
+    return new PaginatedResponseDto(
+      categories.map((c) => new CategoryBaseDto(c)),
       total,
     );
   }

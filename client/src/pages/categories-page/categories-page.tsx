@@ -19,6 +19,7 @@ import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { TablePage } from "../table-page";
 import { Button } from "@components/common/buttons";
+import { api } from "@api";
 
 export const CategoriesPage = () => {
   const { data, isLoading, pagination } = useTableData<TCategory>({
@@ -47,10 +48,30 @@ export const CategoriesPage = () => {
       openAddForm={showAddForm}
       additionalActions={
         <>
-          <Button variant="view" onClick={() => alert("Родители")}>
+          <Button
+            variant="view"
+            onClick={async () =>
+              console.log(
+                await api.categories.getParents(4, {
+                  page: 1,
+                  limit: 10,
+                })
+              )
+            }
+          >
             Родительские категории
           </Button>
-          <Button variant="view" onClick={() => alert("Дети")}>
+          <Button
+            variant="view"
+            onClick={async () =>
+              console.log(
+                await api.categories.getChildren(4, {
+                  page: 1,
+                  limit: 10,
+                })
+              )
+            }
+          >
             Дочерние категории
           </Button>
         </>

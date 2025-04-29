@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { addNamedParametersToQuery } from 'src/utils/sql.utils';
@@ -143,6 +144,27 @@ export class CategoryRepository extends Repository<Category> {
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
     }
+  }
+
+  async findNodes(
+    id: number,
+    page: number,
+    limit: number,
+    direction: boolean = false,
+  ): Promise<PaginatedResponseDto<Category>> {
+    const query = "SELECT * FROM GetTree($1, 'id', $2, $3)";
+
+    const res = (await this.query(query, [
+      this.tableName,
+      String(id),
+      direction,
+    ])) as Category[];
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedData = res.slice(startIndex, endIndex);
+
+    return new PaginatedResponseDto(paginatedData, paginatedData.length);
   }
 
   private async checkCycle(id: number, parentName: string): Promise<boolean> {
