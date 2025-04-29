@@ -34,7 +34,6 @@ export const getParentCategoriesAsync = createAsyncThunk<
   PaginationParams & TEntity
 >(GET_PARENT_CATEGORIES, async ({ id, page, limit }) => {
   const res = await api.categories.getParents(id, { page, limit });
-  console.log(res);
   return res;
 });
 
@@ -43,7 +42,6 @@ export const getChildCategoriesAsync = createAsyncThunk<
   PaginationParams & TEntity
 >(GET_CHILD_CATEGORIES, async ({ id, page, limit }) => {
   const res = await api.categories.getChildren(id, { page, limit });
-  console.log(res);
   return res;
 });
 

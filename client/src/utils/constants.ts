@@ -1,4 +1,4 @@
-import { TCategory, TProduct, TUnit } from "./types";
+import { TCategory, TCategoryShort, TProduct, TUnit } from "./types";
 
 export const productsHeaders: Record<keyof TProduct, string> = {
   id: "ID изделия",
@@ -16,6 +16,11 @@ export const categoriesHeaders: Record<keyof TCategory, string> = {
 
 export const unitsHeaders: Record<keyof TUnit, string> = {
   id: "ID Единицы измерения",
+  name: "Название",
+};
+
+export const shortCategoriesHeaders: Record<keyof TCategoryShort, string> = {
+  id: "ID категории",
   name: "Название",
 };
 

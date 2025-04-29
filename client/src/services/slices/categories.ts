@@ -3,21 +3,26 @@ import { TInitialCategoryState } from "./types/types";
 import {
   addCategoryAsync,
   getAllCategoriesAsync,
+  getChildCategoriesAsync,
+  getParentCategoriesAsync,
   updateCategoryAsync,
 } from "@thunks/categories";
-import { TCategory, TPaginatedData } from "@utils/types";
+import { TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
   categories: [],
   parents: [],
   children: [],
+  editingItem: null,
 
   isLoading: false,
   isAdding: false,
-  removingIds: [],
-  editingItem: null,
   isUpdating: false,
+  removingIds: [],
+
+  isFetchParents: false,
+  isFetchChildren: false,
 
   pagination: {
     totalCount: 1,
@@ -41,6 +46,9 @@ const categoriesSlice = createSlice({
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
     },
+    setNodeCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.nodesPagination.currentPage = payload;
+    },
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
@@ -56,12 +64,20 @@ const categoriesSlice = createSlice({
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
+    getParentsSelector: (state) => state.parents,
+    getChildrenSelector: (state) => state.children,
+    getEditingItemSelector: (state) => state.editingItem,
+
+    getPaginationSelector: (state) => state.pagination,
+    getNodesPaginationSelector: (state) => state.nodesPagination,
+
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getRemovingIdsSelector: (state) => state.removingIds,
     getIsUpdatingSelector: (state) => state.isUpdating,
-    getEditingItemSelector: (state) => state.editingItem,
-    getPaginationSelector: (state) => state.pagination,
+    getRemovingIdsSelector: (state) => state.removingIds,
+
+    getIsFetchParentsSelector: (state) => state.isFetchParents,
+    getIsFetchChildrenSelector: (state) => state.isFetchChildren,
   },
   extraReducers: (builder) => {
     builder
@@ -98,6 +114,36 @@ const categoriesSlice = createSlice({
       })
       .addCase(updateCategoryAsync.rejected, (state) => {
         state.isUpdating = false;
+      })
+
+      .addCase(getParentCategoriesAsync.pending, (state) => {
+        state.isFetchParents = true;
+      })
+      .addCase(
+        getParentCategoriesAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TCategoryShort>>) => {
+          state.parents = payload.items;
+          state.nodesPagination.totalCount = payload.total;
+          state.isFetchParents = false;
+        }
+      )
+      .addCase(getParentCategoriesAsync.rejected, (state) => {
+        state.isFetchParents = false;
+      })
+
+      .addCase(getChildCategoriesAsync.pending, (state) => {
+        state.isFetchChildren = true;
+      })
+      .addCase(
+        getChildCategoriesAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TCategoryShort>>) => {
+          state.children = payload.items;
+          state.nodesPagination.totalCount = payload.total;
+          state.isFetchChildren = false;
+        }
+      )
+      .addCase(getChildCategoriesAsync.rejected, (state) => {
+        state.isFetchChildren = false;
       });
   },
 });
@@ -105,16 +151,24 @@ const categoriesSlice = createSlice({
 export const reducer = categoriesSlice.reducer;
 export const {
   getCategoriesSelector,
+  getParentsSelector,
+  getChildrenSelector,
+  getEditingItemSelector,
+
+  getPaginationSelector,
+  getNodesPaginationSelector,
+
   getIsLoadingSelector,
   getIsAddingSelector,
-  getRemovingIdsSelector,
   getIsUpdatingSelector,
-  getEditingItemSelector,
-  getPaginationSelector,
+  getRemovingIdsSelector,
+  getIsFetchParentsSelector,
+  getIsFetchChildrenSelector,
 } = categoriesSlice.selectors;
 export const {
   setCategories,
   setCurrentPage,
+  setNodeCurrentPage,
   setTotalCount,
   setRemovingIds,
   setEditingItem,

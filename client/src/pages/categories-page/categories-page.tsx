@@ -1,3 +1,4 @@
+import { CategoryRelationsModal } from "@components/category-relations-modal";
 import { Button } from "@components/common/buttons";
 import { Loader } from "@components/common/loader";
 import {
@@ -7,27 +8,21 @@ import {
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
 import { useTableForms } from "@hooks/table/useTableForms";
+import { useModal } from "@hooks/useModal";
 import {
   getCategoriesSelector,
   getIsLoadingSelector,
-  getRemovingIdsSelector,
   getPaginationSelector,
+  getRemovingIdsSelector,
   setCurrentPage,
   setEditingItem,
 } from "@slices/categories";
-import { useDispatch } from "@store";
-import {
-  deleteCategoryAsync,
-  getAllCategoriesAsync,
-  getChildCategoriesAsync,
-  getParentCategoriesAsync,
-} from "@thunks/categories";
+import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { TablePage } from "../table-page";
 
 export const CategoriesPage = () => {
-  const dispatch = useDispatch();
   const { data, isLoading, pagination } = useTableData<TCategory>({
     dataSelector: getCategoriesSelector,
     getIsLoadingSelector,
@@ -42,6 +37,7 @@ export const CategoriesPage = () => {
     deleteElementAsync: deleteCategoryAsync,
     openEditForm: showEditForm,
   });
+  const { showModal } = useModal();
 
   if (isLoading) return <Loader />;
 
@@ -56,24 +52,14 @@ export const CategoriesPage = () => {
         <>
           <Button
             variant="view"
-            onClick={async () =>
-              console.log(
-                await dispatch(
-                  getParentCategoriesAsync({ id: 4, page: 1, limit: 10 })
-                )
-              )
-            }
+            onClick={() => showModal(<CategoryRelationsModal type="parents" />)}
           >
             Родительские категории
           </Button>
           <Button
             variant="view"
-            onClick={async () =>
-              console.log(
-                await dispatch(
-                  getChildCategoriesAsync({ id: 4, page: 1, limit: 10 })
-                )
-              )
+            onClick={() =>
+              showModal(<CategoryRelationsModal type="children" />)
             }
           >
             Дочерние категории

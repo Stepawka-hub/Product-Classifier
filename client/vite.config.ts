@@ -13,7 +13,6 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "src/components"),
       "@pages": path.resolve(__dirname, "src/pages"),
       "@slices": path.resolve(__dirname, "src/services/slices"),
-      "@selectors": path.resolve(__dirname, "src/services/selectors"),
       "@thunks": path.resolve(__dirname, "src/services/thunks"),
       "@api": path.resolve(__dirname, "src/utils/api/api.ts"),
       "@utils": path.resolve(__dirname, "src/utils"),

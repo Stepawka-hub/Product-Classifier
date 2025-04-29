@@ -23,7 +23,7 @@ export type TCommonInitialState = {
 
 export type TEditingState<T> = {
   editingItem: T | null;
-  isUpdating: boolean;
+  isUpdating?: boolean;
 };
 
 export type TInitialProductState = TCommonInitialState &
@@ -36,6 +36,8 @@ export type TInitialCategoryState = TCommonInitialState &
     categories: TCategory[];
     parents: TCategoryShort[];
     children: TCategoryShort[];
+    isFetchParents: boolean;
+    isFetchChildren: boolean;
     nodesPagination: Omit<TPagination, "setCurrentPage">;
   };
 
