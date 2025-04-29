@@ -3,16 +3,20 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PaginationParams } from "@utils/api/types/types";
 import {
   TCategory,
+  TCategoryShort,
   TCreateCategoryData,
+  TEntity,
   TPaginatedData,
   TUpdateCategoryData,
 } from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { refreshTable } from "../helpers/pagination";
 import { RootState } from "@store";
-import { setIsRemoving } from "@slices/categories";
+import { setRemovingIds } from "@slices/categories";
 
 const GET_CATEGORIES = "categories/get";
+const GET_PARENT_CATEGORIES = "categories/get-parents";
+const GET_CHILD_CATEGORIES = "categories/get-children";
 const ADD_CATEGORY = "categories/add";
 const UPDATE_CATEGORY = "categories/update";
 const DELETE_CATEGORY = "categories/delete";
@@ -22,6 +26,24 @@ export const getAllCategoriesAsync = createAsyncThunk<
   PaginationParams
 >(GET_CATEGORIES, async (paginationParams) => {
   const res = await api.categories.getAll(paginationParams);
+  return res;
+});
+
+export const getParentCategoriesAsync = createAsyncThunk<
+  TPaginatedData<TCategoryShort>,
+  PaginationParams & TEntity
+>(GET_PARENT_CATEGORIES, async ({ id, page, limit }) => {
+  const res = await api.categories.getParents(id, { page, limit });
+  console.log(res);
+  return res;
+});
+
+export const getChildCategoriesAsync = createAsyncThunk<
+  TPaginatedData<TCategoryShort>,
+  PaginationParams & TEntity
+>(GET_CHILD_CATEGORIES, async ({ id, page, limit }) => {
+  const res = await api.categories.getChildren(id, { page, limit });
+  console.log(res);
   return res;
 });
 
@@ -66,7 +88,7 @@ export const updateCategoryAsync = createAsyncThunk<void, TUpdateCategoryData>(
 export const deleteCategoryAsync = createAsyncThunk<void, number>(
   DELETE_CATEGORY,
   async (id, { dispatch, getState }) => {
-    dispatch(setIsRemoving(id));
+    dispatch(setRemovingIds(id));
     const res = await api.categories.deleteCategory(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -81,6 +103,6 @@ export const deleteCategoryAsync = createAsyncThunk<void, number>(
       dispatchErrorToast(dispatch, res.message);
     }
 
-    dispatch(setIsRemoving(id));
+    dispatch(setRemovingIds(id));
   }
 );

@@ -4,20 +4,20 @@ import { TDeleteEntityThunk } from "@thunks/types/types";
 import { useCallback, useMemo } from "react";
 
 type TUseTableActionsParams<T> = {
-  getIsRemovingSelector: Selector<RootState, (string | number)[]>;
+  getRemovingIdsSelector: Selector<RootState, (string | number)[]>;
   setEditingItem: ActionCreatorWithPayload<T | null, string>;
   deleteElementAsync: TDeleteEntityThunk;
   openEditForm: () => void;
 };
 
 export const useTableActions = <T>({
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
   setEditingItem,
   deleteElementAsync,
   openEditForm,
 }: TUseTableActionsParams<T>) => {
   const dispatch = useDispatch();
-  const isRemoving = useSelector(getIsRemovingSelector);
+  const removingIds = useSelector(getRemovingIdsSelector);
 
   const handleDelete = useCallback(
     (id: number) => {
@@ -36,10 +36,10 @@ export const useTableActions = <T>({
 
   return useMemo(
     () => ({
-      isRemoving,
+      removingIds,
       onEdit: handleEdit,
       onDelete: handleDelete,
     }),
-    [isRemoving, handleEdit, handleDelete]
+    [removingIds, handleEdit, handleDelete]
   );
 };

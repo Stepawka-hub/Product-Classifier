@@ -1,4 +1,11 @@
-import { TCategory, TPagination, TProduct, TToast, TUnit } from "@utils/types";
+import {
+  TCategory,
+  TCategoryShort,
+  TPagination,
+  TProduct,
+  TToast,
+  TUnit,
+} from "@utils/types";
 import { ReactNode } from "react";
 
 export type TInitialAppState = {
@@ -10,7 +17,7 @@ export type TInitialAppState = {
 export type TCommonInitialState = {
   isLoading: boolean;
   isAdding: boolean;
-  isRemoving: (string | number)[];
+  removingIds: (string | number)[];
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 
@@ -27,6 +34,9 @@ export type TInitialProductState = TCommonInitialState &
 export type TInitialCategoryState = TCommonInitialState &
   TEditingState<TCategory> & {
     categories: TCategory[];
+    parents: TCategoryShort[];
+    children: TCategoryShort[];
+    nodesPagination: Omit<TPagination, "setCurrentPage">;
   };
 
 export type TInitialUnitState = TCommonInitialState &

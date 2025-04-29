@@ -10,7 +10,9 @@ export type TCategory = TEntity & {
   parentName: string;
 };
 
-// Продукт
+export type TCategoryShort = Pick<TCategory, "id" | "name">;
+
+// Изделие
 export type TProduct = TCategory;
 
 // ЕИ

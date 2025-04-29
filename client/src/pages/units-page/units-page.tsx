@@ -8,7 +8,7 @@ import { useTableData } from "@hooks/table/useTableData";
 import { useTableForms } from "@hooks/table/useTableForms";
 import {
   getIsLoadingSelector,
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
   getPaginationSelector,
   getUnitsSelector,
   setCurrentPage,
@@ -29,7 +29,7 @@ export const UnitsPage = () => {
   });
   const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
   const actions = useTableActions({
-    getIsRemovingSelector,
+    getRemovingIdsSelector,
     setEditingItem,
     deleteElementAsync: deleteUnitAsync,
     openEditForm: showEditForm,

@@ -9,7 +9,7 @@ const initialState: TInitialProductState = {
 
   isLoading: false,
   isAdding: false,
-  isRemoving: [],
+  removingIds: [],
 
   editingItem: null,
   isUpdating: false,
@@ -34,8 +34,8 @@ const productsSlice = createSlice({
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving = toggleArrayItem(state.isRemoving, payload);
+    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
+      state.removingIds = toggleArrayItem(state.removingIds, payload);
     },
     setEditingItem: (state, { payload }: PayloadAction<TProduct | null>) => {
       state.editingItem = payload;
@@ -45,7 +45,7 @@ const productsSlice = createSlice({
     getProductsSelector: (state) => state.products,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getIsRemovingSelector: (state) => state.isRemoving,
+    getRemovingIdsSelector: (state) => state.removingIds,
     getIsUpdatingSelector: (state) => state.isUpdating,
     getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
@@ -94,7 +94,7 @@ export const {
   getProductsSelector,
   getIsLoadingSelector,
   getIsAddingSelector,
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
   getIsUpdatingSelector,
   getEditingItemSelector,
   getPaginationSelector,
@@ -103,6 +103,6 @@ export const {
   setProducts,
   setCurrentPage,
   setTotalCount,
-  setIsRemoving,
+  setRemovingIds,
   setEditingItem,
 } = productsSlice.actions;

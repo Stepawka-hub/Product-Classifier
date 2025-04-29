@@ -10,7 +10,7 @@ import {
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
-import { setIsRemoving } from "@slices/products";
+import { setRemovingIds } from "@slices/products";
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
@@ -66,7 +66,7 @@ export const updateProductAsync = createAsyncThunk<void, TUpdateProductData>(
 export const deleteProductAsync = createAsyncThunk<void, number>(
   DELETE_PRODUCT,
   async (id, { dispatch, getState }) => {
-    dispatch(setIsRemoving(id));
+    dispatch(setRemovingIds(id));
     const res = await api.products.deleteProduct(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -81,6 +81,6 @@ export const deleteProductAsync = createAsyncThunk<void, number>(
       dispatchErrorToast(dispatch, res.message);
     }
 
-    dispatch(setIsRemoving(id));
+    dispatch(setRemovingIds(id));
   }
 );

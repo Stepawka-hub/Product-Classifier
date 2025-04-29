@@ -24,7 +24,7 @@ export const TableRow = <T extends TEntity>({
     <tr className={s.trow}>
       {cellElements}
       <td className={s.actions}>
-        <Button variant="edit" size="small" onClick={onEdit} />
+        <Button variant="edit" size="small" onClick={() => onEdit(rowData)} />
         <Button
           variant="cross"
           size="small"

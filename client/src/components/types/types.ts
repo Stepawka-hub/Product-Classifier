@@ -1,5 +1,5 @@
 import { TPagination } from "@utils/types";
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 export type TEntityPageUI<T> = {
   tableConfig: TTableConfig<T>;
@@ -11,7 +11,7 @@ export type TEntityPageUI<T> = {
 export type TTableConfig<T> = {
   headers: Record<keyof T, string>;
   data: T[];
-  isRemoving: (string | number)[];
+  removingIds: (string | number)[];
   onEdit: (e: T) => void;
   onDelete: (id: number) => void;
 };

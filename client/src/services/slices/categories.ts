@@ -10,17 +10,23 @@ import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
   categories: [],
+  parents: [],
+  children: [],
 
   isLoading: false,
   isAdding: false,
-  isRemoving: [],
-
+  removingIds: [],
   editingItem: null,
   isUpdating: false,
 
   pagination: {
     totalCount: 1,
     pageSize: 10,
+    currentPage: 1,
+  },
+  nodesPagination: {
+    totalCount: 1,
+    pageSize: 5,
     currentPage: 1,
   },
 };
@@ -38,8 +44,8 @@ const categoriesSlice = createSlice({
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setIsRemoving: (state, { payload }: PayloadAction<string | number>) => {
-      state.isRemoving = toggleArrayItem(state.isRemoving, payload);
+    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
+      state.removingIds = toggleArrayItem(state.removingIds, payload);
     },
     setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
       state.isUpdating = payload;
@@ -52,7 +58,7 @@ const categoriesSlice = createSlice({
     getCategoriesSelector: (state) => state.categories,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getIsRemovingSelector: (state) => state.isRemoving,
+    getRemovingIdsSelector: (state) => state.removingIds,
     getIsUpdatingSelector: (state) => state.isUpdating,
     getEditingItemSelector: (state) => state.editingItem,
     getPaginationSelector: (state) => state.pagination,
@@ -101,7 +107,7 @@ export const {
   getCategoriesSelector,
   getIsLoadingSelector,
   getIsAddingSelector,
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
   getIsUpdatingSelector,
   getEditingItemSelector,
   getPaginationSelector,
@@ -110,6 +116,6 @@ export const {
   setCategories,
   setCurrentPage,
   setTotalCount,
-  setIsRemoving,
+  setRemovingIds,
   setEditingItem,
 } = categoriesSlice.actions;

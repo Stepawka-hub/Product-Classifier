@@ -10,7 +10,7 @@ import {
 } from "@utils/types";
 import { refreshTable } from "../helpers/pagination";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
-import { setIsRemoving } from "@slices/units";
+import { setRemovingIds } from "@slices/units";
 
 const GET_UNITS = "units/get";
 const ADD_UNIT = "units/add";
@@ -56,7 +56,7 @@ export const updateUnitAsync = createAsyncThunk<void, TUpdateUnitData>(
 export const deleteUnitAsync = createAsyncThunk<void, number>(
   DELETE_UNIT,
   async (id, { dispatch, getState }) => {
-    dispatch(setIsRemoving(id));
+    dispatch(setRemovingIds(id));
     const res = await api.units.deleteUnit(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -67,6 +67,6 @@ export const deleteUnitAsync = createAsyncThunk<void, number>(
       dispatchErrorToast(dispatch, res.message);
     }
 
-    dispatch(setIsRemoving(id));
+    dispatch(setRemovingIds(id));
   }
 );

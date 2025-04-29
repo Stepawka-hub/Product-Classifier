@@ -9,7 +9,7 @@ export const TableUI = <T extends TEntity>({
   headers,
   data,
   pagination,
-  isRemoving,
+  removingIds,
   onEdit,
   onDelete,
 }: TableUIProps<T>) => (
@@ -23,7 +23,7 @@ export const TableUI = <T extends TEntity>({
               key={rowData.id}
               headers={headers}
               rowData={rowData}
-              isRemoving={checkInProgress(isRemoving, rowData.id)}
+              isRemoving={checkInProgress(removingIds, rowData.id)}
               onEdit={() => onEdit(rowData)}
               onDelete={onDelete}
             />

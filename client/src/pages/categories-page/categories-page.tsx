@@ -1,3 +1,4 @@
+import { Button } from "@components/common/buttons";
 import { Loader } from "@components/common/loader";
 import {
   AddCategoryForm as AddForm,
@@ -9,19 +10,24 @@ import { useTableForms } from "@hooks/table/useTableForms";
 import {
   getCategoriesSelector,
   getIsLoadingSelector,
-  getIsRemovingSelector,
+  getRemovingIdsSelector,
   getPaginationSelector,
   setCurrentPage,
   setEditingItem,
 } from "@slices/categories";
-import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
+import { useDispatch } from "@store";
+import {
+  deleteCategoryAsync,
+  getAllCategoriesAsync,
+  getChildCategoriesAsync,
+  getParentCategoriesAsync,
+} from "@thunks/categories";
 import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { TablePage } from "../table-page";
-import { Button } from "@components/common/buttons";
-import { api } from "@api";
 
 export const CategoriesPage = () => {
+  const dispatch = useDispatch();
   const { data, isLoading, pagination } = useTableData<TCategory>({
     dataSelector: getCategoriesSelector,
     getIsLoadingSelector,
@@ -31,7 +37,7 @@ export const CategoriesPage = () => {
   });
   const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
   const actions = useTableActions({
-    getIsRemovingSelector,
+    getRemovingIdsSelector,
     setEditingItem,
     deleteElementAsync: deleteCategoryAsync,
     openEditForm: showEditForm,
@@ -52,10 +58,9 @@ export const CategoriesPage = () => {
             variant="view"
             onClick={async () =>
               console.log(
-                await api.categories.getParents(4, {
-                  page: 1,
-                  limit: 10,
-                })
+                await dispatch(
+                  getParentCategoriesAsync({ id: 4, page: 1, limit: 10 })
+                )
               )
             }
           >
@@ -65,10 +70,9 @@ export const CategoriesPage = () => {
             variant="view"
             onClick={async () =>
               console.log(
-                await api.categories.getChildren(4, {
-                  page: 1,
-                  limit: 10,
-                })
+                await dispatch(
+                  getChildCategoriesAsync({ id: 4, page: 1, limit: 10 })
+                )
               )
             }
           >
