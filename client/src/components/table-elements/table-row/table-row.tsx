@@ -4,6 +4,7 @@ import { TEntity } from "@utils/types";
 import { TableRowProps } from "./type";
 import clsx from "clsx";
 import s from "@ui/table/table.module.css";
+import { MouseEventHandler } from "react";
 
 export const TableRow = <T extends TEntity>({
   rowData,
@@ -24,27 +25,48 @@ export const TableRow = <T extends TEntity>({
     <TableCell key={index} value={rowData[key]} />
   ));
 
+  const handleSelect = () => {
+    const data = isSelected ? null : rowData;
+    selection?.onSelect(data);
+  };
+
+  const handleEdit: MouseEventHandler = (e) => {
+    e.stopPropagation();
+    onEdit?.(rowData);
+  };
+
+  const handleDelete: MouseEventHandler = (e) => {
+    e.stopPropagation();
+    deletion?.onDelete(rowData.id);
+  };
+
   return (
     <tr
       className={clsx(s.trow, {
         [s.selectable]: onSelect,
         [s.selected]: isSelected,
       })}
-      onClick={() => selection?.onSelect(isSelected ? null : rowData)}
+      onClick={handleSelect}
     >
       {cellElements}
 
       <td className={s.actions}>
         {onEdit && (
-          <Button variant="edit" size="small" onClick={() => onEdit(rowData)} />
+          <Button
+            title="Редактировать"
+            variant="edit"
+            size="small"
+            onClick={handleEdit}
+          />
         )}
 
         {deletion && (
           <Button
+            title="Удалить"
             variant="cross"
             size="small"
             disabled={isRemoving}
-            onClick={() => deletion.onDelete(rowData.id)}
+            onClick={handleDelete}
           />
         )}
       </td>

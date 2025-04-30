@@ -61,6 +61,7 @@ export const CategoriesPage = () => {
       additionalActions={
         <>
           <Button
+            title={isSelected ? 'Показать родительские категории' : 'Выберите строку'}
             variant="view"
             disabled={!isSelected}
             onClick={() => showModal(<CategoryRelations type="parents" />)}
@@ -68,6 +69,7 @@ export const CategoriesPage = () => {
             Родительские категории
           </Button>
           <Button
+            title={isSelected ? 'Показать дочерние категории' : 'Выберите строку'}
             variant="view"
             disabled={!isSelected}
             onClick={() => showModal(<CategoryRelations type="children" />)}
