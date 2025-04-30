@@ -1,5 +1,6 @@
 import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { setEditingItemId, setRemovingIds } from "@slices/units";
 import { RootState } from "@store";
 import { PaginationParams } from "@utils/api/types/types";
 import {
@@ -10,12 +11,21 @@ import {
 } from "@utils/types";
 import { refreshTable } from "../helpers/pagination";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
-import { setRemovingIds } from "@slices/units";
+import { AppThunkDispatch } from "./types/types";
 
 const GET_UNITS = "units/get";
 const ADD_UNIT = "units/add";
 const UPDATE_UNIT = "units/update";
 const DELETE_UNIT = "units/delete";
+
+const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
+  refreshTable<TUnit>(
+    dispatch,
+    getAllUnitsAsync,
+    state.units.pagination,
+    setEditingItemId
+  );
+};
 
 export const getAllUnitsAsync = createAsyncThunk<
   TPaginatedData<TUnit>,
@@ -31,7 +41,7 @@ export const addUnitAsync = createAsyncThunk<void, TCreateUnitData>(
     const res = await api.units.createUnit(createUnitData);
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "ЕИ успешно добавлена!");
     } else {
       return Promise.reject(res.message);
@@ -45,7 +55,7 @@ export const updateUnitAsync = createAsyncThunk<void, TUpdateUnitData>(
     const res = await api.units.updateUnit(updateUnitData);
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "ЕИ успешно обновлена!");
     } else {
       return Promise.reject(res.message);
@@ -61,7 +71,7 @@ export const deleteUnitAsync = createAsyncThunk<void, number>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TUnit>(dispatch, getAllUnitsAsync, state.units.pagination);
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "ЕИ успешно удалена!");
     } else {
       dispatchErrorToast(dispatch, res.message);

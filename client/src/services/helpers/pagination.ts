@@ -1,17 +1,9 @@
-import {
-  setCurrentPage as setCurrentCategoryPage,
-  setTotalCount as setTotalCategoriesCount,
-} from "@slices/categories";
-import {
-  setCurrentPage as setCurrentProductPage,
-  setTotalCount as setTotalProductsCount,
-} from "@slices/products";
-import {
-  setCurrentPage as setCurrentUnitPage,
-  setTotalCount as setTotalUnitsCount,
-} from "@slices/units";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { setTotalCount as setTotalCategoriesCount } from "@slices/categories";
+import { setTotalCount as setTotalProductsCount } from "@slices/products";
+import { setTotalCount as setTotalUnitsCount } from "@slices/units";
 import { AppThunkDispatch, TFetchEntitiesThunk } from "@thunks/types/types";
-import { TPagination } from "@utils/types";
+import { TargetId, TPagination } from "@utils/types";
 
 type TEntityTotal = {
   products: number;
@@ -28,21 +20,12 @@ export const setPaginationTotals = (
   dispatch(setTotalUnitsCount(units));
 };
 
-export const resetAllPaginationState = (dispatch: AppThunkDispatch) => {
-  [setCurrentCategoryPage, setCurrentProductPage, setCurrentUnitPage].forEach(
-    (action) => dispatch(action(1))
-  );
-  setPaginationTotals(dispatch, {
-    products: 1,
-    categories: 1,
-    units: 1,
-  });
-};
-
 export const refreshTable = <T>(
   dispatch: AppThunkDispatch,
   getAllEntities: TFetchEntitiesThunk<T>,
-  pagination: Pick<TPagination, "currentPage" | "pageSize">
+  pagination: Pick<TPagination, "currentPage" | "pageSize">,
+  setEditingItemId?: ActionCreatorWithPayload<TargetId, string>,
+  setSelectedItemId?: ActionCreatorWithPayload<TargetId, string>
 ) => {
   const { currentPage, pageSize } = pagination;
   dispatch(
@@ -51,4 +34,12 @@ export const refreshTable = <T>(
       limit: pageSize,
     })
   );
+
+  if (setEditingItemId) {
+    dispatch(setEditingItemId(null));
+  }
+
+  if (setSelectedItemId) {
+    dispatch(setSelectedItemId(null));
+  }
 };

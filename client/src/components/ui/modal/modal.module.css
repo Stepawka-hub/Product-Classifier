@@ -1,6 +1,23 @@
+.modalEnter {
+  opacity: 0;
+}
+
+.modalEnterActive {
+  opacity: 1;
+  transition: opacity .5s;
+}
+
+.modalExit {
+  opacity: 1;
+}
+
+.modalExitActive {
+  opacity: 0;
+  transition: opacity .5s;
+}
+
 .modalOverlay {
   position: fixed;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,18 +28,10 @@
   left: 0;
   right: 0;
 
-  opacity: 0;
-  transition: opacity .5s;
-  pointer-events: none;
   z-index: 10;
 }
 
-.modalOverlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal {
+.modalContent {
   position: relative;
   display: flex;
   justify-content: center;
@@ -36,10 +45,11 @@
 
   padding: 2rem;
   border-radius: 1rem;
+  pointer-events: auto;
   z-index: 15;
 }
 
-.modalClose { 
+.modalClose {
   position: absolute;
   cursor: pointer;
 
@@ -82,6 +92,6 @@
 }
 
 .modalClose:hover::after,
-.modalClose:hover::before { 
+.modalClose:hover::before {
   background-color: var(--orange-color);
 }

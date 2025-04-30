@@ -1,4 +1,5 @@
 import {
+  TargetId,
   TCategory,
   TCategoryShort,
   TPagination,
@@ -21,28 +22,35 @@ export type TCommonInitialState = {
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 
-export type TEditingState<T> = {
-  editingItem: T | null;
-  isUpdating?: boolean;
+export type TEditingState = {
+  editingItemId: TargetId;
+  isUpdating: boolean;
+};
+
+export type TSelectingState = {
+  selectedItemId: TargetId;
 };
 
 export type TInitialProductState = TCommonInitialState &
-  TEditingState<TProduct> & {
+  TEditingState & {
     products: TProduct[];
   };
 
 export type TInitialCategoryState = TCommonInitialState &
-  TEditingState<TCategory> & {
+  TSelectingState &
+  TEditingState & {
     categories: TCategory[];
     parents: TCategoryShort[];
     children: TCategoryShort[];
+
     isFetchParents: boolean;
     isFetchChildren: boolean;
+
     nodesPagination: Omit<TPagination, "setCurrentPage">;
   };
 
 export type TInitialUnitState = TCommonInitialState &
-  TEditingState<TUnit> & {
+  TEditingState & {
     units: TUnit[];
   };
 

@@ -12,12 +12,13 @@ import {
   getPaginationSelector,
   getProductsSelector,
   setCurrentPage,
-  setEditingItem,
+  setEditingItemId,
 } from "@slices/products";
 import { deleteProductAsync, getAllProductsAsync } from "@thunks/products";
 import { productsHeaders as headers } from "@utils/constants";
 import { TProduct } from "@utils/types";
 import { TablePage } from "../table-page";
+import { TTableActions } from "@components/types";
 
 export const ProductsPage = () => {
   const { data, isLoading, pagination } = useTableData<TProduct>({
@@ -28,9 +29,9 @@ export const ProductsPage = () => {
     setCurrentPage,
   });
   const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
-  const actions = useTableActions({
+  const actions: TTableActions = useTableActions({
+    setEditingItemId,
     getRemovingIdsSelector,
-    setEditingItem,
     deleteElementAsync: deleteProductAsync,
     openEditForm: showEditForm,
   });

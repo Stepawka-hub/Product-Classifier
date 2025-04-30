@@ -12,6 +12,7 @@ export default defineConfig({
       "@ui-pages": path.resolve(__dirname, "src/components/ui/pages"),
       "@components": path.resolve(__dirname, "src/components"),
       "@pages": path.resolve(__dirname, "src/pages"),
+      "@selectors": path.resolve(__dirname, "src/services/selectors"),
       "@slices": path.resolve(__dirname, "src/services/slices"),
       "@thunks": path.resolve(__dirname, "src/services/thunks"),
       "@api": path.resolve(__dirname, "src/utils/api/api.ts"),

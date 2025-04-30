@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addUnitAsync, getAllUnitsAsync, updateUnitAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
-import { TPaginatedData, TUnit } from "@utils/types";
+import { TargetId, TPaginatedData, TUnit } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialUnitState = {
@@ -11,7 +11,7 @@ const initialState: TInitialUnitState = {
   isAdding: false,
   removingIds: [],
 
-  editingItem: null,
+  editingItemId: null,
   isUpdating: false,
 
   pagination: {
@@ -25,6 +25,7 @@ const unitsSlice = createSlice({
   name: "units",
   initialState,
   reducers: {
+    resetUnitsState: () => initialState,
     setUnits: (state, { payload }: PayloadAction<TUnit[]>) => {
       state.units = payload;
     },
@@ -37,8 +38,8 @@ const unitsSlice = createSlice({
     setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
       state.removingIds = toggleArrayItem(state.removingIds, payload);
     },
-    setEditingItem: (state, { payload }: PayloadAction<TUnit | null>) => {
-      state.editingItem = payload;
+    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
+      state.editingItemId = payload;
     },
   },
   selectors: {
@@ -47,7 +48,7 @@ const unitsSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getRemovingIdsSelector: (state) => state.removingIds,
     getIsUpdatingSelector: (state) => state.isUpdating,
-    getEditingItemSelector: (state) => state.editingItem,
+    getEditingItemIdSelector: (state) => state.editingItemId,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -96,13 +97,14 @@ export const {
   getIsAddingSelector,
   getRemovingIdsSelector,
   getIsUpdatingSelector,
-  getEditingItemSelector,
+  getEditingItemIdSelector,
   getPaginationSelector,
 } = unitsSlice.selectors;
 export const {
+  resetUnitsState,
   setUnits,
   setCurrentPage,
   setTotalCount,
   setRemovingIds,
-  setEditingItem,
+  setEditingItemId,
 } = unitsSlice.actions;

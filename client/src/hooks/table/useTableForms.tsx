@@ -21,6 +21,8 @@ export const useTableForms = ({ AddForm, EditForm }: TUseTableForms) => {
   );
 
   return {
+    showModal,
+    hideModal,
     showAddForm: () => showModal(addForm),
     showEditForm: () => showModal(editForm),
   };

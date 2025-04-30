@@ -1,4 +1,4 @@
-import { TPagination } from "@utils/types";
+import { TargetId, TPagination } from "@utils/types";
 import { ReactNode } from "react";
 
 export type TEntityPageUI<T> = {
@@ -11,13 +11,17 @@ export type TEntityPageUI<T> = {
 export type TTableConfig<T> = {
   headers: Record<keyof T, string>;
   data: T[];
-  actions?: TTableActions<T>;
+  actions?: TTableActions;
 };
 
-export type TTableActions<T> = {
+export type TTableActions = {
   deletion?: {
-    removingIds?: (string | number)[];
-    onDelete?: (id: number) => void;
+    removingIds: (string | number)[];
+    onDelete: (id: number) => void;
   };
-  onEdit?: (item: T) => void;
+  selection?: {
+    selectedItem: TargetId;
+    onSelect: (item: TargetId) => void;
+  };
+  onEdit?: (itemId: number) => void;
 };

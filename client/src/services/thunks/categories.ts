@@ -12,7 +12,12 @@ import {
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { refreshTable } from "../helpers/pagination";
 import { RootState } from "@store";
-import { setRemovingIds } from "@slices/categories";
+import {
+  setEditingItemId,
+  setRemovingIds,
+  setSelectedItemId,
+} from "@slices/categories";
+import { AppThunkDispatch } from "./types/types";
 
 const GET_CATEGORIES = "categories/get";
 const GET_PARENT_CATEGORIES = "categories/get-parents";
@@ -20,6 +25,16 @@ const GET_CHILD_CATEGORIES = "categories/get-children";
 const ADD_CATEGORY = "categories/add";
 const UPDATE_CATEGORY = "categories/update";
 const DELETE_CATEGORY = "categories/delete";
+
+const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
+  refreshTable<TCategory>(
+    dispatch,
+    getAllCategoriesAsync,
+    state.categories.pagination,
+    setEditingItemId,
+    setSelectedItemId
+  );
+};
 
 export const getAllCategoriesAsync = createAsyncThunk<
   TPaginatedData<TCategory>,
@@ -52,11 +67,7 @@ export const addCategoryAsync = createAsyncThunk<void, TCreateCategoryData>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TCategory>(
-        dispatch,
-        getAllCategoriesAsync,
-        state.categories.pagination
-      );
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Категория успешно добавлена!");
     } else {
       return Promise.reject(res.message);
@@ -71,11 +82,7 @@ export const updateCategoryAsync = createAsyncThunk<void, TUpdateCategoryData>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TCategory>(
-        dispatch,
-        getAllCategoriesAsync,
-        state.categories.pagination
-      );
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Категория успешно обновлена!");
     } else {
       return Promise.reject(res.message);
@@ -91,11 +98,7 @@ export const deleteCategoryAsync = createAsyncThunk<void, number>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TCategory>(
-        dispatch,
-        getAllCategoriesAsync,
-        state.categories.pagination
-      );
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Категория успешно удалена!");
     } else {
       dispatchErrorToast(dispatch, res.message);

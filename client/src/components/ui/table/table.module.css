@@ -36,8 +36,13 @@
   text-align: center;
 }
 
+.trow {
+  transition: .2s ease-in;
+}
+
 .trow td {
   padding: 0.5rem 0;
+  transition: .2s linear;
 }
 
 .trow:nth-child(odd) {
@@ -46,6 +51,18 @@
 
 .trow:nth-child(even) {
   background-color: var(--table-body-color-even);
+}
+
+.trow.selected {
+  background-color: var(--table-selected-row-color);
+}
+
+.selectable {
+  cursor: pointer;
+}
+
+.trow.selectable:hover:not(.selected) td {
+  background-color: var(--table-selected-row-color);
 }
 
 .actions {

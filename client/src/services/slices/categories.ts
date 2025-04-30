@@ -7,14 +7,15 @@ import {
   getParentCategoriesAsync,
   updateCategoryAsync,
 } from "@thunks/categories";
-import { TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
+import { TargetId, TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
   categories: [],
   parents: [],
   children: [],
-  editingItem: null,
+  editingItemId: null,
+  selectedItemId: null,
 
   isLoading: false,
   isAdding: false,
@@ -31,7 +32,7 @@ const initialState: TInitialCategoryState = {
   },
   nodesPagination: {
     totalCount: 1,
-    pageSize: 5,
+    pageSize: 7,
     currentPage: 1,
   },
 };
@@ -40,6 +41,7 @@ const categoriesSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
+    resetCategoriesState: () => initialState,
     setCategories: (state, { payload }: PayloadAction<TCategory[]>) => {
       state.categories = payload;
     },
@@ -58,15 +60,19 @@ const categoriesSlice = createSlice({
     setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
       state.isUpdating = payload;
     },
-    setEditingItem: (state, { payload }: PayloadAction<TCategory | null>) => {
-      state.editingItem = payload;
+    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
+      state.editingItemId = payload;
+    },
+    setSelectedItemId: (state, { payload }: PayloadAction<TargetId>) => {
+      state.selectedItemId = payload;
     },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
-    getEditingItemSelector: (state) => state.editingItem,
+    getEditingItemIdSelector: (state) => state.editingItemId,
+    getSelectedItemIdSelector: (state) => state.selectedItemId,
 
     getPaginationSelector: (state) => state.pagination,
     getNodesPaginationSelector: (state) => state.nodesPagination,
@@ -153,7 +159,8 @@ export const {
   getCategoriesSelector,
   getParentsSelector,
   getChildrenSelector,
-  getEditingItemSelector,
+  getEditingItemIdSelector,
+  getSelectedItemIdSelector,
 
   getPaginationSelector,
   getNodesPaginationSelector,
@@ -166,10 +173,12 @@ export const {
   getIsFetchChildrenSelector,
 } = categoriesSlice.selectors;
 export const {
+  resetCategoriesState,
   setCategories,
   setCurrentPage,
   setNodeCurrentPage,
   setTotalCount,
   setRemovingIds,
-  setEditingItem,
+  setEditingItemId,
+  setSelectedItemId,
 } = categoriesSlice.actions;

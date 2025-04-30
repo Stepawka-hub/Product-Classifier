@@ -1,12 +1,11 @@
-import { createContext, ReactNode } from 'react';
-
+import { createContext, ReactNode } from "react";
 
 type TModalContext = {
-  showModal: (content: ReactNode) => void;
+  showModal: (content: ReactNode, onClose?: () => void) => void;
   hideModal: () => void;
 };
 
 export const ModalContext = createContext<TModalContext>({
   showModal: () => {},
-  hideModal: () => {}
+  hideModal: () => {},
 });

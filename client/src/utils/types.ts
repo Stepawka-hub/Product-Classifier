@@ -67,3 +67,5 @@ export type TPagination = {
   currentPage: number;
   setCurrentPage: (n: number) => void;
 };
+
+export type TargetId = number | null;
