@@ -47,6 +47,7 @@ export const useTableData = <T, P extends PaginationParams = PaginationParams>({
   }, [dispatch, currentPage, pageSize]);
 
   return {
+    dispatch,
     isLoading,
     data,
     pagination: { ...pagination, setCurrentPage: setPageNumber },

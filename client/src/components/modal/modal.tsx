@@ -5,7 +5,7 @@ import { TModalProps } from "./type";
 
 const modalRoot = document.getElementById("modals");
 
-export const Modal: FC<TModalProps> = memo(({ isOpen, children, onClose }) => {
+export const Modal: FC<TModalProps> = memo(({ isOpen, nodeRef, children, onClose }) => {
   const closeByEsc = useCallback(
     (evt: KeyboardEvent) => {
       if (evt.key === "Escape") {
@@ -32,6 +32,7 @@ export const Modal: FC<TModalProps> = memo(({ isOpen, children, onClose }) => {
   return createPortal(
     <ModalUI
       isOpen={isOpen}
+      nodeRef={nodeRef}
       onOverlayClick={handleOverlayClick}
       onClose={onClose}
     >

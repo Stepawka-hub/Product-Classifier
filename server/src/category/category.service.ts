@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
@@ -40,10 +40,6 @@ export class CategoryService {
   ): Promise<PaginatedResponseDto<CategoryBaseDto>> {
     const { items: categories, total } =
       await this.categoryRepository.findNodes(id, page, limit, direction);
-
-    new Logger().log(total);
-    new Logger().log(page);
-    new Logger().log(limit);
 
     return new PaginatedResponseDto(
       categories.map((c) => new CategoryBaseDto(c)),

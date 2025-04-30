@@ -32,10 +32,12 @@ export const CategoriesPage = () => {
     getElementsAsync: getAllCategoriesAsync,
     setCurrentPage,
   });
+
   const { showModal, showAddForm, showEditForm } = useTableForms({
     AddForm,
     EditForm,
   });
+
   const actions: TTableActions<TCategory> = useTableActions({
     setEditingItem,
     setSelectedItem,
@@ -44,6 +46,7 @@ export const CategoriesPage = () => {
     deleteElementAsync: deleteCategoryAsync,
     openEditForm: showEditForm,
   });
+
   const isSelected = !!actions?.selection?.selectedItem;
 
   if (isLoading) return <Loader />;

@@ -8,7 +8,7 @@ import {
   getNodesPaginationSelector,
   getParentsSelector,
   getSelectedItemSelector,
-  setNodeCurrentPage,
+  setNodeCurrentPage
 } from "@slices/categories";
 import { useSelector } from "@store";
 import {
@@ -57,16 +57,15 @@ export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
   return (
     <div className={s.container}>
       <h2 className={s.title}>{config[type].title}</h2>
-      {
-        isEmpty ?
+      {isEmpty ? (
         <Table<TCategoryShort>
           headers={shortCategoriesHeaders}
           data={data}
           pagination={pagination}
         />
-        :
+      ) : (
         <div className={s.notFound}>Узлы не найдены!</div>
-      }
+      )}
     </div>
   );
 };

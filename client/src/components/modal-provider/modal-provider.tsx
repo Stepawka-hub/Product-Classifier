@@ -4,43 +4,34 @@ import { ModalContext } from "./modal-context";
 
 export const ModalProvider = memo(({ children }: React.PropsWithChildren) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [content, setContent] = useState<ReactNode | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
-  const clearExistingTimeout = () => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  };
+  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const [onCloseCallback, setOnCloseCallback] = useState<
+    (() => void) | undefined
+  >();
 
-  const showModal = useCallback((content: ReactNode) => {
+  const showModal = useCallback((content: ReactNode, onClose?: () => void) => {
+    setModalContent(content);
     setIsOpen(true);
-    setContent(content);
-    clearExistingTimeout();
+    setOnCloseCallback(() => onClose);
   }, []);
 
   const hideModal = useCallback(() => {
     setIsOpen(false);
-    timeoutRef.current = setTimeout(() => {
-      setContent(null);
-      clearExistingTimeout();
-    }, 500);
-  }, []);
+    onCloseCallback?.();
+  }, [setIsOpen, onCloseCallback]);
 
   const contextValue = useMemo(
-    () => ({
-      showModal,
-      hideModal,
-    }),
+    () => ({ showModal, hideModal }),
     [showModal, hideModal]
   );
 
   return (
     <ModalContext.Provider value={contextValue}>
       {children}
-      <Modal isOpen={isOpen} onClose={hideModal}>
-        {content}
+      <Modal isOpen={isOpen} nodeRef={nodeRef} onClose={hideModal}>
+        {modalContent}
       </Modal>
     </ModalContext.Provider>
   );
