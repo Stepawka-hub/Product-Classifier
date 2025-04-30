@@ -160,11 +160,14 @@ export class CategoryRepository extends Repository<Category> {
       direction,
     ])) as Category[];
 
+    const total = res.length;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const paginatedData = res.slice(startIndex, endIndex);
+    const paginatedData = res
+      .sort((a, b) => a.id - b.id)
+      .slice(startIndex, endIndex);
 
-    return new PaginatedResponseDto(paginatedData, paginatedData.length);
+    return new PaginatedResponseDto(paginatedData, total);
   }
 
   private async checkCycle(id: number, parentName: string): Promise<boolean> {
