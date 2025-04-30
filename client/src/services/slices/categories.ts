@@ -7,7 +7,7 @@ import {
   getParentCategoriesAsync,
   updateCategoryAsync,
 } from "@thunks/categories";
-import { TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
+import { TargetId, TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
@@ -15,7 +15,7 @@ const initialState: TInitialCategoryState = {
   parents: [],
   children: [],
   editingItemId: null,
-  selectedItem: null,
+  selectedItemId: null,
 
   isLoading: false,
   isAdding: false,
@@ -60,11 +60,11 @@ const categoriesSlice = createSlice({
     setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
       state.isUpdating = payload;
     },
-    setEditingItemId: (state, { payload }: PayloadAction<number | null>) => {
+    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
       state.editingItemId = payload;
     },
-    setSelectedItem: (state, { payload }: PayloadAction<TCategory | null>) => {
-      state.selectedItem = payload;
+    setSelectedItemId: (state, { payload }: PayloadAction<TargetId>) => {
+      state.selectedItemId = payload;
     },
   },
   selectors: {
@@ -72,7 +72,7 @@ const categoriesSlice = createSlice({
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
     getEditingItemIdSelector: (state) => state.editingItemId,
-    getSelectedItemSelector: (state) => state.selectedItem,
+    getSelectedItemIdSelector: (state) => state.selectedItemId,
 
     getPaginationSelector: (state) => state.pagination,
     getNodesPaginationSelector: (state) => state.nodesPagination,
@@ -160,7 +160,7 @@ export const {
   getParentsSelector,
   getChildrenSelector,
   getEditingItemIdSelector,
-  getSelectedItemSelector,
+  getSelectedItemIdSelector,
 
   getPaginationSelector,
   getNodesPaginationSelector,
@@ -180,5 +180,5 @@ export const {
   setTotalCount,
   setRemovingIds,
   setEditingItemId,
-  setSelectedItem,
+  setSelectedItemId,
 } = categoriesSlice.actions;

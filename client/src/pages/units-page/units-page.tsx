@@ -29,7 +29,7 @@ export const UnitsPage = () => {
     setCurrentPage,
   });
   const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
-  const actions: TTableActions<TUnit> = useTableActions({
+  const actions: TTableActions = useTableActions({
     setEditingItemId,
     getRemovingIdsSelector,
     deleteElementAsync: deleteUnitAsync,

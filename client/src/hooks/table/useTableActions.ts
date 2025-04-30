@@ -1,27 +1,28 @@
 import { ActionCreatorWithPayload, Selector } from "@reduxjs/toolkit";
 import { RootState, useDispatch, useSelector } from "@store";
 import { TDeleteEntityThunk } from "@thunks/types/types";
+import { TargetId } from "@utils/types";
 import { useCallback, useMemo } from "react";
 
-type TUseTableActionsParams<T> = {
-  setEditingItemId: ActionCreatorWithPayload<number | null, string>;
-  setSelectedItem?: ActionCreatorWithPayload<T | null, string>;
-  getSelectedItem?: Selector<RootState, T | null>;
+type TUseTableActionsParams = {
+  setEditingItemId: ActionCreatorWithPayload<TargetId, string>;
+  setSelectedItemId?: ActionCreatorWithPayload<TargetId, string>;
+  getSelectedItemId?: Selector<RootState, TargetId>;
   getRemovingIdsSelector: Selector<RootState, (string | number)[]>;
   deleteElementAsync: TDeleteEntityThunk;
   openEditForm: () => void;
 };
 
-export const useTableActions = <T>({
+export const useTableActions = ({
   getRemovingIdsSelector,
-  getSelectedItem,
+  getSelectedItemId,
   setEditingItemId,
-  setSelectedItem,
+  setSelectedItemId,
   deleteElementAsync,
   openEditForm,
-}: TUseTableActionsParams<T>) => {
+}: TUseTableActionsParams) => {
   const dispatch = useDispatch();
-  const selectedItem = useSelector(getSelectedItem ?? (() => null));
+  const selectedItem = useSelector(getSelectedItemId ?? (() => null));
   const removingIds = useSelector(getRemovingIdsSelector);
 
   const handleDelete = useCallback(
@@ -40,12 +41,12 @@ export const useTableActions = <T>({
   );
 
   const handleSelect = useCallback(
-    (element: T | null) => {
-      if (setSelectedItem) {
-        dispatch(setSelectedItem(element));
+    (element: TargetId) => {
+      if (setSelectedItemId) {
+        dispatch(setSelectedItemId(element));
       }
     },
-    [dispatch, setSelectedItem]
+    [dispatch, setSelectedItemId]
   );
 
   return useMemo(() => {
@@ -57,7 +58,7 @@ export const useTableActions = <T>({
       onEdit: handleEdit,
     };
 
-    if (setSelectedItem) {
+    if (setSelectedItemId) {
       return {
         ...actions,
         selection: {
@@ -74,6 +75,6 @@ export const useTableActions = <T>({
     handleEdit,
     handleSelect,
     handleDelete,
-    setSelectedItem,
+    setSelectedItemId,
   ]);
 };

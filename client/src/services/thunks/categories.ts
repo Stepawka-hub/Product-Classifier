@@ -15,7 +15,7 @@ import { RootState } from "@store";
 import {
   setEditingItemId,
   setRemovingIds,
-  setSelectedItem,
+  setSelectedItemId,
 } from "@slices/categories";
 import { AppThunkDispatch } from "./types/types";
 
@@ -32,7 +32,7 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     getAllCategoriesAsync,
     state.categories.pagination,
     setEditingItemId,
-    setSelectedItem
+    setSelectedItemId
   );
 };
 

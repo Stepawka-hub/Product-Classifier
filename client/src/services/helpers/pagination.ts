@@ -3,7 +3,7 @@ import { setTotalCount as setTotalCategoriesCount } from "@slices/categories";
 import { setTotalCount as setTotalProductsCount } from "@slices/products";
 import { setTotalCount as setTotalUnitsCount } from "@slices/units";
 import { AppThunkDispatch, TFetchEntitiesThunk } from "@thunks/types/types";
-import { TPagination } from "@utils/types";
+import { TargetId, TPagination } from "@utils/types";
 
 type TEntityTotal = {
   products: number;
@@ -24,8 +24,8 @@ export const refreshTable = <T>(
   dispatch: AppThunkDispatch,
   getAllEntities: TFetchEntitiesThunk<T>,
   pagination: Pick<TPagination, "currentPage" | "pageSize">,
-  setEditingItemId?: ActionCreatorWithPayload<number | null, string>,
-  setSelectedItem?: ActionCreatorWithPayload<T | null, string>
+  setEditingItemId?: ActionCreatorWithPayload<TargetId, string>,
+  setSelectedItemId?: ActionCreatorWithPayload<TargetId, string>
 ) => {
   const { currentPage, pageSize } = pagination;
   dispatch(
@@ -39,7 +39,7 @@ export const refreshTable = <T>(
     dispatch(setEditingItemId(null));
   }
 
-  if (setSelectedItem) {
-    dispatch(setSelectedItem(null));
+  if (setSelectedItemId) {
+    dispatch(setSelectedItemId(null));
   }
 };

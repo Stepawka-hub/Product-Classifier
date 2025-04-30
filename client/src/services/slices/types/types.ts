@@ -1,4 +1,5 @@
 import {
+  TargetId,
   TCategory,
   TCategoryShort,
   TPagination,
@@ -22,12 +23,12 @@ export type TCommonInitialState = {
 };
 
 export type TEditingState = {
-  editingItemId: number | null;
+  editingItemId: TargetId;
   isUpdating: boolean;
 };
 
-export type TSelectingState<T> = {
-  selectedItem: T | null;
+export type TSelectingState = {
+  selectedItemId: TargetId;
 };
 
 export type TInitialProductState = TCommonInitialState &
@@ -36,7 +37,7 @@ export type TInitialProductState = TCommonInitialState &
   };
 
 export type TInitialCategoryState = TCommonInitialState &
-  TSelectingState<TCategory> &
+  TSelectingState &
   TEditingState & {
     categories: TCategory[];
     parents: TCategoryShort[];

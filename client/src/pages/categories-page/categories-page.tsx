@@ -13,11 +13,11 @@ import {
   getIsLoadingSelector,
   getPaginationSelector,
   getRemovingIdsSelector,
-  getSelectedItemSelector as getSelectedItem,
   setCurrentPage,
   setEditingItemId,
   setNodeCurrentPage,
-  setSelectedItem,
+  getSelectedItemIdSelector as getSelectedItemId,
+  setSelectedItemId,
 } from "@slices/categories";
 import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { categoriesHeaders as headers } from "@utils/constants";
@@ -37,10 +37,10 @@ export const CategoriesPage = () => {
     AddForm,
     EditForm,
   });
-  const actions: TTableActions<TCategory> = useTableActions({
+  const actions: TTableActions = useTableActions({
     setEditingItemId,
-    setSelectedItem,
-    getSelectedItem,
+    setSelectedItemId,
+    getSelectedItemId,
     getRemovingIdsSelector,
     deleteElementAsync: deleteCategoryAsync,
     openEditForm: showEditForm,

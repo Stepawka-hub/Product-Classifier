@@ -7,8 +7,7 @@ import {
   getIsFetchParentsSelector,
   getNodesPaginationSelector,
   getParentsSelector,
-  getSelectedItemSelector,
-  setNodeCurrentPage
+  setNodeCurrentPage,
 } from "@slices/categories";
 import { useSelector } from "@store";
 import {
@@ -21,9 +20,10 @@ import { TCategoryShort, TEntity } from "@utils/types";
 import { FC } from "react";
 import s from "./category-relations.module.css";
 import { TCategoryRelationsProps } from "./type";
+import { getSelectedCategorySelector } from "@selectors/categories";
 
 export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
-  const selectedItem = useSelector(getSelectedItemSelector);
+  const selectedItem = useSelector(getSelectedCategorySelector);
 
   const config = {
     parents: {

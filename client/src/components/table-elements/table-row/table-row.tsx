@@ -14,7 +14,7 @@ export const TableRow = <T extends TEntity>({
 }: TableRowProps<T>) => {
   const { onEdit, selection, deletion } = actions;
   const { onSelect, selectedItem } = selection || {};
-  const isSelected = selectedItem?.id === rowData.id;
+  const isSelected = selectedItem === rowData.id;
 
   // Указываем, что это не просто массив строк, а массив ключей типа T
   const data = Object.keys(headers) as Array<keyof T>;
@@ -26,7 +26,7 @@ export const TableRow = <T extends TEntity>({
   ));
 
   const handleSelect = () => {
-    const data = isSelected ? null : rowData;
+    const data = isSelected ? null : rowData.id;
     selection?.onSelect(data);
   };
 

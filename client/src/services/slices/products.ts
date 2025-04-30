@@ -5,7 +5,7 @@ import {
   updateProductAsync,
 } from "@thunks/products";
 import { toggleArrayItem } from "@utils/helpers/array";
-import { TPaginatedData, TProduct } from "@utils/types";
+import { TargetId, TPaginatedData, TProduct } from "@utils/types";
 import { TInitialProductState } from "./types/types";
 
 const initialState: TInitialProductState = {
@@ -42,7 +42,7 @@ const productsSlice = createSlice({
     setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
       state.removingIds = toggleArrayItem(state.removingIds, payload);
     },
-    setEditingItemId: (state, { payload }: PayloadAction<number | null>) => {
+    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
       state.editingItemId = payload;
     },
   },

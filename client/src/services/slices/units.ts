@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addUnitAsync, getAllUnitsAsync, updateUnitAsync } from "@thunks/units";
 import { TInitialUnitState } from "./types/types";
-import { TPaginatedData, TUnit } from "@utils/types";
+import { TargetId, TPaginatedData, TUnit } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialUnitState = {
@@ -38,7 +38,7 @@ const unitsSlice = createSlice({
     setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
       state.removingIds = toggleArrayItem(state.removingIds, payload);
     },
-    setEditingItemId: (state, { payload }: PayloadAction<number | null>) => {
+    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
       state.editingItemId = payload;
     },
   },
