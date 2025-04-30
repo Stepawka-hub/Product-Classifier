@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TInitialProductState } from "./types/types";
-import { addProductAsync, getAllProductsAsync, updateProductAsync } from "@thunks/products";
+import {
+  addProductAsync,
+  getAllProductsAsync,
+  updateProductAsync,
+} from "@thunks/products";
 import { TPaginatedData, TProduct } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
@@ -25,6 +29,7 @@ const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
+    resetProductsState: () => initialState,
     setProducts: (state, { payload }: PayloadAction<TProduct[]>) => {
       state.products = payload;
     },
@@ -100,6 +105,7 @@ export const {
   getPaginationSelector,
 } = productsSlice.selectors;
 export const {
+  resetProductsState,
   setProducts,
   setCurrentPage,
   setTotalCount,

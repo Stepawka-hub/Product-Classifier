@@ -2,17 +2,16 @@ import { BaseForm } from "@components/forms/base-form";
 import { Input } from "@components/forms/form-elements";
 import { useForm } from "@hooks/forms/useForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
+import {
+  getEditingItemSelector,
+  getIsUpdatingSelector
+} from "@slices/units";
+import { useSelector } from "@store";
 import { updateUnitAsync } from "@thunks/units";
 import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateUnitForm } from "../../types";
-import { useSelector } from "@store";
-import {
-  getEditingItemSelector,
-  getIsUpdatingSelector,
-  setEditingItem,
-} from "@slices/units";
 
 export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
   const editingUnit = useSelector(getEditingItemSelector);
@@ -37,7 +36,6 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
       ).unwrap();
 
       onClose();
-      dispatch(setEditingItem(null));
       setFormData(initialState);
     } catch (err: unknown) {
       dispatchErrorToast(dispatch, getErrorMessage(err));

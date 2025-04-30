@@ -7,7 +7,7 @@ import clsx from "clsx";
 export const BaseForm: FC<BaseFormProps> = ({
   title,
   btnLabel,
-  isProgress,
+  isProgress = false,
   children,
   onClose,
   onSubmit,

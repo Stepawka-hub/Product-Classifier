@@ -25,6 +25,7 @@ const unitsSlice = createSlice({
   name: "units",
   initialState,
   reducers: {
+    resetUnitsState: () => initialState,
     setUnits: (state, { payload }: PayloadAction<TUnit[]>) => {
       state.units = payload;
     },
@@ -100,6 +101,7 @@ export const {
   getPaginationSelector,
 } = unitsSlice.selectors;
 export const {
+  resetUnitsState,
   setUnits,
   setCurrentPage,
   setTotalCount,

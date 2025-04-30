@@ -23,7 +23,7 @@ export type TCommonInitialState = {
 
 export type TEditingState<T> = {
   editingItem: T | null;
-  isUpdating?: boolean;
+  isUpdating: boolean;
 };
 
 export type TSelectingState<T> = {

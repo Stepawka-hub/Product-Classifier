@@ -1,19 +1,18 @@
 import { BaseForm } from "@components/forms/base-form";
 import { Input } from "@components/forms/form-elements";
+import { Checkbox } from "@components/forms/form-elements/checkbox";
 import { useForm } from "@hooks/forms/useForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
+import {
+  getEditingItemSelector,
+  getIsUpdatingSelector
+} from "@slices/categories";
+import { useSelector } from "@store";
 import { updateCategoryAsync } from "@thunks/categories";
 import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateCategoryForm } from "../../types";
-import { useSelector } from "@store";
-import {
-  getEditingItemSelector,
-  getIsUpdatingSelector,
-  setEditingItem,
-} from "@slices/categories";
-import { Checkbox } from "@components/forms/form-elements/checkbox";
 
 export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
   const editingCategory = useSelector(getEditingItemSelector);
@@ -47,7 +46,6 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
       ).unwrap();
 
       onClose();
-      dispatch(setEditingItem(null));
       setFormData(initialState);
     } catch (err: unknown) {
       dispatchErrorToast(dispatch, getErrorMessage(err));

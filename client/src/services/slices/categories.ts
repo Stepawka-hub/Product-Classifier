@@ -41,6 +41,7 @@ const categoriesSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
+    resetCategoriesState: () => initialState,
     setCategories: (state, { payload }: PayloadAction<TCategory[]>) => {
       state.categories = payload;
     },
@@ -172,6 +173,7 @@ export const {
   getIsFetchChildrenSelector,
 } = categoriesSlice.selectors;
 export const {
+  resetCategoriesState,
   setCategories,
   setCurrentPage,
   setNodeCurrentPage,

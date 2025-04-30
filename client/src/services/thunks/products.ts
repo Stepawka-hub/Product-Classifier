@@ -10,12 +10,22 @@ import {
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
-import { setRemovingIds } from "@slices/products";
+import { setEditingItem, setRemovingIds } from "@slices/products";
+import { AppThunkDispatch } from "./types/types";
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
 const UPDATE_PRODUCT = "products/update";
 const DELETE_PRODUCT = "products/delete";
+
+const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
+  refreshTable<TProduct>(
+    dispatch,
+    getAllProductsAsync,
+    state.products.pagination,
+    setEditingItem
+  );
+};
 
 export const getAllProductsAsync = createAsyncThunk<
   TPaginatedData<TProduct>,
@@ -32,11 +42,7 @@ export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TProduct>(
-        dispatch,
-        getAllProductsAsync,
-        state.products.pagination
-      );
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Изделие успешно добавлено!");
     } else {
       return Promise.reject(res.message);
@@ -51,11 +57,7 @@ export const updateProductAsync = createAsyncThunk<void, TUpdateProductData>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TProduct>(
-        dispatch,
-        getAllProductsAsync,
-        state.products.pagination
-      );
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Изделие успешно обновлено!");
     } else {
       return Promise.reject(res.message);
@@ -71,11 +73,7 @@ export const deleteProductAsync = createAsyncThunk<void, number>(
 
     if (res.resultCode === SUCCESS_CODE) {
       const state = getState() as RootState;
-      refreshTable<TProduct>(
-        dispatch,
-        getAllProductsAsync,
-        state.products.pagination
-      );
+      refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Изделие успешно удалено!");
     } else {
       dispatchErrorToast(dispatch, res.message);
