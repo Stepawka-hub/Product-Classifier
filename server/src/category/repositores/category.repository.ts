@@ -164,6 +164,7 @@ export class CategoryRepository extends Repository<Category> {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const paginatedData = res
+      .filter((e) => String(e.id) !== String(id))
       .sort((a, b) => a.id - b.id)
       .slice(startIndex, endIndex);
 

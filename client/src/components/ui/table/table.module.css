@@ -42,6 +42,7 @@
 
 .trow td {
   padding: 0.5rem 0;
+  transition: .2s linear;
 }
 
 .trow:nth-child(odd) {
@@ -58,6 +59,10 @@
 
 .selectable {
   cursor: pointer;
+}
+
+.trow.selectable:hover:not(.selected) td {
+  background-color: var(--table-selected-row-color);
 }
 
 .actions {
