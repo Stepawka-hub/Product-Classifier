@@ -15,6 +15,7 @@ const initialState: TInitialCategoryState = {
   parents: [],
   children: [],
   editingItem: null,
+  selectedItem: null,
 
   isLoading: false,
   isAdding: false,
@@ -31,7 +32,7 @@ const initialState: TInitialCategoryState = {
   },
   nodesPagination: {
     totalCount: 1,
-    pageSize: 5,
+    pageSize: 3,
     currentPage: 1,
   },
 };
@@ -61,12 +62,16 @@ const categoriesSlice = createSlice({
     setEditingItem: (state, { payload }: PayloadAction<TCategory | null>) => {
       state.editingItem = payload;
     },
+    setSelectedItem: (state, { payload }: PayloadAction<TCategory | null>) => {
+      state.selectedItem = payload;
+    },
   },
   selectors: {
     getCategoriesSelector: (state) => state.categories,
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
     getEditingItemSelector: (state) => state.editingItem,
+    getSelectedItemSelector: (state) => state.selectedItem,
 
     getPaginationSelector: (state) => state.pagination,
     getNodesPaginationSelector: (state) => state.nodesPagination,
@@ -154,6 +159,7 @@ export const {
   getParentsSelector,
   getChildrenSelector,
   getEditingItemSelector,
+  getSelectedItemSelector,
 
   getPaginationSelector,
   getNodesPaginationSelector,
@@ -172,4 +178,5 @@ export const {
   setTotalCount,
   setRemovingIds,
   setEditingItem,
+  setSelectedItem,
 } = categoriesSlice.actions;

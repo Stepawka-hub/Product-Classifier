@@ -26,18 +26,25 @@ export type TEditingState<T> = {
   isUpdating?: boolean;
 };
 
+export type TSelectingState<T> = {
+  selectedItem: T | null;
+};
+
 export type TInitialProductState = TCommonInitialState &
   TEditingState<TProduct> & {
     products: TProduct[];
   };
 
 export type TInitialCategoryState = TCommonInitialState &
+  TSelectingState<TCategory> &
   TEditingState<TCategory> & {
     categories: TCategory[];
     parents: TCategoryShort[];
     children: TCategoryShort[];
+
     isFetchParents: boolean;
     isFetchChildren: boolean;
+
     nodesPagination: Omit<TPagination, "setCurrentPage">;
   };
 

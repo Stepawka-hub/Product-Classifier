@@ -16,8 +16,12 @@ export type TTableConfig<T> = {
 
 export type TTableActions<T> = {
   deletion?: {
-    removingIds?: (string | number)[];
-    onDelete?: (id: number) => void;
+    removingIds: (string | number)[];
+    onDelete: (id: number) => void;
+  };
+  selection?: {
+    selectedItem: T | null;
+    onSelect: (item: T) => void;
   };
   onEdit?: (item: T) => void;
 };

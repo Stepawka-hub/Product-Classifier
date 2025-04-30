@@ -17,17 +17,19 @@ import { PaginationParams } from "@utils/api/types/types";
 import { shortCategoriesHeaders } from "@utils/constants";
 import { TCategoryShort, TEntity } from "@utils/types";
 import { FC } from "react";
-import { TCategoryRelationsProps } from "./type";
 import s from "./category-relations.module.css";
+import { TCategoryRelationsProps } from "./type";
 
 export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
   const config = {
     parents: {
+      title: "Родительские категории",
       dataSelector: getParentsSelector,
       getIsLoadingSelector: getIsFetchParentsSelector,
       getElementsAsync: getParentCategoriesAsync,
     },
     children: {
+      title: "Дочерние категории",
       dataSelector: getChildrenSelector,
       getIsLoadingSelector: getIsFetchChildrenSelector,
       getElementsAsync: getChildCategoriesAsync,
@@ -50,6 +52,7 @@ export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
 
   return (
     <div className={s.container}>
+      <h2 className={s.title}>{config[type].title}</h2>
       <Table<TCategoryShort>
         headers={shortCategoriesHeaders}
         data={data}

@@ -27,6 +27,7 @@
   --table-color: #171717;
   --table-body-color-odd: #282828;
   --table-body-color-even: #232323;
+  --table-selected-row-color: rgba(237, 237, 237, 0.25);
 
   --toast-bg-color: #FFF;
   --toast-btn-color: #333333;
