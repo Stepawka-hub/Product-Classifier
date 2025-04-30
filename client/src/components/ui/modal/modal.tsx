@@ -4,7 +4,7 @@ import s from "./modal.module.css";
 import { ModalPropsUI } from "./type";
 
 export const ModalUI: FC<ModalPropsUI> = memo(
-  ({ isOpen, nodeRef, children, onOverlayClick, onClose }) => (
+  ({ isOpen, nodeRef, children, onOverlayClick, onCloseCallback, onClose }) => (
     <CSSTransition
       in={isOpen}
       nodeRef={nodeRef}
@@ -16,6 +16,7 @@ export const ModalUI: FC<ModalPropsUI> = memo(
         exitActive: s.modalExitActive,
       }}
       unmountOnExit
+      onExited={() => onCloseCallback?.()}
     >
       <div ref={nodeRef} className={s.modal}>
         <div className={s.modalOverlay} onClick={onOverlayClick}>

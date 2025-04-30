@@ -160,11 +160,12 @@ export class CategoryRepository extends Repository<Category> {
       direction,
     ])) as Category[];
 
-    const total = res.length;
+    const filteredData = res.filter((e) => String(e.id) !== String(id));
+    const total = filteredData.length;
+
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const paginatedData = res
-      .filter((e) => String(e.id) !== String(id))
+    const paginatedData = filteredData
       .sort((a, b) => a.id - b.id)
       .slice(startIndex, endIndex);
 

@@ -16,6 +16,7 @@ import {
   getSelectedItemSelector as getSelectedItem,
   setCurrentPage,
   setEditingItem,
+  setNodeCurrentPage,
   setSelectedItem,
 } from "@slices/categories";
 import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
@@ -25,19 +26,17 @@ import { TablePage } from "../table-page";
 import { TTableActions } from "@components/types";
 
 export const CategoriesPage = () => {
-  const { data, isLoading, pagination } = useTableData<TCategory>({
+  const { dispatch, data, isLoading, pagination } = useTableData<TCategory>({
     dataSelector: getCategoriesSelector,
     getIsLoadingSelector,
     getPaginationSelector,
     getElementsAsync: getAllCategoriesAsync,
     setCurrentPage,
   });
-
   const { showModal, showAddForm, showEditForm } = useTableForms({
     AddForm,
     EditForm,
   });
-
   const actions: TTableActions<TCategory> = useTableActions({
     setEditingItem,
     setSelectedItem,
@@ -46,8 +45,14 @@ export const CategoriesPage = () => {
     deleteElementAsync: deleteCategoryAsync,
     openEditForm: showEditForm,
   });
-
   const isSelected = !!actions?.selection?.selectedItem;
+
+  const showNodes = (type: "parents" | "children") => () => {
+    const callback = () => {
+      dispatch(setNodeCurrentPage(1));
+    };
+    showModal(<CategoryRelations type={type} />, callback);
+  };
 
   if (isLoading) return <Loader />;
 
@@ -61,18 +66,22 @@ export const CategoriesPage = () => {
       additionalActions={
         <>
           <Button
-            title={isSelected ? 'Показать родительские категории' : 'Выберите строку'}
+            title={
+              isSelected ? "Показать родительские категории" : "Выберите строку"
+            }
             variant="view"
             disabled={!isSelected}
-            onClick={() => showModal(<CategoryRelations type="parents" />)}
+            onClick={showNodes("parents")}
           >
             Родительские категории
           </Button>
           <Button
-            title={isSelected ? 'Показать дочерние категории' : 'Выберите строку'}
+            title={
+              isSelected ? "Показать дочерние категории" : "Выберите строку"
+            }
             variant="view"
             disabled={!isSelected}
-            onClick={() => showModal(<CategoryRelations type="children" />)}
+            onClick={showNodes("children")}
           >
             Дочерние категории
           </Button>
