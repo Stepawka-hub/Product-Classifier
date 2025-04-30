@@ -14,7 +14,7 @@ const initialState: TInitialCategoryState = {
   categories: [],
   parents: [],
   children: [],
-  editingItem: null,
+  editingItemId: null,
   selectedItem: null,
 
   isLoading: false,
@@ -32,7 +32,7 @@ const initialState: TInitialCategoryState = {
   },
   nodesPagination: {
     totalCount: 1,
-    pageSize: 3,
+    pageSize: 7,
     currentPage: 1,
   },
 };
@@ -60,8 +60,8 @@ const categoriesSlice = createSlice({
     setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
       state.isUpdating = payload;
     },
-    setEditingItem: (state, { payload }: PayloadAction<TCategory | null>) => {
-      state.editingItem = payload;
+    setEditingItemId: (state, { payload }: PayloadAction<number | null>) => {
+      state.editingItemId = payload;
     },
     setSelectedItem: (state, { payload }: PayloadAction<TCategory | null>) => {
       state.selectedItem = payload;
@@ -71,7 +71,7 @@ const categoriesSlice = createSlice({
     getCategoriesSelector: (state) => state.categories,
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
-    getEditingItemSelector: (state) => state.editingItem,
+    getEditingItemIdSelector: (state) => state.editingItemId,
     getSelectedItemSelector: (state) => state.selectedItem,
 
     getPaginationSelector: (state) => state.pagination,
@@ -159,7 +159,7 @@ export const {
   getCategoriesSelector,
   getParentsSelector,
   getChildrenSelector,
-  getEditingItemSelector,
+  getEditingItemIdSelector,
   getSelectedItemSelector,
 
   getPaginationSelector,
@@ -179,6 +179,6 @@ export const {
   setNodeCurrentPage,
   setTotalCount,
   setRemovingIds,
-  setEditingItem,
+  setEditingItemId,
   setSelectedItem,
 } = categoriesSlice.actions;

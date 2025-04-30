@@ -1,11 +1,9 @@
 import { BaseForm } from "@components/forms/base-form";
 import { Input } from "@components/forms/form-elements";
 import { useForm } from "@hooks/forms/useForm";
+import { getEditingUnitSelector } from "@selectors/units";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import {
-  getEditingItemSelector,
-  getIsUpdatingSelector
-} from "@slices/units";
+import { getIsUpdatingSelector } from "@slices/units";
 import { useSelector } from "@store";
 import { updateUnitAsync } from "@thunks/units";
 import { editBtnLabel } from "@utils/constants";
@@ -14,7 +12,7 @@ import { FC } from "react";
 import { FormProps, TUpdateUnitForm } from "../../types";
 
 export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
-  const editingUnit = useSelector(getEditingItemSelector);
+  const editingUnit = useSelector(getEditingUnitSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "unit-edit";

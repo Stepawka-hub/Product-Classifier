@@ -15,7 +15,7 @@ import {
   getRemovingIdsSelector,
   getSelectedItemSelector as getSelectedItem,
   setCurrentPage,
-  setEditingItem,
+  setEditingItemId,
   setNodeCurrentPage,
   setSelectedItem,
 } from "@slices/categories";
@@ -38,7 +38,7 @@ export const CategoriesPage = () => {
     EditForm,
   });
   const actions: TTableActions<TCategory> = useTableActions({
-    setEditingItem,
+    setEditingItemId,
     setSelectedItem,
     getSelectedItem,
     getRemovingIdsSelector,

@@ -3,19 +3,17 @@ import { Input } from "@components/forms/form-elements";
 import { Checkbox } from "@components/forms/form-elements/checkbox";
 import { useForm } from "@hooks/forms/useForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import {
-  getEditingItemSelector,
-  getIsUpdatingSelector
-} from "@slices/categories";
+import { getIsUpdatingSelector } from "@slices/categories";
 import { useSelector } from "@store";
 import { updateCategoryAsync } from "@thunks/categories";
 import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
 import { FormProps, TUpdateCategoryForm } from "../../types";
+import { getEditingCategorySelector } from "@selectors/categories";
 
 export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
-  const editingCategory = useSelector(getEditingItemSelector);
+  const editingCategory = useSelector(getEditingCategorySelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "category-edit";

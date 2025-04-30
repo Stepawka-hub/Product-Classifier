@@ -21,8 +21,8 @@ export type TCommonInitialState = {
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 
-export type TEditingState<T> = {
-  editingItem: T | null;
+export type TEditingState = {
+  editingItemId: number | null;
   isUpdating: boolean;
 };
 
@@ -31,13 +31,13 @@ export type TSelectingState<T> = {
 };
 
 export type TInitialProductState = TCommonInitialState &
-  TEditingState<TProduct> & {
+  TEditingState & {
     products: TProduct[];
   };
 
 export type TInitialCategoryState = TCommonInitialState &
   TSelectingState<TCategory> &
-  TEditingState<TCategory> & {
+  TEditingState & {
     categories: TCategory[];
     parents: TCategoryShort[];
     children: TCategoryShort[];
@@ -49,7 +49,7 @@ export type TInitialCategoryState = TCommonInitialState &
   };
 
 export type TInitialUnitState = TCommonInitialState &
-  TEditingState<TUnit> & {
+  TEditingState & {
     units: TUnit[];
   };
 

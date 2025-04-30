@@ -11,7 +11,7 @@ const initialState: TInitialUnitState = {
   isAdding: false,
   removingIds: [],
 
-  editingItem: null,
+  editingItemId: null,
   isUpdating: false,
 
   pagination: {
@@ -38,8 +38,8 @@ const unitsSlice = createSlice({
     setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
       state.removingIds = toggleArrayItem(state.removingIds, payload);
     },
-    setEditingItem: (state, { payload }: PayloadAction<TUnit | null>) => {
-      state.editingItem = payload;
+    setEditingItemId: (state, { payload }: PayloadAction<number | null>) => {
+      state.editingItemId = payload;
     },
   },
   selectors: {
@@ -48,7 +48,7 @@ const unitsSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getRemovingIdsSelector: (state) => state.removingIds,
     getIsUpdatingSelector: (state) => state.isUpdating,
-    getEditingItemSelector: (state) => state.editingItem,
+    getEditingItemIdSelector: (state) => state.editingItemId,
     getPaginationSelector: (state) => state.pagination,
   },
   extraReducers: (builder) => {
@@ -97,7 +97,7 @@ export const {
   getIsAddingSelector,
   getRemovingIdsSelector,
   getIsUpdatingSelector,
-  getEditingItemSelector,
+  getEditingItemIdSelector,
   getPaginationSelector,
 } = unitsSlice.selectors;
 export const {
@@ -106,5 +106,5 @@ export const {
   setCurrentPage,
   setTotalCount,
   setRemovingIds,
-  setEditingItem,
+  setEditingItemId,
 } = unitsSlice.actions;

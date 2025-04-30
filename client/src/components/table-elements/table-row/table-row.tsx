@@ -32,7 +32,7 @@ export const TableRow = <T extends TEntity>({
 
   const handleEdit: MouseEventHandler = (e) => {
     e.stopPropagation();
-    onEdit?.(rowData);
+    onEdit?.(rowData.id);
   };
 
   const handleDelete: MouseEventHandler = (e) => {

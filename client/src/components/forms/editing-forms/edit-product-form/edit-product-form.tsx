@@ -1,11 +1,9 @@
 import { BaseForm } from "@components/forms/base-form";
 import { Input } from "@components/forms/form-elements";
 import { useForm } from "@hooks/forms/useForm";
+import { getEditingProductSelector } from "@selectors/products";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import {
-  getEditingItemSelector,
-  getIsUpdatingSelector
-} from "@slices/products";
+import { getIsUpdatingSelector } from "@slices/products";
 import { useSelector } from "@store";
 import { updateProductAsync } from "@thunks/products";
 import { editBtnLabel } from "@utils/constants";
@@ -14,7 +12,7 @@ import { FC } from "react";
 import { FormProps, TUpdateProductForm } from "../../types";
 
 export const EditProductForm: FC<FormProps> = ({ onClose }) => {
-  const editingProduct = useSelector(getEditingItemSelector);
+  const editingProduct = useSelector(getEditingProductSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "product-edit";

@@ -31,6 +31,7 @@
       "@ui-pages": ["src/components/ui/pages"],
       "@components/*": ["src/components/*"],
       "@pages": ["src/pages"],
+      "@selectors/*": ["src/services/selectors/*"],
       "@slices/*": ["src/services/slices/*"],
       "@thunks/*": ["src/services/thunks/*"],
       "@api": ["src/utils/api/api.ts"],

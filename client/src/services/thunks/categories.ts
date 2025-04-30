@@ -13,7 +13,7 @@ import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { refreshTable } from "../helpers/pagination";
 import { RootState } from "@store";
 import {
-  setEditingItem,
+  setEditingItemId,
   setRemovingIds,
   setSelectedItem,
 } from "@slices/categories";
@@ -31,7 +31,7 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     dispatch,
     getAllCategoriesAsync,
     state.categories.pagination,
-    setEditingItem,
+    setEditingItemId,
     setSelectedItem
   );
 };

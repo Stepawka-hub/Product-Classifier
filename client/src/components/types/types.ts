@@ -23,5 +23,5 @@ export type TTableActions<T> = {
     selectedItem: T | null;
     onSelect: (item: T | null) => void;
   };
-  onEdit?: (item: T) => void;
+  onEdit?: (itemId: number) => void;
 };

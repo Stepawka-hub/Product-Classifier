@@ -10,7 +10,7 @@ import {
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
-import { setEditingItem, setRemovingIds } from "@slices/products";
+import { setEditingItemId, setRemovingIds } from "@slices/products";
 import { AppThunkDispatch } from "./types/types";
 
 const GET_PRODUCTS = "products/get";
@@ -23,7 +23,7 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     dispatch,
     getAllProductsAsync,
     state.products.pagination,
-    setEditingItem
+    setEditingItemId
   );
 };
 

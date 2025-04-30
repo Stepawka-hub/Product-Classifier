@@ -1,6 +1,6 @@
 import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { setEditingItem, setRemovingIds } from "@slices/units";
+import { setEditingItemId, setRemovingIds } from "@slices/units";
 import { RootState } from "@store";
 import { PaginationParams } from "@utils/api/types/types";
 import {
@@ -23,7 +23,7 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     dispatch,
     getAllUnitsAsync,
     state.units.pagination,
-    setEditingItem
+    setEditingItemId
   );
 };
 
