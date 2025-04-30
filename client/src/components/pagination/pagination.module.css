@@ -38,3 +38,15 @@
   pointer-events: none;
   opacity: 1;
 }
+
+@media (max-width: 600px) {
+  .pagination {
+    gap: 0.35rem;
+  }
+
+  .pagination__item {
+    font-size: 1rem;
+    width: 2rem;
+    height: 2rem;
+  }
+}
