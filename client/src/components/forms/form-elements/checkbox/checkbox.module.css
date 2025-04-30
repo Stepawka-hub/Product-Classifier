@@ -61,3 +61,16 @@
 .required {
   color: var(--red-color);
 }
+
+@media (max-width: 960px) {
+  .label {
+    font-size: 1rem;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .label {
+    font-size: 0.9rem;
+  }
+}

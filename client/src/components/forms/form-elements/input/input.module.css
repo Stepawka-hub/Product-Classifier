@@ -14,3 +14,23 @@
 .required {
   color: var(--red-color);
 }
+
+@media (max-width: 960px) {
+  .input {
+    font-size: 1rem;
+  }
+
+  .label {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .input {
+    font-size: 0.9rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+}

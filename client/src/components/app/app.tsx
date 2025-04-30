@@ -5,13 +5,13 @@ import { Route, Routes } from "react-router";
 import { AppPreloader } from "@components/app-preloader";
 import { ModalProvider } from "@components/modal-provider/modal-provider";
 import { NotFound } from "@components/not-found";
-import { Sidebar } from "@components/sidebar/sidebar";
 import { ToastList } from "@components/toast-list";
 import { CategoriesPage, HomePage, ProductsPage, UnitsPage } from "@pages";
 import { getIsInitializedSelector } from "@slices/app";
 import { useDispatch, useSelector } from "@store";
 import { initialize } from "@thunks/app";
 import s from "./app.module.css";
+import { NavigationPanel } from "@components/navigation-panel";
 
 export const App: FC = () => {
   const dispatch = useDispatch();
@@ -27,8 +27,8 @@ export const App: FC = () => {
 
   return (
     <div className={s.wrapper}>
-      <div className={s.sidebar}>
-        <Sidebar />
+      <div className={s.navigation}>
+        <NavigationPanel />
       </div>
 
       <ModalProvider>
