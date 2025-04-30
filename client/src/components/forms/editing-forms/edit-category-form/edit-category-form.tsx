@@ -21,7 +21,7 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
   const initialState: TUpdateCategoryForm = {
     name: editingCategory?.name || "",
     parentName: editingCategory?.parentName || "",
-    unitName: needInheritInLeaves ? "" : editingCategory?.unitName || "",
+    unitName: !needInheritInLeaves ? "" : editingCategory?.unitName || "",
     needInheritInLeaves,
   };
   const { dispatch, formData, setFormData, onChange } =

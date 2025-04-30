@@ -17,6 +17,16 @@ export const SidebarUI: FC<SidebarUIProps> = ({
     </div>
     <div className={s.links}>
       <NavLink
+        to="/"
+        className={({ isActive }) =>
+          clsx("link", s.link, {
+            [s.link_active]: isActive,
+          })
+        }
+      >
+        - На главную
+      </NavLink>
+      <NavLink
         to="/products"
         className={({ isActive }) =>
           clsx("link", s.link, {
