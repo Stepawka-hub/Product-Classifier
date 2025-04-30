@@ -24,15 +24,13 @@ export const TableRow = <T extends TEntity>({
     <TableCell key={index} value={rowData[key]} />
   ));
 
-  console.log(selection?.selectedItem?.id === rowData.id);
-
   return (
     <tr
       className={clsx(s.trow, {
         [s.selectable]: onSelect,
         [s.selected]: isSelected,
       })}
-      onClick={() => selection?.onSelect(rowData)}
+      onClick={() => selection?.onSelect(isSelected ? null : rowData)}
     >
       {cellElements}
 

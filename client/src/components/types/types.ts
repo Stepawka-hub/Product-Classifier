@@ -21,7 +21,7 @@ export type TTableActions<T> = {
   };
   selection?: {
     selectedItem: T | null;
-    onSelect: (item: T) => void;
+    onSelect: (item: T | null) => void;
   };
   onEdit?: (item: T) => void;
 };

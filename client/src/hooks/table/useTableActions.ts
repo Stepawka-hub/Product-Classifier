@@ -40,7 +40,7 @@ export const useTableActions = <T>({
   );
 
   const handleSelect = useCallback(
-    (element: T) => {
+    (element: T | null) => {
       if (setSelectedItem) {
         dispatch(setSelectedItem(element));
       }

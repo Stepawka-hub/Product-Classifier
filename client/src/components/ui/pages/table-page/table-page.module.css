@@ -32,12 +32,12 @@
   text-overflow: ellipsis;
 }
 
-.actions button:hover {
+.actions button:not(:disabled):hover {
   box-shadow: 0 0 10px 1px var(--action-btn-shadow-color);
   transform: scale(1.02);
 }
 
-.actions button:active {
+.actions button:not(:disabled):active {
   opacity: 0.7;
 }
 

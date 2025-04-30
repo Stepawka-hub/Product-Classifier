@@ -1,4 +1,4 @@
-import { CategoryRelations } from "@components/category-relations-modal/category-relations";
+import { CategoryRelations } from "@components/category-relations/category-relations";
 import { Button } from "@components/common/buttons";
 import { Loader } from "@components/common/loader";
 import {
@@ -22,6 +22,7 @@ import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
 import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { TablePage } from "../table-page";
+import { TTableActions } from "@components/types";
 
 export const CategoriesPage = () => {
   const { data, isLoading, pagination } = useTableData<TCategory>({
@@ -35,7 +36,7 @@ export const CategoriesPage = () => {
     AddForm,
     EditForm,
   });
-  const actions = useTableActions({
+  const actions: TTableActions<TCategory> = useTableActions({
     setEditingItem,
     setSelectedItem,
     getSelectedItem,
@@ -43,6 +44,7 @@ export const CategoriesPage = () => {
     deleteElementAsync: deleteCategoryAsync,
     openEditForm: showEditForm,
   });
+  const isSelected = !!actions?.selection?.selectedItem;
 
   if (isLoading) return <Loader />;
 
@@ -57,12 +59,14 @@ export const CategoriesPage = () => {
         <>
           <Button
             variant="view"
+            disabled={!isSelected}
             onClick={() => showModal(<CategoryRelations type="parents" />)}
           >
             Родительские категории
           </Button>
           <Button
             variant="view"
+            disabled={!isSelected}
             onClick={() => showModal(<CategoryRelations type="children" />)}
           >
             Дочерние категории

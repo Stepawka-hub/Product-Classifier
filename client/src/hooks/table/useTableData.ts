@@ -17,7 +17,7 @@ type TUseTableDataParams<T, P> = {
   >;
   setCurrentPage: ActionCreatorWithPayload<number, string>;
   getElementsAsync: (params: P) => ReturnType<TFetchEntitiesThunk<T>>;
-  additionalParams?: Omit<P, "page" | "limit">;
+  additionalParams?: Partial<Omit<P, "page" | "limit">>;
 };
 
 export const useTableData = <T, P extends PaginationParams = PaginationParams>({
