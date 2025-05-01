@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
@@ -109,8 +109,6 @@ export class CategoryRepository extends Repository<Category> {
     // Добавляем named parameters
     const { query: finalQuery, params: finalParams } =
       addNamedParametersToQuery(query, params, namedParams);
-
-    new Logger().log(finalQuery);
 
     try {
       await this.query(finalQuery, finalParams);
