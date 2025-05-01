@@ -21,6 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
   background-color: rgba(0, 0, 0, 0.6);
 
   top: 0;
@@ -94,4 +95,39 @@
 .modalClose:hover::after,
 .modalClose:hover::before {
   background-color: var(--orange-color);
+}
+
+@media (max-width: 960px) {
+  .modalOverlay {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modalOverlay {
+    padding: 1rem;
+  }
+
+  .modalContent {
+    min-width: 25%;
+    min-height: 7.5rem;
+  
+    padding: 1rem;
+    border-radius: 1rem;
+    pointer-events: auto;
+    z-index: 15;
+  }
+
+  .modalClose {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .modalClose::after,
+  .modalClose::before {
+    top: 5px;
+    left: 13px;
+    width: 3px;
+    height: 19px;
+  }
 }

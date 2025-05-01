@@ -10,9 +10,9 @@ export const TableRow = <T extends TEntity>({
   rowData,
   headers,
   isRemoving = false,
-  actions = {},
+  actions,
 }: TableRowProps<T>) => {
-  const { onEdit, selection, deletion } = actions;
+  const { onEdit, selection, deletion } = actions || {};
   const { onSelect, selectedItem } = selection || {};
   const isSelected = selectedItem === rowData.id;
 
@@ -50,26 +50,28 @@ export const TableRow = <T extends TEntity>({
     >
       {cellElements}
 
-      <td className={s.actions}>
-        {onEdit && (
-          <Button
-            title="Редактировать"
-            variant="edit"
-            size="small"
-            onClick={handleEdit}
-          />
-        )}
+      {actions && (
+        <td className={s.actions}>
+          {onEdit && (
+            <Button
+              title="Редактировать"
+              variant="edit"
+              size="small"
+              onClick={handleEdit}
+            />
+          )}
 
-        {deletion && (
-          <Button
-            title="Удалить"
-            variant="cross"
-            size="small"
-            disabled={isRemoving}
-            onClick={handleDelete}
-          />
-        )}
-      </td>
+          {deletion && (
+            <Button
+              title="Удалить"
+              variant="cross"
+              size="small"
+              disabled={isRemoving}
+              onClick={handleDelete}
+            />
+          )}
+        </td>
+      )}
     </tr>
   );
 };

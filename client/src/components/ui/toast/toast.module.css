@@ -98,3 +98,10 @@
     transform: translateX(0);
   }
 }
+
+@media (max-width: 600px) {
+  .toast {
+    max-width: 15rem;
+    padding: 1.25rem 0.75rem;
+  }
+}

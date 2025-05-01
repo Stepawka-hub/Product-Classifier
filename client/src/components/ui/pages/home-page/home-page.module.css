@@ -5,12 +5,41 @@
 
 .home__title {
   margin-bottom: 0.5rem;
-  font-size: 2.75rem;
+  font-size: 2.5rem;
   font-weight: 600;
   color: var(--orange-color);
 }
 
 .home__text {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 500;
+}
+
+@media (max-width: 960px) {
+  .home {
+    margin-top: 5rem;
+  }
+
+  .home__title {
+    margin-bottom: 0.5rem;
+    font-size: 2.25rem;
+  }
+
+  .home__text {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home {
+    margin-top: 4rem;
+  }
+
+  .home__title {
+    font-size: 2rem;
+  }
+
+  .home__text {
+    font-size: 1.15rem;
+  }
 }
