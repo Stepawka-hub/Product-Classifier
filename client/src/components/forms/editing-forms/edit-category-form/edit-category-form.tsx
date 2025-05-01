@@ -17,12 +17,11 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "category-edit";
-  const needInheritInLeaves = true;
   const initialState: TUpdateCategoryForm = {
     name: editingCategory?.name || "",
     parentName: editingCategory?.parentName || "",
-    unitName: !needInheritInLeaves ? "" : editingCategory?.unitName || "",
-    needInheritInLeaves,
+    unitName: editingCategory?.unitName || "",
+    needInheritInLeaves: false,
   };
   const { dispatch, formData, setFormData, onChange } =
     useForm<TUpdateCategoryForm>(initialState, [editingCategory]);
@@ -76,24 +75,22 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
           onChange={onChange("parentName")}
           maxLength={128}
         />
+        <Input
+          id={`${prefix}_unitName`}
+          name="unitName"
+          label="Название ЕИ"
+          value={formData.unitName}
+          onChange={onChange("unitName")}
+          maxLength={64}
+        />
         <Checkbox
           id={`${prefix}_needInheritInLeaves`}
           name="needInheritInLeaves"
-          label="Наследовать ЕИ?"
+          label="Должны ли изделия наследовать ЕИ?"
           type="checkbox"
           checked={formData.needInheritInLeaves}
           onChange={onChange("needInheritInLeaves")}
         />
-        {!formData.needInheritInLeaves && (
-          <Input
-            id={`${prefix}_unitName`}
-            name="unitName"
-            label="Название ЕИ"
-            value={formData.unitName}
-            onChange={onChange("unitName")}
-            maxLength={64}
-          />
-        )}
       </>
     </BaseForm>
   );

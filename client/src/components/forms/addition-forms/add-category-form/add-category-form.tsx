@@ -70,7 +70,6 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
           value={formData.unitName}
           onChange={onChange("unitName")}
           maxLength={64}
-          required
         />
       </>
     </BaseForm>
