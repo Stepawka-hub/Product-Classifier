@@ -24,6 +24,7 @@ import { categoriesHeaders as headers } from "@utils/constants";
 import { TCategory } from "@utils/types";
 import { TablePage } from "../table-page";
 import { TTableActions } from "@components/types";
+import { TCategoryRealtionsTypes } from '@components/category-relations/type';
 
 export const CategoriesPage = () => {
   const { dispatch, data, isLoading, pagination } = useTableData<TCategory>({
@@ -47,7 +48,7 @@ export const CategoriesPage = () => {
   });
   const isSelected = !!actions?.selection?.selectedItem;
 
-  const showNodes = (type: "parents" | "children") => () => {
+  const showNodes = (type: TCategoryRealtionsTypes) => () => {
     const callback = () => {
       dispatch(setNodeCurrentPage(1));
     };
@@ -84,6 +85,16 @@ export const CategoriesPage = () => {
             onClick={showNodes("children")}
           >
             Дочерние категории
+          </Button>
+          <Button
+            title={
+              isSelected ? "Показать изделия" : "Выберите строку"
+            }
+            variant="view"
+            disabled={!isSelected}
+            onClick={showNodes("leaves")}
+          >
+            Изделия
           </Button>
         </>
       }

@@ -3,17 +3,25 @@ import { TInitialCategoryState } from "./types/types";
 import {
   addCategoryAsync,
   getAllCategoriesAsync,
+  getCategoryLeavesAsync,
   getChildCategoriesAsync,
   getParentCategoriesAsync,
   updateCategoryAsync,
 } from "@thunks/categories";
-import { TargetId, TCategory, TCategoryShort, TPaginatedData } from "@utils/types";
+import {
+  TargetId,
+  TCategory,
+  TCategoryShort,
+  TPaginatedData,
+  TProduct,
+} from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialCategoryState = {
   categories: [],
   parents: [],
   children: [],
+  leaves: [],
   editingItemId: null,
   selectedItemId: null,
 
@@ -24,6 +32,7 @@ const initialState: TInitialCategoryState = {
 
   isFetchParents: false,
   isFetchChildren: false,
+  isFetchLeaves: false,
 
   pagination: {
     totalCount: 1,
@@ -71,6 +80,7 @@ const categoriesSlice = createSlice({
     getCategoriesSelector: (state) => state.categories,
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
+    getLeavesSelector: (state) => state.leaves,
     getEditingItemIdSelector: (state) => state.editingItemId,
     getSelectedItemIdSelector: (state) => state.selectedItemId,
 
@@ -84,6 +94,7 @@ const categoriesSlice = createSlice({
 
     getIsFetchParentsSelector: (state) => state.isFetchParents,
     getIsFetchChildrenSelector: (state) => state.isFetchChildren,
+    getIsFetchLeavesSelector: (state) => state.isFetchLeaves,
   },
   extraReducers: (builder) => {
     builder
@@ -150,6 +161,21 @@ const categoriesSlice = createSlice({
       )
       .addCase(getChildCategoriesAsync.rejected, (state) => {
         state.isFetchChildren = false;
+      })
+
+      .addCase(getCategoryLeavesAsync.pending, (state) => {
+        state.isFetchLeaves = true;
+      })
+      .addCase(
+        getCategoryLeavesAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TProduct>>) => {
+          state.leaves = payload.items;
+          state.nodesPagination.totalCount = payload.total;
+          state.isFetchLeaves = false;
+        }
+      )
+      .addCase(getCategoryLeavesAsync.rejected, (state) => {
+        state.isFetchLeaves = false;
       });
   },
 });
@@ -161,9 +187,11 @@ export const {
   getChildrenSelector,
   getEditingItemIdSelector,
   getSelectedItemIdSelector,
+  getLeavesSelector,
 
   getPaginationSelector,
   getNodesPaginationSelector,
+  getIsFetchLeavesSelector,
 
   getIsLoadingSelector,
   getIsAddingSelector,

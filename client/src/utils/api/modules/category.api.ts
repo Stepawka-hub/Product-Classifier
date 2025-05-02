@@ -3,6 +3,7 @@ import {
   TCategoryShort,
   TCreateCategoryData,
   TPaginatedData,
+  TProduct,
   TUpdateCategoryData,
 } from "@utils/types";
 import { BaseApi } from "./base/base.api";
@@ -29,6 +30,13 @@ export class CategoryApi extends BaseApi {
     params: PaginationParams
   ): Promise<TPaginatedData<TCategoryShort>> {
     return this.get(params, `${id}/children`);
+  }
+
+  getLeaves(
+    id: number,
+    params: PaginationParams
+  ): Promise<TPaginatedData<TProduct>> {
+    return this.get(params, `${id}/leaves`);
   }
 
   createCategory(categoryData: TCreateCategoryData): Promise<TServerResponse> {

@@ -1,3 +1,5 @@
 export type TCategoryRelationsProps = {
-  type: "parents" | "children";
+  type: TCategoryRealtionsTypes;
 };
+
+export type TCategoryRealtionsTypes = 'parents' | 'children' | 'leaves';

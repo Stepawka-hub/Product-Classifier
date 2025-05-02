@@ -7,6 +7,7 @@ import {
   TCreateCategoryData,
   TEntity,
   TPaginatedData,
+  TProduct,
   TUpdateCategoryData,
 } from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
@@ -22,6 +23,7 @@ import { AppThunkDispatch } from "./types/types";
 const GET_CATEGORIES = "categories/get";
 const GET_PARENT_CATEGORIES = "categories/get-parents";
 const GET_CHILD_CATEGORIES = "categories/get-children";
+const GET_CATEGORY_LEAVES = "categories/get-leaves";
 const ADD_CATEGORY = "categories/add";
 const UPDATE_CATEGORY = "categories/update";
 const DELETE_CATEGORY = "categories/delete";
@@ -57,6 +59,14 @@ export const getChildCategoriesAsync = createAsyncThunk<
   PaginationParams & TEntity
 >(GET_CHILD_CATEGORIES, async ({ id, page, limit }) => {
   const res = await api.categories.getChildren(id, { page, limit });
+  return res;
+});
+
+export const getCategoryLeavesAsync = createAsyncThunk<
+  TPaginatedData<TProduct>,
+  PaginationParams & TEntity
+>(GET_CATEGORY_LEAVES, async ({ id, page, limit }) => {
+  const res = await api.categories.getLeaves(id, { page, limit });
   return res;
 });
 
