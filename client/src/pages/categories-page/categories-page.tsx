@@ -88,13 +88,13 @@ export const CategoriesPage = () => {
           </Button>
           <Button
             title={
-              isSelected ? "Показать изделия" : "Выберите строку"
+              isSelected ? "Показать изделия (листья)" : "Выберите строку"
             }
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("leaves")}
           >
-            Изделия
+            Изделия (Листья)
           </Button>
         </>
       }

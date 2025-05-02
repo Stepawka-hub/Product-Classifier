@@ -48,7 +48,7 @@ export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
     },
     leaves: {
       headers: productsHeaders,
-      title: `Изделия - "${selectedItem?.name}"`,
+      title: `Изделия (Листья) - "${selectedItem?.name}"`,
       dataSelector: getLeavesSelector,
       getIsLoadingSelector: getIsFetchLeavesSelector,
       getElementsAsync: getCategoryLeavesAsync,
