@@ -39,6 +39,15 @@ export class CategoryController {
     return this.categoryService.findNodes(id, page, limit, true);
   }
 
+  @Get(':id/leaves')
+  findLeaves(
+    @Param('id') id: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.categoryService.findLeaves(id, page, limit);
+  }
+
   @Post()
   createCategory(@Body() dto: CreateCategoryDto) {
     return this.categoryService.createCategory(dto);

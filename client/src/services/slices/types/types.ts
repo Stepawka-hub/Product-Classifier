@@ -42,9 +42,11 @@ export type TInitialCategoryState = TCommonInitialState &
     categories: TCategory[];
     parents: TCategoryShort[];
     children: TCategoryShort[];
+    leaves: TProduct[];
 
     isFetchParents: boolean;
     isFetchChildren: boolean;
+    isFetchLeaves: boolean;
 
     nodesPagination: Omit<TPagination, "setCurrentPage">;
   };

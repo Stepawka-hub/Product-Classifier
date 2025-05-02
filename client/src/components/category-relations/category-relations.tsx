@@ -4,49 +4,67 @@ import { useTableData } from "@hooks/table/useTableData";
 import {
   getChildrenSelector,
   getIsFetchChildrenSelector,
+  getIsFetchLeavesSelector,
   getIsFetchParentsSelector,
+  getLeavesSelector,
   getNodesPaginationSelector,
   getParentsSelector,
   setNodeCurrentPage,
 } from "@slices/categories";
 import { useSelector } from "@store";
 import {
+  getCategoryLeavesAsync,
   getChildCategoriesAsync,
   getParentCategoriesAsync,
 } from "@thunks/categories";
 import { PaginationParams } from "@utils/api/types/types";
-import { shortCategoriesHeaders } from "@utils/constants";
-import { TCategoryShort, TEntity } from "@utils/types";
+import { productsHeaders, shortCategoriesHeaders } from "@utils/constants";
+import { TCategoryShort, TEntity, TProduct } from "@utils/types";
 import { FC } from "react";
 import s from "./category-relations.module.css";
 import { TCategoryRelationsProps } from "./type";
 import { getSelectedCategorySelector } from "@selectors/categories";
+
+type RelationDataType<T extends "parents" | "children" | "leaves"> =
+  T extends "leaves" ? TProduct : TCategoryShort;
 
 export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
   const selectedItem = useSelector(getSelectedCategorySelector);
 
   const config = {
     parents: {
+      headers: shortCategoriesHeaders,
       title: `Родительские категории - "${selectedItem?.name}"`,
       dataSelector: getParentsSelector,
       getIsLoadingSelector: getIsFetchParentsSelector,
       getElementsAsync: getParentCategoriesAsync,
     },
     children: {
+      headers: shortCategoriesHeaders,
       title: `Дочерние категории - "${selectedItem?.name}"`,
       dataSelector: getChildrenSelector,
       getIsLoadingSelector: getIsFetchChildrenSelector,
       getElementsAsync: getChildCategoriesAsync,
     },
+    leaves: {
+      headers: productsHeaders,
+      title: `Изделия (Листья) - "${selectedItem?.name}"`,
+      dataSelector: getLeavesSelector,
+      getIsLoadingSelector: getIsFetchLeavesSelector,
+      getElementsAsync: getCategoryLeavesAsync,
+    },
   };
+
+  const currentConfig = config[type];
+
   const { data, isLoading, pagination } = useTableData<
-    TCategoryShort,
+    RelationDataType<typeof type>,
     PaginationParams & TEntity
   >({
-    dataSelector: config[type].dataSelector,
-    getIsLoadingSelector: config[type].getIsLoadingSelector,
+    dataSelector: currentConfig.dataSelector,
+    getIsLoadingSelector: currentConfig.getIsLoadingSelector,
     getPaginationSelector: getNodesPaginationSelector,
-    getElementsAsync: config[type].getElementsAsync,
+    getElementsAsync: currentConfig.getElementsAsync,
     setCurrentPage: setNodeCurrentPage,
     additionalParams: { id: selectedItem?.id },
   });
@@ -56,10 +74,10 @@ export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
 
   return (
     <div className={s.container}>
-      <h2 className={s.title}>{config[type].title}</h2>
+      <h2 className={s.title}>{currentConfig.title}</h2>
       {isEmpty ? (
-        <Table<TCategoryShort>
-          headers={shortCategoriesHeaders}
+        <Table<RelationDataType<typeof type>>
+          headers={currentConfig.headers}
           data={data}
           pagination={pagination}
         />

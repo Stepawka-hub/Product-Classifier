@@ -3,11 +3,13 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { ProductDto } from 'src/product/dto/product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 import { DataSource, Repository } from 'typeorm';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { Category } from '../entities/category.entity';
+import { TerminalProduct } from 'src/product/types/types';
 
 @Injectable()
 export class CategoryRepository extends Repository<Category> {
@@ -170,6 +172,36 @@ export class CategoryRepository extends Repository<Category> {
       .slice(startIndex, endIndex);
 
     return new PaginatedResponseDto(paginatedData, total);
+  }
+
+  async findLeaves(
+    id: number,
+    page: number,
+    limit: number,
+  ): Promise<PaginatedResponseDto<ProductDto>> {
+    const query = "SELECT * FROM GetLeaves('product', $1, 'id', $2)";
+
+    const res = (await this.query(query, [
+      this.tableName,
+      String(id),
+    ])) as TerminalProduct[];
+
+    const total = res.length;
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedData = res
+      .sort((a, b) => a.id - b.id)
+      .slice(startIndex, endIndex);
+
+    const leaves = paginatedData.map((p) => ({
+      id: p.id,
+      name: p.name,
+      parentName: p.parentname,
+      unitName: p.umname,
+    }));
+
+    return new PaginatedResponseDto(leaves, total);
   }
 
   private async checkCycle(id: number, parentName: string): Promise<boolean> {

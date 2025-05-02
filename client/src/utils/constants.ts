@@ -4,7 +4,7 @@ export const productsHeaders: Record<keyof TProduct, string> = {
   id: "ID изделия",
   name: "Название",
   parentName: "Категория",
-  unitName: "Единицы измерения",
+  unitName: "Единица измерения",
 };
 
 export const categoriesHeaders: Record<keyof TCategory, string> = {

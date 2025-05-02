@@ -6,6 +6,7 @@ import { CategoryBaseDto, CategoryDto } from './dto/category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryRepository } from './repositores/category.repository';
+import { ProductDto } from 'src/product/dto/product.dto';
 
 @Injectable()
 export class CategoryService {
@@ -45,6 +46,20 @@ export class CategoryService {
       categories.map((c) => new CategoryBaseDto(c)),
       total,
     );
+  }
+
+  async findLeaves(
+    id: number,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedResponseDto<ProductDto>> {
+    const { items: leaves, total } = await this.categoryRepository.findLeaves(
+      id,
+      page,
+      limit,
+    );
+
+    return new PaginatedResponseDto(leaves, total);
   }
 
   async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
