@@ -18,9 +18,45 @@ export class Product {
 
   @ManyToOne(() => Unit, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'umid' })
-  unit: Unit;
+  unit: Unit | null;
+
+  @ManyToOne(() => Product, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'parentid' })
+  parent: Product | null;
 
   @ManyToOne(() => Classifier, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'parentid' })
-  parent: Classifier;
+  @JoinColumn({ name: 'classifierid' })
+  classifier: Classifier | null;
+
+  @ManyToOne(() => Product, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'baseproductid' })
+  baseProduct: Product | null;
+
+  @Column({ name: 'versionnumber', type: 'int', default: 1 })
+  versionNumber: number;
+
+  @Column({ name: 'isactive', type: 'boolean', default: true })
+  isActive: boolean;
+
+  @Column({
+    name: 'datecreated',
+    type: 'timestamp without time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  dateCreated: Date;
+
+  @Column({
+    name: 'dateplanned',
+    type: 'timestamp without time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  datePlanned: Date;
+
+  @Column({
+    name: 'dateactual',
+    type: 'timestamp without time zone',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  dateActual?: Date | null;
 }

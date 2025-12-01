@@ -6,7 +6,7 @@ import { AppPreloader } from "@components/app-preloader";
 import { ModalProvider } from "@components/modal-provider/modal-provider";
 import { NotFound } from "@components/not-found";
 import { ToastList } from "@components/toast-list";
-import { CategoriesPage, HomePage, ProductsPage, UnitsPage } from "@pages";
+import { ClassifiersPage, HomePage, ProductsPage, UnitsPage } from "@pages";
 import { getIsInitializedSelector } from "@slices/app";
 import { useDispatch, useSelector } from "@store";
 import { initialize } from "@thunks/app";
@@ -36,7 +36,7 @@ export const App: FC = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/products" element={<ProductsPage />} />
-            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/classifiers" element={<ClassifiersPage />} />
             <Route path="/units" element={<UnitsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

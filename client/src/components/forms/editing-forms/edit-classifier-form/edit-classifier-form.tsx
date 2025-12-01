@@ -3,38 +3,38 @@ import { Input } from "@components/forms/form-elements";
 import { Checkbox } from "@components/forms/form-elements/checkbox";
 import { useForm } from "@hooks/forms/useForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import { getIsUpdatingSelector } from "@slices/categories";
+import { getIsUpdatingSelector } from "@slices/classifiers";
 import { useSelector } from "@store";
-import { updateCategoryAsync } from "@thunks/categories";
+import { updateClassifierAsync } from "@thunks/classifiers";
 import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
-import { FormProps, TUpdateCategoryForm } from "../../types";
-import { getEditingCategorySelector } from "@selectors/categories";
+import { FormProps, TUpdateClassifierForm } from "../../types";
+import { getEditingClassifierSelector } from "@selectors/classifiers";
 
-export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
-  const editingCategory = useSelector(getEditingCategorySelector);
+export const EditClassifierForm: FC<FormProps> = ({ onClose }) => {
+  const editingClassifier = useSelector(getEditingClassifierSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
-  const prefix = "category-edit";
-  const initialState: TUpdateCategoryForm = {
-    name: editingCategory?.name || "",
-    parentName: editingCategory?.parentName || "",
-    unitName: editingCategory?.unitName || "",
+  const prefix = "classifier-edit";
+  const initialState: TUpdateClassifierForm = {
+    name: editingClassifier?.name || "",
+    parentName: editingClassifier?.parentName || "",
+    unitName: editingClassifier?.unitName || "",
     needInheritInLeaves: false,
   };
   const { dispatch, formData, setFormData, onChange } =
-    useForm<TUpdateCategoryForm>(initialState, [editingCategory]);
+    useForm<TUpdateClassifierForm>(initialState, [editingClassifier]);
 
-  if (!editingCategory) return null;
+  if (!editingClassifier) return null;
 
   const handleSubmit = async () => {
     const { name, parentName, unitName, needInheritInLeaves } = formData;
 
     try {
       await dispatch(
-        updateCategoryAsync({
-          id: editingCategory.id,
+        updateClassifierAsync({
+          id: editingClassifier.id,
           name,
           parentName,
           unitName,
@@ -51,7 +51,7 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
 
   return (
     <BaseForm
-      title="Обновление категории"
+      title="Обновление классификатора"
       btnLabel={editBtnLabel}
       isProgress={isUpdating}
       onClose={onClose}
@@ -61,7 +61,7 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
         <Input
           id={`${prefix}_name`}
           name="name"
-          label="Название категории"
+          label="Название классификатора"
           value={formData.name}
           onChange={onChange("name")}
           maxLength={128}
@@ -70,7 +70,7 @@ export const EditCategoryForm: FC<FormProps> = ({ onClose }) => {
         <Input
           id={`${prefix}_parentName`}
           name="parentName"
-          label="Название родительской категории"
+          label="Название родительского классификатора"
           value={formData.parentName}
           onChange={onChange("parentName")}
           maxLength={128}

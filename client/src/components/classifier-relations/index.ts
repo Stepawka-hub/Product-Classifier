@@ -1,0 +1,1 @@
+export { ClassifierRelations } from "./classifier-relations";

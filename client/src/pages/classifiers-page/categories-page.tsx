@@ -1,15 +1,15 @@
-import { CategoryRelations } from "@components/category-relations/category-relations";
+import { ClassifierRelations } from "@components/classifier-relations";
 import { Button } from "@components/common/buttons";
 import { Loader } from "@components/common/loader";
 import {
-  AddCategoryForm as AddForm,
-  EditCategoryForm as EditForm,
+  AddClassifierForm as AddForm,
+  EditClassifierForm as EditForm,
 } from "@components/forms";
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
 import { useTableForms } from "@hooks/table/useTableForms";
 import {
-  getCategoriesSelector,
+  getClassifiersSelector,
   getIsLoadingSelector,
   getPaginationSelector,
   getRemovingIdsSelector,
@@ -18,20 +18,20 @@ import {
   setNodeCurrentPage,
   getSelectedItemIdSelector as getSelectedItemId,
   setSelectedItemId,
-} from "@slices/categories";
-import { deleteCategoryAsync, getAllCategoriesAsync } from "@thunks/categories";
-import { categoriesHeaders as headers } from "@utils/constants";
-import { TCategory } from "@utils/types";
+} from "@slices/classifiers";
+import { deleteClassifierAsync, getAllClassifiersAsync } from "@thunks/classifiers";
+import { classifiersHeaders as headers } from "@utils/constants";
+import { TClassifier } from "@utils/types";
 import { TablePage } from "../table-page";
 import { TTableActions } from "@components/types";
-import { TCategoryRealtionsTypes } from '@components/category-relations/type';
+import { TClassifierRealtionsTypes } from '@components/classifier-relations/type';
 
-export const CategoriesPage = () => {
-  const { dispatch, data, isLoading, pagination } = useTableData<TCategory>({
-    dataSelector: getCategoriesSelector,
+export const ClassifiersPage = () => {
+  const { dispatch, data, isLoading, pagination } = useTableData<TClassifier>({
+    dataSelector: getClassifiersSelector,
     getIsLoadingSelector,
     getPaginationSelector,
-    getElementsAsync: getAllCategoriesAsync,
+    getElementsAsync: getAllClassifiersAsync,
     setCurrentPage,
   });
   const { showModal, showAddForm, showEditForm } = useTableForms({
@@ -43,24 +43,24 @@ export const CategoriesPage = () => {
     setSelectedItemId,
     getSelectedItemId,
     getRemovingIdsSelector,
-    deleteElementAsync: deleteCategoryAsync,
+    deleteElementAsync: deleteClassifierAsync,
     openEditForm: showEditForm,
   });
   const isSelected = !!actions?.selection?.selectedItem;
 
-  const showNodes = (type: TCategoryRealtionsTypes) => () => {
+  const showNodes = (type: TClassifierRealtionsTypes) => () => {
     const callback = () => {
       dispatch(setNodeCurrentPage(1));
     };
-    showModal(<CategoryRelations type={type} />, callback);
+    showModal(<ClassifierRelations type={type} />, callback);
   };
 
   if (isLoading) return <Loader />;
 
   return (
-    <TablePage<TCategory>
-      title="Категории"
-      addButtonLabel="Добавить категорию"
+    <TablePage<TClassifier>
+      title="Классификаторы"
+      addButtonLabel="Добавить классификатор"
       tableConfig={{ headers, data, actions }}
       pagination={pagination}
       openAddForm={showAddForm}
@@ -68,23 +68,23 @@ export const CategoriesPage = () => {
         <>
           <Button
             title={
-              isSelected ? "Показать родительские категории" : "Выберите строку"
+              isSelected ? "Показать родительские классификаторы" : "Выберите строку"
             }
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("parents")}
           >
-            Родительские категории
+            Родительские классификаторы
           </Button>
           <Button
             title={
-              isSelected ? "Показать дочерние категории" : "Выберите строку"
+              isSelected ? "Показать дочерние классификаторы" : "Выберите строку"
             }
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("children")}
           >
-            Дочерние категории
+            Дочерние классификаторы
           </Button>
           <Button
             title={

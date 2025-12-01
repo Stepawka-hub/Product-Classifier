@@ -21,17 +21,17 @@ export const fillDataAsync = createAsyncThunk(
   FILL_DATA,
   async (_, { dispatch }) => {
     try {
-      const { products, categories, units } = await api.app.fillData();
+      const { products, classifiers, units } = await api.app.fillData();
 
       resetAllState(dispatch);
       setAllEntitiesState(dispatch, {
         products: products.items,
-        categories: categories.items,
+        classifiers: classifiers.items,
         units: units.items,
       });
       setPaginationTotals(dispatch, {
         products: products.total,
-        categories: categories.total,
+        classifiers: classifiers.total,
         units: units.total,
       });
 

@@ -1,34 +1,34 @@
 import {
-  TCategory,
-  TCategoryShort,
-  TCreateCategoryData,
+  TClassifier,
+  TClassifierShort,
+  TCreateClassifierData,
   TPaginatedData,
   TProduct,
-  TUpdateCategoryData,
+  TUpdateClassifierData,
 } from "@utils/types";
 import { BaseApi } from "./base/base.api";
 import { PaginationParams, TServerResponse } from "../types/types";
 
-export class CategoryApi extends BaseApi {
+export class ClassifierApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {
     super(baseUrl, baseEndpoint);
   }
 
-  getAll(params: PaginationParams): Promise<TPaginatedData<TCategory>> {
+  getAll(params: PaginationParams): Promise<TPaginatedData<TClassifier>> {
     return this.get(params);
   }
 
   getParents(
     id: number,
     params: PaginationParams
-  ): Promise<TPaginatedData<TCategoryShort>> {
+  ): Promise<TPaginatedData<TClassifierShort>> {
     return this.get(params, `${id}/parents`);
   }
 
   getChildren(
     id: number,
     params: PaginationParams
-  ): Promise<TPaginatedData<TCategoryShort>> {
+  ): Promise<TPaginatedData<TClassifierShort>> {
     return this.get(params, `${id}/children`);
   }
 
@@ -39,15 +39,15 @@ export class CategoryApi extends BaseApi {
     return this.get(params, `${id}/leaves`);
   }
 
-  createCategory(categoryData: TCreateCategoryData): Promise<TServerResponse> {
-    return this.post(categoryData);
+  createClassifier(classifierData: TCreateClassifierData): Promise<TServerResponse> {
+    return this.post(classifierData);
   }
 
-  updateCategory(categoryData: TUpdateCategoryData): Promise<TServerResponse> {
-    return this.update(categoryData);
+  updateClassifier(classifierData: TUpdateClassifierData): Promise<TServerResponse> {
+    return this.update(classifierData);
   }
 
-  deleteCategory(id: number): Promise<TServerResponse> {
+  deleteClassifier(id: number): Promise<TServerResponse> {
     return this.delete(id);
   }
 }

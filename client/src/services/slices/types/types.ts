@@ -1,7 +1,7 @@
 import {
   TargetId,
-  TCategory,
-  TCategoryShort,
+  TClassifier,
+  TClassifierShort,
   TPagination,
   TProduct,
   TToast,
@@ -36,12 +36,12 @@ export type TInitialProductState = TCommonInitialState &
     products: TProduct[];
   };
 
-export type TInitialCategoryState = TCommonInitialState &
+export type TInitialClassifierState = TCommonInitialState &
   TSelectingState &
   TEditingState & {
-    categories: TCategory[];
-    parents: TCategoryShort[];
-    children: TCategoryShort[];
+    classifiers: TClassifier[];
+    parents: TClassifierShort[];
+    children: TClassifierShort[];
     leaves: TProduct[];
 
     isFetchParents: boolean;

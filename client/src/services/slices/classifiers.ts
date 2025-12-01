@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TInitialCategoryState } from "./types/types";
+import { TInitialClassifierState } from "./types";
 import {
-  addCategoryAsync,
-  getAllCategoriesAsync,
-  getCategoryLeavesAsync,
-  getChildCategoriesAsync,
-  getParentCategoriesAsync,
-  updateCategoryAsync,
-} from "@thunks/categories";
+  addClassifierAsync,
+  getAllClassifiersAsync,
+  getClassifierLeavesAsync,
+  getChildClassifiersAsync,
+  getParentClassifiersAsync,
+  updateClassifierAsync,
+} from "@thunks/classifiers";
 import {
   TargetId,
-  TCategory,
-  TCategoryShort,
+  TClassifier,
+  TClassifierShort,
   TPaginatedData,
   TProduct,
 } from "@utils/types";
 import { toggleArrayItem } from "@utils/helpers/array";
 
-const initialState: TInitialCategoryState = {
-  categories: [],
+const initialState: TInitialClassifierState = {
+  classifiers: [],
   parents: [],
   children: [],
   leaves: [],
@@ -46,13 +46,13 @@ const initialState: TInitialCategoryState = {
   },
 };
 
-const categoriesSlice = createSlice({
-  name: "categories",
+const classifiersSlice = createSlice({
+  name: "classifiers",
   initialState,
   reducers: {
-    resetCategoriesState: () => initialState,
-    setCategories: (state, { payload }: PayloadAction<TCategory[]>) => {
-      state.categories = payload;
+    resetClassifiersState: () => initialState,
+    setClassifiers: (state, { payload }: PayloadAction<TClassifier[]>) => {
+      state.classifiers = payload;
     },
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
@@ -77,7 +77,7 @@ const categoriesSlice = createSlice({
     },
   },
   selectors: {
-    getCategoriesSelector: (state) => state.categories,
+    getClassifiersSelector: (state) => state.classifiers,
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
     getLeavesSelector: (state) => state.leaves,
@@ -98,91 +98,91 @@ const categoriesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllCategoriesAsync.pending, (state) => {
+      .addCase(getAllClassifiersAsync.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
-        getAllCategoriesAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedData<TCategory>>) => {
+        getAllClassifiersAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TClassifier>>) => {
           state.isLoading = false;
-          state.categories = payload.items;
+          state.classifiers = payload.items;
           state.pagination.totalCount = payload.total;
         }
       )
-      .addCase(getAllCategoriesAsync.rejected, (state) => {
+      .addCase(getAllClassifiersAsync.rejected, (state) => {
         state.isLoading = false;
       })
 
-      .addCase(addCategoryAsync.pending, (state) => {
+      .addCase(addClassifierAsync.pending, (state) => {
         state.isAdding = true;
       })
-      .addCase(addCategoryAsync.fulfilled, (state) => {
+      .addCase(addClassifierAsync.fulfilled, (state) => {
         state.isAdding = false;
       })
-      .addCase(addCategoryAsync.rejected, (state) => {
+      .addCase(addClassifierAsync.rejected, (state) => {
         state.isAdding = false;
       })
 
-      .addCase(updateCategoryAsync.pending, (state) => {
+      .addCase(updateClassifierAsync.pending, (state) => {
         state.isUpdating = true;
       })
-      .addCase(updateCategoryAsync.fulfilled, (state) => {
+      .addCase(updateClassifierAsync.fulfilled, (state) => {
         state.isUpdating = false;
       })
-      .addCase(updateCategoryAsync.rejected, (state) => {
+      .addCase(updateClassifierAsync.rejected, (state) => {
         state.isUpdating = false;
       })
 
-      .addCase(getParentCategoriesAsync.pending, (state) => {
+      .addCase(getParentClassifiersAsync.pending, (state) => {
         state.isFetchParents = true;
       })
       .addCase(
-        getParentCategoriesAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedData<TCategoryShort>>) => {
+        getParentClassifiersAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TClassifierShort>>) => {
           state.parents = payload.items;
           state.nodesPagination.totalCount = payload.total;
           state.isFetchParents = false;
         }
       )
-      .addCase(getParentCategoriesAsync.rejected, (state) => {
+      .addCase(getParentClassifiersAsync.rejected, (state) => {
         state.isFetchParents = false;
       })
 
-      .addCase(getChildCategoriesAsync.pending, (state) => {
+      .addCase(getChildClassifiersAsync.pending, (state) => {
         state.isFetchChildren = true;
       })
       .addCase(
-        getChildCategoriesAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedData<TCategoryShort>>) => {
+        getChildClassifiersAsync.fulfilled,
+        (state, { payload }: PayloadAction<TPaginatedData<TClassifierShort>>) => {
           state.children = payload.items;
           state.nodesPagination.totalCount = payload.total;
           state.isFetchChildren = false;
         }
       )
-      .addCase(getChildCategoriesAsync.rejected, (state) => {
+      .addCase(getChildClassifiersAsync.rejected, (state) => {
         state.isFetchChildren = false;
       })
 
-      .addCase(getCategoryLeavesAsync.pending, (state) => {
+      .addCase(getClassifierLeavesAsync.pending, (state) => {
         state.isFetchLeaves = true;
       })
       .addCase(
-        getCategoryLeavesAsync.fulfilled,
+        getClassifierLeavesAsync.fulfilled,
         (state, { payload }: PayloadAction<TPaginatedData<TProduct>>) => {
           state.leaves = payload.items;
           state.nodesPagination.totalCount = payload.total;
           state.isFetchLeaves = false;
         }
       )
-      .addCase(getCategoryLeavesAsync.rejected, (state) => {
+      .addCase(getClassifierLeavesAsync.rejected, (state) => {
         state.isFetchLeaves = false;
       });
   },
 });
 
-export const reducer = categoriesSlice.reducer;
+export const reducer = classifiersSlice.reducer;
 export const {
-  getCategoriesSelector,
+  getClassifiersSelector,
   getParentsSelector,
   getChildrenSelector,
   getEditingItemIdSelector,
@@ -199,14 +199,14 @@ export const {
   getRemovingIdsSelector,
   getIsFetchParentsSelector,
   getIsFetchChildrenSelector,
-} = categoriesSlice.selectors;
+} = classifiersSlice.selectors;
 export const {
-  resetCategoriesState,
-  setCategories,
+  resetClassifiersState,
+  setClassifiers,
   setCurrentPage,
   setNodeCurrentPage,
   setTotalCount,
   setRemovingIds,
   setEditingItemId,
   setSelectedItemId,
-} = categoriesSlice.actions;
+} = classifiersSlice.actions;

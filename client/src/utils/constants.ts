@@ -1,4 +1,4 @@
-import { TCategory, TCategoryShort, TProduct, TUnit } from "./types";
+import { TClassifier, TClassifierShort, TProduct, TUnit } from "./types";
 
 export const productsHeaders: Record<keyof TProduct, string> = {
   id: "ID изделия",
@@ -7,10 +7,10 @@ export const productsHeaders: Record<keyof TProduct, string> = {
   unitName: "Единица измерения",
 };
 
-export const categoriesHeaders: Record<keyof TCategory, string> = {
-  id: "ID категории",
+export const classifiersHeaders: Record<keyof TClassifier, string> = {
+  id: "ID классификатора",
   name: "Название",
-  parentName: "Родительская категория",
+  parentName: "Родительский классификатор",
   unitName: "Единица измерения",
 };
 
@@ -19,8 +19,8 @@ export const unitsHeaders: Record<keyof TUnit, string> = {
   name: "Название",
 };
 
-export const shortCategoriesHeaders: Record<keyof TCategoryShort, string> = {
-  id: "ID категории",
+export const shortClassifiersHeaders: Record<keyof TClassifierShort, string> = {
+  id: "ID классификатора",
   name: "Название",
 };
 

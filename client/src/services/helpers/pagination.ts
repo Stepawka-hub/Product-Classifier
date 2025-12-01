@@ -1,5 +1,5 @@
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { setTotalCount as setTotalCategoriesCount } from "@slices/categories";
+import { setTotalCount as setTotalClassifiersCount } from "@slices/classifiers";
 import { setTotalCount as setTotalProductsCount } from "@slices/products";
 import { setTotalCount as setTotalUnitsCount } from "@slices/units";
 import { AppThunkDispatch, TFetchEntitiesThunk } from "@thunks/types/types";
@@ -7,16 +7,16 @@ import { TargetId, TPagination } from "@utils/types";
 
 type TEntityTotal = {
   products: number;
-  categories: number;
+  classifiers: number;
   units: number;
 };
 
 export const setPaginationTotals = (
   dispatch: AppThunkDispatch,
-  { products, categories, units }: TEntityTotal
+  { products, classifiers, units }: TEntityTotal
 ) => {
   dispatch(setTotalProductsCount(products));
-  dispatch(setTotalCategoriesCount(categories));
+  dispatch(setTotalClassifiersCount(classifiers));
   dispatch(setTotalUnitsCount(units));
 };
 

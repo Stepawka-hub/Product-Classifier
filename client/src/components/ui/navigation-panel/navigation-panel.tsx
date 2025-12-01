@@ -38,6 +38,16 @@ export const NavigationPanelUI: FC<NavigationPanelProps> = ({
               - На главную
             </NavLink>
             <NavLink
+              to="/classifiers"
+              className={({ isActive }) =>
+                clsx("link", s.link, {
+                  [s.link_active]: isActive,
+                })
+              }
+            >
+              - Классификаторы
+            </NavLink>
+            <NavLink
               to="/products"
               className={({ isActive }) =>
                 clsx("link", s.link, {
@@ -46,16 +56,6 @@ export const NavigationPanelUI: FC<NavigationPanelProps> = ({
               }
             >
               - Изделия
-            </NavLink>
-            <NavLink
-              to="/categories"
-              className={({ isActive }) =>
-                clsx("link", s.link, {
-                  [s.link_active]: isActive,
-                })
-              }
-            >
-              - Категории
             </NavLink>
             <NavLink
               to="/units"

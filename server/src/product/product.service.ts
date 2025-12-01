@@ -45,7 +45,7 @@ export class ProductService {
         where: { id: parentId },
       });
       if (!classifierExists) {
-        return BaseResponseDto.Error('Указанная категория не найдена');
+        return BaseResponseDto.Error('Указанный классификатор не найден');
       }
     }
 
@@ -81,7 +81,9 @@ export class ProductService {
         where: { name: parentName },
       });
       if (!classifier) {
-        return BaseResponseDto.Error('Указанной категории не существует!');
+        return BaseResponseDto.Error(
+          'Указанного классификатора не существует!',
+        );
       }
 
       const unit = await this.unitRepository.findOne({

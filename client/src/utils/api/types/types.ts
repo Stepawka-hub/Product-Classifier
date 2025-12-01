@@ -1,4 +1,4 @@
-import { TCategory, TPaginatedData, TProduct, TUnit } from "@utils/types";
+import { TClassifier, TPaginatedData, TProduct, TUnit } from "@utils/types";
 
 export type TServerResponse = {
   resultCode: number;
@@ -6,7 +6,7 @@ export type TServerResponse = {
 };
 
 export type TAppData = {
-  categories: TPaginatedData<TCategory>;
+  classifiers: TPaginatedData<TClassifier>;
   products: TPaginatedData<TProduct>;
   units: TPaginatedData<TUnit>;
 };

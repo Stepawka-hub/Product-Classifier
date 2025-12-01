@@ -27,7 +27,7 @@ export class ClassifierRepository extends Repository<Classifier> {
       const isExist = await this.findOne({ where: { name } });
       if (isExist) {
         return BaseResponseDto.Error(
-          getErrorMessage('Данная категория уже существует!'),
+          getErrorMessage('Данный классификатор уже существует!'),
         );
       }
 
@@ -75,7 +75,7 @@ export class ClassifierRepository extends Repository<Classifier> {
     });
 
     if (!currentClassifier) {
-      return BaseResponseDto.Error('Категория не найдена');
+      return BaseResponseDto.Error('Классификатор не найден');
     }
 
     const params: any[] = [
@@ -94,7 +94,7 @@ export class ClassifierRepository extends Repository<Classifier> {
       const isExistCycle = await this.checkCycle(id, parentName);
       if (isExistCycle) {
         return BaseResponseDto.Error(
-          'Нельзя выбрать текущую категорию или её подкатегории как родительские',
+          'Нельзя выбрать текущий классификатор или её дочерний классификатор как родительский',
         );
       }
       namedParams.parentName = parentName;
@@ -117,7 +117,7 @@ export class ClassifierRepository extends Repository<Classifier> {
       return BaseResponseDto.Success();
     } catch (e) {
       return BaseResponseDto.Error(
-        `Ошибка при обновлении категории: ${getErrorMessage(e)}`,
+        `Ошибка при обновлении классификатора: ${getErrorMessage(e)}`,
       );
     }
   }
@@ -131,7 +131,7 @@ export class ClassifierRepository extends Repository<Classifier> {
       });
 
       if (!classifier || !id) {
-        return BaseResponseDto.Error('Категория не найдена!');
+        return BaseResponseDto.Error('Классификатор не найден!');
       }
 
       const [res] = (await this.query(query, [this.tableName, String(id)])) as [
@@ -139,7 +139,7 @@ export class ClassifierRepository extends Repository<Classifier> {
       ];
 
       if (!res.deleterows) {
-        return BaseResponseDto.Error('Не удалось удалить категорию!');
+        return BaseResponseDto.Error('Не удалось удалить классификатор!');
       }
 
       return BaseResponseDto.Success();

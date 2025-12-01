@@ -10,48 +10,48 @@ import {
   getNodesPaginationSelector,
   getParentsSelector,
   setNodeCurrentPage,
-} from "@slices/categories";
+} from "@slices/classifiers";
 import { useSelector } from "@store";
 import {
-  getCategoryLeavesAsync,
-  getChildCategoriesAsync,
-  getParentCategoriesAsync,
-} from "@thunks/categories";
+  getClassifierLeavesAsync,
+  getChildClassifiersAsync,
+  getParentClassifiersAsync,
+} from "@thunks/classifiers";
 import { PaginationParams } from "@utils/api/types/types";
-import { productsHeaders, shortCategoriesHeaders } from "@utils/constants";
-import { TCategoryShort, TEntity, TProduct } from "@utils/types";
+import { productsHeaders, shortClassifiersHeaders } from "@utils/constants";
+import { TClassifierShort, TEntity, TProduct } from "@utils/types";
 import { FC } from "react";
-import s from "./category-relations.module.css";
-import { TCategoryRelationsProps } from "./type";
-import { getSelectedCategorySelector } from "@selectors/categories";
+import s from "./classifier-relations.module.css";
+import { TClassifierRelationsProps } from "./type";
+import { getSelectedClassifierSelector } from "@selectors/classifiers";
 
 type RelationDataType<T extends "parents" | "children" | "leaves"> =
-  T extends "leaves" ? TProduct : TCategoryShort;
+  T extends "leaves" ? TProduct : TClassifierShort;
 
-export const CategoryRelations: FC<TCategoryRelationsProps> = ({ type }) => {
-  const selectedItem = useSelector(getSelectedCategorySelector);
+export const ClassifierRelations: FC<TClassifierRelationsProps> = ({ type }) => {
+  const selectedItem = useSelector(getSelectedClassifierSelector);
 
   const config = {
     parents: {
-      headers: shortCategoriesHeaders,
-      title: `Родительские категории - "${selectedItem?.name}"`,
+      headers: shortClassifiersHeaders,
+      title: `Родительские классификаторы - "${selectedItem?.name}"`,
       dataSelector: getParentsSelector,
       getIsLoadingSelector: getIsFetchParentsSelector,
-      getElementsAsync: getParentCategoriesAsync,
+      getElementsAsync: getParentClassifiersAsync,
     },
     children: {
-      headers: shortCategoriesHeaders,
-      title: `Дочерние категории - "${selectedItem?.name}"`,
+      headers: shortClassifiersHeaders,
+      title: `Дочерние классификаторы - "${selectedItem?.name}"`,
       dataSelector: getChildrenSelector,
       getIsLoadingSelector: getIsFetchChildrenSelector,
-      getElementsAsync: getChildCategoriesAsync,
+      getElementsAsync: getChildClassifiersAsync,
     },
     leaves: {
       headers: productsHeaders,
       title: `Изделия (Листья) - "${selectedItem?.name}"`,
       dataSelector: getLeavesSelector,
       getIsLoadingSelector: getIsFetchLeavesSelector,
-      getElementsAsync: getCategoryLeavesAsync,
+      getElementsAsync: getClassifierLeavesAsync,
     },
   };
 

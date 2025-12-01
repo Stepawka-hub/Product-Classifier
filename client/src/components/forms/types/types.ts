@@ -15,7 +15,7 @@ export interface BaseFormProps
 export type FormProps = Pick<BaseFormProps, "onClose">;
 
 // Create Data Form
-export type TCreateCategoryForm = {
+export type TCreateClassifierForm = {
   name: string;
   parentName: string;
   unitName: string;
@@ -32,7 +32,7 @@ export type TCreateUnitForm = {
 };
 
 // Update Data Form
-export type TUpdateCategoryForm = {
+export type TUpdateClassifierForm = {
   name: string;
   parentName: string;
   unitName: string;

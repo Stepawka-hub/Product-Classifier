@@ -71,7 +71,7 @@ export class ClassifierService {
       });
       if (!parentExists) {
         return BaseResponseDto.Error(
-          'Указанная родительская категория не найдена',
+          'Указанный родительский классификатор не найден',
         );
       }
     }
@@ -97,7 +97,7 @@ export class ClassifierService {
       });
       if (!parentExists) {
         return BaseResponseDto.Error(
-          'Указанная родительская категория не найдена',
+          'Указанный родительский классификатор не найден',
         );
       }
     }

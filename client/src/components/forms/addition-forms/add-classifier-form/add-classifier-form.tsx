@@ -1,30 +1,30 @@
 import { Input } from "@components/forms/form-elements";
 import { useForm } from "@hooks/forms/useForm";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import { getIsAddingSelector } from "@slices/categories";
-import { addCategoryAsync } from "@thunks/categories";
+import { getIsAddingSelector } from "@slices/classifiers";
+import { addClassifierAsync } from "@thunks/classifiers";
 import { getErrorMessage } from "@utils/helpers/error";
 import { FC } from "react";
-import { FormProps, TCreateCategoryForm } from "../../types";
+import { FormProps, TCreateClassifierForm } from "../../types";
 import { BaseForm } from "@components/forms/base-form";
 import { addBtnLabel } from "@utils/constants";
 import { useSelector } from "react-redux";
 
-export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
-  const prefix = "category-add";
-  const initialState: TCreateCategoryForm = {
+export const AddClassifierForm: FC<FormProps> = ({ onClose }) => {
+  const prefix = "classifier-add";
+  const initialState: TCreateClassifierForm = {
     name: "",
     parentName: "",
     unitName: "",
   };
   const isAdding = useSelector(getIsAddingSelector);
   const { dispatch, formData, setFormData, onChange } =
-    useForm<TCreateCategoryForm>(initialState);
+    useForm<TCreateClassifierForm>(initialState);
 
   const handleSubmit = async () => {
     try {
       await dispatch(
-        addCategoryAsync({
+        addClassifierAsync({
           name: formData.name,
           parentName: formData.parentName,
           unitName: formData.unitName,
@@ -39,7 +39,7 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
 
   return (
     <BaseForm
-      title="Добавление категории"
+      title="Добавление классификатора"
       btnLabel={addBtnLabel}
       isProgress={isAdding}
       onClose={onClose}
@@ -49,7 +49,7 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
         <Input
           id={`${prefix}_name`}
           name="name"
-          label="Название категории"
+          label="Название классификатора"
           value={formData.name}
           onChange={onChange("name")}
           maxLength={128}
@@ -58,7 +58,7 @@ export const AddCategoryForm: FC<FormProps> = ({ onClose }) => {
         <Input
           id={`${prefix}_parentName`}
           name="parentName"
-          label="Название родительской категории"
+          label="Название родительского классификатора"
           value={formData.parentName}
           onChange={onChange("parentName")}
           maxLength={128}

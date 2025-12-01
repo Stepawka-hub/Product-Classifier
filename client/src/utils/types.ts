@@ -3,17 +3,17 @@ export type TEntity = {
   id: number;
 };
 
-// Категория
-export type TCategory = TEntity & {
+// Классификатор
+export type TClassifier = TEntity & {
   name: string;
   unitName: string;
   parentName: string;
 };
 
-export type TCategoryShort = Pick<TCategory, "id" | "name">;
+export type TClassifierShort = Pick<TClassifier, "id" | "name">;
 
 // Изделие
-export type TProduct = TCategory;
+export type TProduct = TClassifier;
 
 // ЕИ
 export type TUnit = TEntity & {
@@ -46,7 +46,7 @@ export type TCreateProductData = {
   unitId: number;
 };
 
-export type TCreateCategoryData = {
+export type TCreateClassifierData = {
   name: string;
   parentName: string;
   unitName: string;
@@ -55,8 +55,8 @@ export type TCreateCategoryData = {
 // Данные, необходимые для обновления сущностей
 export type TUpdateUnitData = TUnit;
 export type TUpdateProductData = TProduct;
-export type TUpdateCategoryData = TEntity &
-  TCreateCategoryData & {
+export type TUpdateClassifierData = TEntity &
+  TCreateClassifierData & {
     needInheritInLeaves: boolean;
   };
 
