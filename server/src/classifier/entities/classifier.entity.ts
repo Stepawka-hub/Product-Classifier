@@ -7,17 +7,17 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('productclass')
-export class Category {
+@Entity('objectclassifier')
+export class Classifier {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar', length: 250, nullable: false, unique: true })
   name: string;
 
-  @ManyToOne(() => Category, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => Classifier, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'parentid' })
-  parent: Category;
+  parent: Classifier;
 
   @ManyToOne(() => Unit, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'umid' })

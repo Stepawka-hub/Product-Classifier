@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { CategoryService } from '../category/category.service';
+import { ClassifierService } from '../classifier/classifier.service';
 import { ProductService } from '../product/product.service';
 import { UnitService } from '../unit/unit.service';
 import { IAppData } from './dto/app-data.dto';
@@ -10,7 +10,7 @@ export class AppService {
   constructor(
     private dataSource: DataSource,
     private productService: ProductService,
-    private categoryService: CategoryService,
+    private classifierService: ClassifierService,
     private unitService: UnitService,
   ) {}
 
@@ -18,13 +18,13 @@ export class AppService {
     // Вызываем процедуру заполнения данных
     await this.seedDatabase();
 
-    const [products, categories, units] = await Promise.all([
+    const [products, classifiers, units] = await Promise.all([
       this.productService.findAllWithPagination(),
-      this.categoryService.findAllWithPagination(),
+      this.classifierService.findAllWithPagination(),
       this.unitService.findAllWithPagination(),
     ]);
 
-    return { products, categories, units };
+    return { products, classifiers, units };
   }
 
   async clearData() {

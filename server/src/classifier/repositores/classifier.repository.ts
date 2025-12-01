@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
+import { CreateClassifierDto } from 'src/classifier/dto/create-classifier.dto';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { ProductDto } from 'src/product/dto/product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 import { DataSource, Repository } from 'typeorm';
-import { UpdateCategoryDto } from '../dto/update-category.dto';
-import { Category } from '../entities/category.entity';
+import { UpdateClassifierDto } from '../dto/update-classifier.dto';
+import { Classifier } from '../entities/classifier.entity';
 import { TerminalProduct } from 'src/product/types/types';
 
 @Injectable()
-export class CategoryRepository extends Repository<Category> {
+export class ClassifierRepository extends Repository<Classifier> {
   private tableName: string;
 
   constructor(@InjectDataSource() dataSource: DataSource) {
-    super(Category, dataSource.createEntityManager());
+    super(Classifier, dataSource.createEntityManager());
     this.tableName = 'productclass';
   }
 
-  async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
+  async createClassifier(dto: CreateClassifierDto): Promise<BaseResponseDto> {
     const { name, parentName, unitName } = dto;
 
     try {
@@ -66,22 +66,22 @@ export class CategoryRepository extends Repository<Category> {
     }
   }
 
-  async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+  async updateClassifier(dto: UpdateClassifierDto): Promise<BaseResponseDto> {
     const { id, name, parentName, unitName, needInheritInLeaves } = dto;
 
-    const currentCategory = await this.findOne({
+    const currentClassifier = await this.findOne({
       where: { id },
       select: ['name'],
     });
 
-    if (!currentCategory) {
+    if (!currentClassifier) {
       return BaseResponseDto.Error('Категория не найдена');
     }
 
     const params: any[] = [
       'product',
       this.tableName,
-      currentCategory.name,
+      currentClassifier.name,
       name,
     ];
 
@@ -122,15 +122,15 @@ export class CategoryRepository extends Repository<Category> {
     }
   }
 
-  async deleteCategory(id: number): Promise<BaseResponseDto> {
+  async deleteClassifier(id: number): Promise<BaseResponseDto> {
     const query = `SELECT DeleteRows($1, 'id', $2)`;
 
     try {
-      const category = await this.findOne({
+      const classifier = await this.findOne({
         where: { id },
       });
 
-      if (!category || !id) {
+      if (!classifier || !id) {
         return BaseResponseDto.Error('Категория не найдена!');
       }
 
@@ -153,14 +153,14 @@ export class CategoryRepository extends Repository<Category> {
     page: number,
     limit: number,
     direction: boolean = false,
-  ): Promise<PaginatedResponseDto<Category>> {
+  ): Promise<PaginatedResponseDto<Classifier>> {
     const query = "SELECT * FROM GetTree($1, 'id', $2, $3)";
 
     const res = (await this.query(query, [
       this.tableName,
       String(id),
       direction,
-    ])) as Category[];
+    ])) as Classifier[];
 
     const filteredData = res.filter((e) => String(e.id) !== String(id));
     const total = filteredData.length;

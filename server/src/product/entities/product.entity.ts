@@ -1,4 +1,4 @@
-import { Category } from 'src/category/entities/category.entity';
+import { Classifier } from 'src/classifier/entities/classifier.entity';
 import { Unit } from 'src/unit/entities/unit.entity';
 import {
   Column,
@@ -20,7 +20,7 @@ export class Product {
   @JoinColumn({ name: 'umid' })
   unit: Unit;
 
-  @ManyToOne(() => Category, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => Classifier, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'parentid' })
-  parent: Category;
+  parent: Classifier;
 }

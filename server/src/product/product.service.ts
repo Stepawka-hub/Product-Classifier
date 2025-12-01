@@ -6,7 +6,7 @@ import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
-import { CategoryRepository } from 'src/category/repositores/category.repository';
+import { ClassifierRepository } from 'src/classifier/repositores/classifier.repository';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
 import { Not } from 'typeorm';
 
@@ -14,7 +14,7 @@ import { Not } from 'typeorm';
 export class ProductService {
   constructor(
     private productRepository: ProductRepository,
-    private categoryRepository: CategoryRepository,
+    private classifierRepository: ClassifierRepository,
     private unitRepository: UnitRepository,
   ) {}
 
@@ -41,10 +41,10 @@ export class ProductService {
     const { parentId, unitId } = dto;
 
     if (parentId) {
-      const categoryExists = await this.categoryRepository.findOne({
+      const classifierExists = await this.classifierRepository.findOne({
         where: { id: parentId },
       });
-      if (!categoryExists) {
+      if (!classifierExists) {
         return BaseResponseDto.Error('Указанная категория не найдена');
       }
     }
@@ -77,10 +77,10 @@ export class ProductService {
         );
       }
 
-      const category = await this.categoryRepository.findOne({
+      const classifier = await this.classifierRepository.findOne({
         where: { name: parentName },
       });
-      if (!category) {
+      if (!classifier) {
         return BaseResponseDto.Error('Указанной категории не существует!');
       }
 
@@ -93,7 +93,7 @@ export class ProductService {
 
       const updateResult = await this.productRepository.update(
         { id },
-        { name, parent: category, unit },
+        { name, parent: classifier, unit },
       );
 
       if (updateResult.affected === 0) {

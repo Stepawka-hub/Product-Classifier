@@ -2,25 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
-import { CategoryBaseDto, CategoryDto } from './dto/category.dto';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { CategoryRepository } from './repositores/category.repository';
+import { ClassifierBaseDto, ClassifierDto } from './dto/classifier.dto';
+import { CreateClassifierDto } from './dto/create-classifier.dto';
+import { UpdateClassifierDto } from './dto/update-classifier.dto';
+import { ClassifierRepository } from './repositores/classifier.repository';
 import { ProductDto } from 'src/product/dto/product.dto';
 
 @Injectable()
-export class CategoryService {
+export class ClassifierService {
   constructor(
-    private categoryRepository: CategoryRepository,
+    private classifierRepository: ClassifierRepository,
     private unitRepository: UnitRepository,
   ) {}
 
   async findAllWithPagination(
     page: number = 1,
     limit: number = 10,
-  ): Promise<PaginatedResponseDto<CategoryDto>> {
+  ): Promise<PaginatedResponseDto<ClassifierDto>> {
     const skip = (page - 1) * limit;
-    const [categories, total] = await this.categoryRepository.findAndCount({
+    const [classifiers, total] = await this.classifierRepository.findAndCount({
       relations: ['unit', 'parent'],
       skip,
       take: limit,
@@ -28,7 +28,7 @@ export class CategoryService {
     });
 
     return new PaginatedResponseDto(
-      categories.map((c) => new CategoryDto(c)),
+      classifiers.map((c) => new ClassifierDto(c)),
       total,
     );
   }
@@ -38,12 +38,12 @@ export class CategoryService {
     page: number = 1,
     limit: number = 10,
     direction: boolean = false,
-  ): Promise<PaginatedResponseDto<CategoryBaseDto>> {
-    const { items: categories, total } =
-      await this.categoryRepository.findNodes(id, page, limit, direction);
+  ): Promise<PaginatedResponseDto<ClassifierBaseDto>> {
+    const { items: classifiers, total } =
+      await this.classifierRepository.findNodes(id, page, limit, direction);
 
     return new PaginatedResponseDto(
-      categories.map((c) => new CategoryBaseDto(c)),
+      classifiers.map((c) => new ClassifierBaseDto(c)),
       total,
     );
   }
@@ -53,7 +53,7 @@ export class CategoryService {
     page: number = 1,
     limit: number = 10,
   ): Promise<PaginatedResponseDto<ProductDto>> {
-    const { items: leaves, total } = await this.categoryRepository.findLeaves(
+    const { items: leaves, total } = await this.classifierRepository.findLeaves(
       id,
       page,
       limit,
@@ -62,11 +62,11 @@ export class CategoryService {
     return new PaginatedResponseDto(leaves, total);
   }
 
-  async createCategory(dto: CreateCategoryDto): Promise<BaseResponseDto> {
+  async createClassifier(dto: CreateClassifierDto): Promise<BaseResponseDto> {
     const { parentName, unitName } = dto;
 
     if (parentName) {
-      const parentExists = await this.categoryRepository.findOne({
+      const parentExists = await this.classifierRepository.findOne({
         where: { name: parentName },
       });
       if (!parentExists) {
@@ -85,14 +85,14 @@ export class CategoryService {
       }
     }
 
-    return await this.categoryRepository.createCategory(dto);
+    return await this.classifierRepository.createClassifier(dto);
   }
 
-  async updateCategory(dto: UpdateCategoryDto): Promise<BaseResponseDto> {
+  async updateClassifier(dto: UpdateClassifierDto): Promise<BaseResponseDto> {
     const { parentName, unitName } = dto;
 
     if (parentName) {
-      const parentExists = await this.categoryRepository.findOne({
+      const parentExists = await this.classifierRepository.findOne({
         where: { name: parentName },
       });
       if (!parentExists) {
@@ -111,10 +111,10 @@ export class CategoryService {
       }
     }
 
-    return await this.categoryRepository.updateCategory(dto);
+    return await this.classifierRepository.updateClassifier(dto);
   }
 
-  async deleteCategory(id: number): Promise<BaseResponseDto> {
-    return await this.categoryRepository.deleteCategory(id);
+  async deleteClassifier(id: number): Promise<BaseResponseDto> {
+    return await this.classifierRepository.deleteClassifier(id);
   }
 }

@@ -1,4 +1,4 @@
-export class CreateCategoryDto {
+export class CreateClassifierDto {
   name: string;
   unitName: string;
   parentName: string;
