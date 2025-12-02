@@ -25,14 +25,23 @@ export class ProductService {
     const skip = (page - 1) * limit;
 
     const [products, total] = await this.productRepository.findAndCount({
-      relations: ['unit', 'parent'],
+      relations: ['unit', 'parent', 'classifier', 'baseProduct'],
       skip,
       take: limit,
       order: { id: 'ASC' },
     });
 
     return new PaginatedResponseDto(
-      products.map((p) => new ProductDto(p)),
+      products.map((p) => ({
+        ...p,
+        unitName: p.unit?.name || null,
+        parentName: p.parent?.name || null,
+        baseProductName: p.baseProduct?.name || null,
+        classifierName: p.classifier?.name || null,
+        dateCreated: p.dateCreated.toISOString(),
+        datePlanned: p.datePlanned.toISOString(),
+        dateActual: p.dateActual?.toISOString() || null,
+      })),
       total,
     );
   }

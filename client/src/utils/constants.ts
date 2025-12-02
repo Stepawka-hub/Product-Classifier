@@ -5,6 +5,13 @@ export const productsHeaders: Record<keyof TProduct, string> = {
   name: "Название",
   parentName: "Категория",
   unitName: "Единица измерения",
+  classifierName: "Классификатор",
+  baseProductName: "Базовое изделие",
+  versionNumber: "Версия",
+  isActive: "Активно",
+  dateCreated: "Дата создания",
+  datePlanned: "Дата планирования",
+  dateActual: "Дата актуальности"
 };
 
 export const classifiersHeaders: Record<keyof TClassifier, string> = {

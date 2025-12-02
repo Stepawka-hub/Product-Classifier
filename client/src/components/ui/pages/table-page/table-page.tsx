@@ -13,23 +13,21 @@ export const TablePageUI = <T extends TEntity>({
   openAddForm,
   additionalActions,
 }: TablePageUIProps<T>) => (
-  <>
-    <BasePage title={title}>
-      <div className={s.content}>
-        {tableConfig.data.length ? (
-          <Table<T> pagination={pagination} {...tableConfig} />
-        ) : (
-          <span className={s.noData}>Данных не найдено!</span>
-        )}
-        <div className={s.actions}>
-          <Button
-            variant="plus"
-            children={addButtonLabel}
-            onClick={openAddForm}
-          />
-          {additionalActions}
-        </div>
+  <BasePage title={title}>
+    <div className={s.content}>
+      {tableConfig.data.length ? (
+        <Table<T> pagination={pagination} {...tableConfig} />
+      ) : (
+        <span className={s.noData}>Данных не найдено!</span>
+      )}
+      <div className={s.actions}>
+        <Button
+          variant="plus"
+          children={addButtonLabel}
+          onClick={openAddForm}
+        />
+        {additionalActions}
       </div>
-    </BasePage>
-  </>
+    </div>
+  </BasePage>
 );

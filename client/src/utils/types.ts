@@ -13,7 +13,18 @@ export type TClassifier = TEntity & {
 export type TClassifierShort = Pick<TClassifier, "id" | "name">;
 
 // Изделие
-export type TProduct = TClassifier;
+export type TProduct = TEntity & {
+  name: string;
+  unitName: string | null;
+  parentName: string | null;
+  classifierName: string | null;
+  baseProductName: string | null;
+  versionNumber: number;
+  isActive: boolean;
+  dateCreated: string;
+  datePlanned: string;
+  dateActual: string | null;
+}
 
 // ЕИ
 export type TUnit = TEntity & {

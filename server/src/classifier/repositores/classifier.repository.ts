@@ -3,13 +3,13 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { CreateClassifierDto } from 'src/classifier/dto/create-classifier.dto';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
-import { ProductDto } from 'src/product/dto/product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { addNamedParametersToQuery } from 'src/utils/sql.utils';
 import { DataSource, Repository } from 'typeorm';
 import { UpdateClassifierDto } from '../dto/update-classifier.dto';
 import { Classifier } from '../entities/classifier.entity';
 import { TerminalProduct } from 'src/product/types/types';
+import { ClassifierDto } from '../dto/classifier.dto';
 
 @Injectable()
 export class ClassifierRepository extends Repository<Classifier> {
@@ -178,8 +178,8 @@ export class ClassifierRepository extends Repository<Classifier> {
     id: number,
     page: number,
     limit: number,
-  ): Promise<PaginatedResponseDto<ProductDto>> {
-    const query = "SELECT * FROM GetLeaves('product', $1, 'id', $2)";
+  ): Promise<PaginatedResponseDto<ClassifierDto>> {
+    const query = "SELECT * FROM GetLeaves('objectclassifier', $1, 'id', $2)";
 
     const res = (await this.query(query, [
       this.tableName,

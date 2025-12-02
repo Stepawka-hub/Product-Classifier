@@ -68,23 +68,23 @@ export const ClassifiersPage = () => {
         <>
           <Button
             title={
-              isSelected ? "Показать родительские классификаторы" : "Выберите строку"
+              isSelected ? "Показать родительские узлы" : "Выберите строку"
             }
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("parents")}
           >
-            Родительские классификаторы
+            Родительские узлы
           </Button>
           <Button
             title={
-              isSelected ? "Показать дочерние классификаторы" : "Выберите строку"
+              isSelected ? "Показать дочерние узлы" : "Выберите строку"
             }
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("children")}
           >
-            Дочерние классификаторы
+            Дочерние узлы
           </Button>
           <Button
             title={

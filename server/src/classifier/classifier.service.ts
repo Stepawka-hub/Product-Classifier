@@ -6,7 +6,6 @@ import { ClassifierBaseDto, ClassifierDto } from './dto/classifier.dto';
 import { CreateClassifierDto } from './dto/create-classifier.dto';
 import { UpdateClassifierDto } from './dto/update-classifier.dto';
 import { ClassifierRepository } from './repositores/classifier.repository';
-import { ProductDto } from 'src/product/dto/product.dto';
 
 @Injectable()
 export class ClassifierService {
@@ -52,7 +51,7 @@ export class ClassifierService {
     id: number,
     page: number = 1,
     limit: number = 10,
-  ): Promise<PaginatedResponseDto<ProductDto>> {
+  ): Promise<PaginatedResponseDto<ClassifierDto>> {
     const { items: leaves, total } = await this.classifierRepository.findLeaves(
       id,
       page,
