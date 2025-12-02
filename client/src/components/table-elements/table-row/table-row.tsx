@@ -1,18 +1,15 @@
-import { Button } from "@components/common/buttons";
 import { TableCell } from "@components/table-elements";
 import { TEntity } from "@utils/types";
 import { TableRowProps } from "./type";
 import clsx from "clsx";
 import s from "@ui/table/table.module.css";
-import { MouseEventHandler } from "react";
 
 export const TableRow = <T extends TEntity>({
   rowData,
   headers,
-  isRemoving = false,
   actions,
 }: TableRowProps<T>) => {
-  const { onEdit, selection, deletion } = actions || {};
+  const { selection } = actions || {};
   const { onSelect, selectedItem } = selection || {};
   const isSelected = selectedItem === rowData.id;
 
@@ -30,16 +27,6 @@ export const TableRow = <T extends TEntity>({
     selection?.onSelect(data);
   };
 
-  const handleEdit: MouseEventHandler = (e) => {
-    e.stopPropagation();
-    onEdit?.(rowData.id);
-  };
-
-  const handleDelete: MouseEventHandler = (e) => {
-    e.stopPropagation();
-    deletion?.onDelete(rowData.id);
-  };
-
   return (
     <tr
       className={clsx(s.trow, {
@@ -49,29 +36,6 @@ export const TableRow = <T extends TEntity>({
       onClick={handleSelect}
     >
       {cellElements}
-
-      {actions && (
-        <td className={s.actions}>
-          {onEdit && (
-            <Button
-              title="Редактировать"
-              variant="edit"
-              size="small"
-              onClick={handleEdit}
-            />
-          )}
-
-          {deletion && (
-            <Button
-              title="Удалить"
-              variant="cross"
-              size="small"
-              disabled={isRemoving}
-              onClick={handleDelete}
-            />
-          )}
-        </td>
-      )}
     </tr>
   );
 };

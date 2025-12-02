@@ -7,6 +7,7 @@ import {
   getChildClassifiersAsync,
   getParentClassifiersAsync,
   updateClassifierAsync,
+  deleteClassifierAsync,
 } from "@thunks/classifiers";
 import {
   TargetId,
@@ -15,20 +16,18 @@ import {
   TPaginatedData,
   TProduct,
 } from "@utils/types";
-import { toggleArrayItem } from "@utils/helpers/array";
 
 const initialState: TInitialClassifierState = {
   classifiers: [],
   parents: [],
   children: [],
   leaves: [],
-  editingItemId: null,
   selectedItemId: null,
 
   isLoading: false,
   isAdding: false,
   isUpdating: false,
-  removingIds: [],
+  isRemoving: false,
 
   isFetchParents: false,
   isFetchChildren: false,
@@ -63,15 +62,6 @@ const classifiersSlice = createSlice({
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
-      state.removingIds = toggleArrayItem(state.removingIds, payload);
-    },
-    setIsUpdating: (state, { payload }: PayloadAction<boolean>) => {
-      state.isUpdating = payload;
-    },
-    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
-      state.editingItemId = payload;
-    },
     setSelectedItemId: (state, { payload }: PayloadAction<TargetId>) => {
       state.selectedItemId = payload;
     },
@@ -81,7 +71,6 @@ const classifiersSlice = createSlice({
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
     getLeavesSelector: (state) => state.leaves,
-    getEditingItemIdSelector: (state) => state.editingItemId,
     getSelectedItemIdSelector: (state) => state.selectedItemId,
 
     getPaginationSelector: (state) => state.pagination,
@@ -90,7 +79,7 @@ const classifiersSlice = createSlice({
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
     getIsUpdatingSelector: (state) => state.isUpdating,
-    getRemovingIdsSelector: (state) => state.removingIds,
+    getIsRemovingSelector: (state) => state.isRemoving,
 
     getIsFetchParentsSelector: (state) => state.isFetchParents,
     getIsFetchChildrenSelector: (state) => state.isFetchChildren,
@@ -133,12 +122,25 @@ const classifiersSlice = createSlice({
         state.isUpdating = false;
       })
 
+      .addCase(deleteClassifierAsync.pending, (state) => {
+        state.isRemoving = true;
+      })
+      .addCase(deleteClassifierAsync.fulfilled, (state) => {
+        state.isRemoving = false;
+      })
+      .addCase(deleteClassifierAsync.rejected, (state) => {
+        state.isRemoving = false;
+      })
+
       .addCase(getParentClassifiersAsync.pending, (state) => {
         state.isFetchParents = true;
       })
       .addCase(
         getParentClassifiersAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedData<TClassifierShort>>) => {
+        (
+          state,
+          { payload }: PayloadAction<TPaginatedData<TClassifierShort>>
+        ) => {
           state.parents = payload.items;
           state.nodesPagination.totalCount = payload.total;
           state.isFetchParents = false;
@@ -153,7 +155,10 @@ const classifiersSlice = createSlice({
       })
       .addCase(
         getChildClassifiersAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedData<TClassifierShort>>) => {
+        (
+          state,
+          { payload }: PayloadAction<TPaginatedData<TClassifierShort>>
+        ) => {
           state.children = payload.items;
           state.nodesPagination.totalCount = payload.total;
           state.isFetchChildren = false;
@@ -185,7 +190,6 @@ export const {
   getClassifiersSelector,
   getParentsSelector,
   getChildrenSelector,
-  getEditingItemIdSelector,
   getSelectedItemIdSelector,
   getLeavesSelector,
 
@@ -196,7 +200,7 @@ export const {
   getIsLoadingSelector,
   getIsAddingSelector,
   getIsUpdatingSelector,
-  getRemovingIdsSelector,
+  getIsRemovingSelector,
   getIsFetchParentsSelector,
   getIsFetchChildrenSelector,
 } = classifiersSlice.selectors;
@@ -206,7 +210,5 @@ export const {
   setCurrentPage,
   setNodeCurrentPage,
   setTotalCount,
-  setRemovingIds,
-  setEditingItemId,
   setSelectedItemId,
 } = classifiersSlice.actions;

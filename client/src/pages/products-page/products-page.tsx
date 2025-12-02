@@ -17,8 +17,7 @@ import {
 import { deleteProductAsync, getAllProductsAsync } from "@thunks/products";
 import { productsHeaders as headers } from "@utils/constants";
 import { TProduct } from "@utils/types";
-import { TablePage } from "../table-page";
-import { TTableActions } from "@components/types";
+import { TablePage } from "@ui/pages";
 
 export const ProductsPage = () => {
   const { data, isLoading, pagination } = useTableData<TProduct>({
@@ -29,7 +28,7 @@ export const ProductsPage = () => {
     setCurrentPage,
   });
   const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
-  const actions: TTableActions = useTableActions({
+  const actions = useTableActions({
     setEditingItemId,
     getRemovingIdsSelector,
     deleteElementAsync: deleteProductAsync,
@@ -41,9 +40,7 @@ export const ProductsPage = () => {
   return (
     <TablePage<TProduct>
       title="Изделия"
-      addButtonLabel="Добавить изделие"
       tableConfig={{ headers, data, actions }}
-      openAddForm={showAddForm}
       pagination={pagination}
     />
   );

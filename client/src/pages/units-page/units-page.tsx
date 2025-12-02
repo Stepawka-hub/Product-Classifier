@@ -3,7 +3,6 @@ import {
   AddUnitForm as AddForm,
   EditUnitForm as EditForm,
 } from "@components/forms";
-import { TTableActions } from "@components/types";
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
 import { useTableForms } from "@hooks/table/useTableForms";
@@ -18,7 +17,7 @@ import {
 import { deleteUnitAsync, getAllUnitsAsync } from "@thunks/units";
 import { unitsHeaders as headers } from "@utils/constants";
 import { TUnit } from "@utils/types";
-import { TablePage } from "../table-page";
+import { TablePage } from "@ui/pages";
 
 export const UnitsPage = () => {
   const { data, isLoading, pagination } = useTableData<TUnit>({
@@ -29,7 +28,7 @@ export const UnitsPage = () => {
     setCurrentPage,
   });
   const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
-  const actions: TTableActions = useTableActions({
+  const actions = useTableActions({
     setEditingItemId,
     getRemovingIdsSelector,
     deleteElementAsync: deleteUnitAsync,
@@ -41,9 +40,7 @@ export const UnitsPage = () => {
   return (
     <TablePage<TUnit>
       title="Единицы измерения"
-      addButtonLabel="Добавить ЕИ"
-      tableConfig={{ headers, data, actions }}
-      openAddForm={showAddForm}
+      tableConfig={{ headers, data, actions: {} }}
       pagination={pagination}
     />
   );

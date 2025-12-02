@@ -1,10 +1,10 @@
 import { createSelector } from "@reduxjs/toolkit";
 import {
-  getEditingItemIdSelector,
   getProductsSelector,
+  getSelectedItemIdSelector,
 } from "@slices/products";
 
-export const getEditingProductSelector = createSelector(
-  [getProductsSelector, getEditingItemIdSelector],
-  (products, editingItemId) => products.find((p) => p.id === editingItemId)
+export const getSelectedProductSelector = createSelector(
+  [getProductsSelector, getSelectedItemIdSelector],
+  (products, selectedItemId) => products.find((p) => p.id === selectedItemId)
 );

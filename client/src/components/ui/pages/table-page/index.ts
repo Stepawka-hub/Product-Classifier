@@ -1,1 +1,1 @@
-export { TablePageUI } from './table-page';
+export { TablePage } from './table-page';

@@ -1,19 +1,15 @@
 import { Pagination } from "@components/pagination/pagination";
-import s from "./table.module.css";
-import { TableUIProps } from "./type";
+import { TableProps } from "./type";
 import { TableHeader, TableRow } from "@components/table-elements";
 import { TEntity } from "@utils/types";
-import { checkInProgress } from "@utils/helpers/array";
+import s from "./table.module.css";
 
-export const TableUI = <T extends TEntity>({
+export const Table = <T extends TEntity>({
   headers,
   data,
   pagination,
   actions,
-}: TableUIProps<T>) => {
-  const { deletion } = actions || {};
-  const { removingIds } = deletion || {};
-
+}: TableProps<T>) => {
   return (
     <div className={s.container}>
       <div className={s.wrapper}>
@@ -24,15 +20,7 @@ export const TableUI = <T extends TEntity>({
           />
           <tbody className={s.tbody}>
             {data.map((rowData) => (
-              <TableRow
-                key={rowData.id}
-                headers={headers}
-                rowData={rowData}
-                isRemoving={
-                  removingIds ? checkInProgress(removingIds, rowData.id) : false
-                }
-                actions={actions}
-              />
+              <TableRow key={rowData.id} headers={headers} rowData={rowData} />
             ))}
           </tbody>
         </table>

@@ -15,46 +15,38 @@ export type TInitialAppState = {
   isClearingData: boolean;
 };
 
-export type TCommonInitialState = {
+export type TActionsInitialState = {
   isLoading: boolean;
   isAdding: boolean;
-  removingIds: (string | number)[];
+  isRemoving: boolean;
+  isUpdating: boolean;
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 
-export type TEditingState = {
-  editingItemId: TargetId;
-  isUpdating: boolean;
-};
-
-export type TSelectingState = {
+export type TInitialProductState = TActionsInitialState & {
+  products: TProduct[];
   selectedItemId: TargetId;
 };
 
-export type TInitialProductState = TCommonInitialState &
-  TEditingState & {
-    products: TProduct[];
-  };
+export type TInitialClassifierState = TActionsInitialState & {
+  classifiers: TClassifier[];
+  selectedItemId: TargetId;
 
-export type TInitialClassifierState = TCommonInitialState &
-  TSelectingState &
-  TEditingState & {
-    classifiers: TClassifier[];
-    parents: TClassifierShort[];
-    children: TClassifierShort[];
-    leaves: TProduct[];
+  parents: TClassifierShort[];
+  children: TClassifierShort[];
+  leaves: TProduct[];
 
-    isFetchParents: boolean;
-    isFetchChildren: boolean;
-    isFetchLeaves: boolean;
+  isFetchParents: boolean;
+  isFetchChildren: boolean;
+  isFetchLeaves: boolean;
 
-    nodesPagination: Omit<TPagination, "setCurrentPage">;
-  };
+  nodesPagination: Omit<TPagination, "setCurrentPage">;
+};
 
-export type TInitialUnitState = TCommonInitialState &
-  TEditingState & {
-    units: TUnit[];
-  };
+export type TInitialUnitState = TActionsInitialState & {
+  units: TUnit[];
+  selectedItemId: TargetId;
+};
 
 export type TInitialModalState = {
   isOpen: boolean;

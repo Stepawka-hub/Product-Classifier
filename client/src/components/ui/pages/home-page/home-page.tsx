@@ -1,6 +1,6 @@
 import { FC } from "react";
+import { BasePage } from '@ui/pages';
 import s from "./home-page.module.css";
-import { BasePage } from "@pages";
 
 export const HomePageUI: FC = () => (
   <BasePage>

@@ -24,7 +24,6 @@ export const refreshTable = <T>(
   dispatch: AppThunkDispatch,
   getAllEntities: TFetchEntitiesThunk<T>,
   pagination: Pick<TPagination, "currentPage" | "pageSize">,
-  setEditingItemId?: ActionCreatorWithPayload<TargetId, string>,
   setSelectedItemId?: ActionCreatorWithPayload<TargetId, string>
 ) => {
   const { currentPage, pageSize } = pagination;
@@ -34,10 +33,6 @@ export const refreshTable = <T>(
       limit: pageSize,
     })
   );
-
-  if (setEditingItemId) {
-    dispatch(setEditingItemId(null));
-  }
 
   if (setSelectedItemId) {
     dispatch(setSelectedItemId(null));

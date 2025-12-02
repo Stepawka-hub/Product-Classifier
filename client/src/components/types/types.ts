@@ -4,8 +4,8 @@ import { ReactNode } from "react";
 export type TEntityPageUI<T> = {
   tableConfig: TTableConfig<T>;
   pagination: TPagination;
-  additionalActions?: ReactNode;
-  openAddForm: () => void;
+  headerActions?: ReactNode;
+  footerActions?: ReactNode;
 };
 
 export type TTableConfig<T> = {
@@ -15,13 +15,8 @@ export type TTableConfig<T> = {
 };
 
 export type TTableActions = {
-  deletion?: {
-    removingIds: (string | number)[];
-    onDelete: (id: number) => void;
-  };
   selection?: {
     selectedItem: TargetId;
     onSelect: (item: TargetId) => void;
   };
-  onEdit?: (itemId: number) => void;
 };

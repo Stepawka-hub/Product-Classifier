@@ -13,11 +13,7 @@ import {
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { refreshTable } from "../helpers/pagination";
 import { RootState } from "@store";
-import {
-  setEditingItemId,
-  setRemovingIds,
-  setSelectedItemId,
-} from "@slices/classifiers";
+import { setSelectedItemId } from "@slices/classifiers";
 import { AppThunkDispatch } from "./types/types";
 
 const GET_CLASSIFIERS = "classifiers/get";
@@ -33,7 +29,6 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     dispatch,
     getAllClassifiersAsync,
     state.classifiers.pagination,
-    setEditingItemId,
     setSelectedItemId
   );
 };
@@ -85,25 +80,24 @@ export const addClassifierAsync = createAsyncThunk<void, TCreateClassifierData>(
   }
 );
 
-export const updateClassifierAsync = createAsyncThunk<void, TUpdateClassifierData>(
-  UPDATE_CLASSIFIER,
-  async (updateClassifierData, { dispatch, getState }) => {
-    const res = await api.classifiers.updateClassifier(updateClassifierData);
+export const updateClassifierAsync = createAsyncThunk<
+  void,
+  TUpdateClassifierData
+>(UPDATE_CLASSIFIER, async (updateClassifierData, { dispatch, getState }) => {
+  const res = await api.classifiers.updateClassifier(updateClassifierData);
 
-    if (res.resultCode === SUCCESS_CODE) {
-      const state = getState() as RootState;
-      refresh(dispatch, state);
-      dispatchSuccessToast(dispatch, "Классификатор успешно обновлен!");
-    } else {
-      return Promise.reject(res.message);
-    }
+  if (res.resultCode === SUCCESS_CODE) {
+    const state = getState() as RootState;
+    refresh(dispatch, state);
+    dispatchSuccessToast(dispatch, "Классификатор успешно обновлен!");
+  } else {
+    return Promise.reject(res.message);
   }
-);
+});
 
 export const deleteClassifierAsync = createAsyncThunk<void, number>(
   DELETE_CLASSIFIER,
   async (id, { dispatch, getState }) => {
-    dispatch(setRemovingIds(id));
     const res = await api.classifiers.deleteClassifier(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -113,7 +107,5 @@ export const deleteClassifierAsync = createAsyncThunk<void, number>(
     } else {
       dispatchErrorToast(dispatch, res.message);
     }
-
-    dispatch(setRemovingIds(id));
   }
 );

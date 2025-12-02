@@ -19,12 +19,42 @@ import {
   getSelectedItemIdSelector as getSelectedItemId,
   setSelectedItemId,
 } from "@slices/classifiers";
-import { deleteClassifierAsync, getAllClassifiersAsync } from "@thunks/classifiers";
+import {
+  deleteClassifierAsync,
+  getAllClassifiersAsync,
+} from "@thunks/classifiers";
 import { classifiersHeaders as headers } from "@utils/constants";
 import { TClassifier } from "@utils/types";
-import { TablePage } from "../table-page";
-import { TTableActions } from "@components/types";
-import { TClassifierRealtionsTypes } from '@components/classifier-relations/type';
+import { TablePage } from "@ui/pages";
+import { TClassifierRealtionsTypes } from "@components/classifier-relations/type";
+
+// {onEdit && (
+//   <Button
+//     title="Редактировать"
+//     variant="edit"
+//     size="small"
+//     onClick={handleEdit}
+//   />
+// )}
+
+// {deletion && (
+//   <Button
+//     title="Удалить"
+//     variant="cross"
+//     size="small"
+//     disabled={isRemoving}
+//     onClick={handleDelete}
+//   />
+// )}
+
+// <div className={s.actions}>
+//   <Button
+//     variant="plus"
+//     children={addButtonLabel}
+//     onClick={openAddForm}
+//   />
+//   {additionalActions}
+// </div>
 
 export const ClassifiersPage = () => {
   const { dispatch, data, isLoading, pagination } = useTableData<TClassifier>({
@@ -38,7 +68,7 @@ export const ClassifiersPage = () => {
     AddForm,
     EditForm,
   });
-  const actions: TTableActions = useTableActions({
+  const actions = useTableActions({
     setEditingItemId,
     setSelectedItemId,
     getSelectedItemId,
@@ -60,11 +90,9 @@ export const ClassifiersPage = () => {
   return (
     <TablePage<TClassifier>
       title="Классификаторы"
-      addButtonLabel="Добавить классификатор"
       tableConfig={{ headers, data, actions }}
       pagination={pagination}
-      openAddForm={showAddForm}
-      additionalActions={
+      footerActions={
         <>
           <Button
             title={
@@ -77,9 +105,7 @@ export const ClassifiersPage = () => {
             Родительские узлы
           </Button>
           <Button
-            title={
-              isSelected ? "Показать дочерние узлы" : "Выберите строку"
-            }
+            title={isSelected ? "Показать дочерние узлы" : "Выберите строку"}
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("children")}
@@ -87,9 +113,7 @@ export const ClassifiersPage = () => {
             Дочерние узлы
           </Button>
           <Button
-            title={
-              isSelected ? "Показать изделия (листья)" : "Выберите строку"
-            }
+            title={isSelected ? "Показать изделия (листья)" : "Выберите строку"}
             variant="view"
             disabled={!isSelected}
             onClick={showNodes("leaves")}

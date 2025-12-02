@@ -10,7 +10,7 @@ import {
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
-import { setEditingItemId, setRemovingIds } from "@slices/products";
+import { setSelectedItemId } from "@slices/products";
 import { AppThunkDispatch } from "./types/types";
 
 const GET_PRODUCTS = "products/get";
@@ -23,7 +23,7 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     dispatch,
     getAllProductsAsync,
     state.products.pagination,
-    setEditingItemId
+    setSelectedItemId
   );
 };
 
@@ -32,7 +32,6 @@ export const getAllProductsAsync = createAsyncThunk<
   PaginationParams
 >(GET_PRODUCTS, async (paginationParams) => {
   const res = await api.products.getAll(paginationParams);
-  console.log(res);
   return res;
 });
 
@@ -69,7 +68,6 @@ export const updateProductAsync = createAsyncThunk<void, TUpdateProductData>(
 export const deleteProductAsync = createAsyncThunk<void, number>(
   DELETE_PRODUCT,
   async (id, { dispatch, getState }) => {
-    dispatch(setRemovingIds(id));
     const res = await api.products.deleteProduct(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -79,7 +77,5 @@ export const deleteProductAsync = createAsyncThunk<void, number>(
     } else {
       dispatchErrorToast(dispatch, res.message);
     }
-
-    dispatch(setRemovingIds(id));
   }
 );
