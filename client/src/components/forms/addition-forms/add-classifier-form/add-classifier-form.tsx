@@ -1,14 +1,16 @@
-import { Input } from "@components/forms/form-elements";
-import { useForm } from "@hooks/forms/useForm";
+import { FC } from "react";
+
+import { useSelector } from '@store';
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingSelector } from "@slices/classifiers";
 import { addClassifierAsync } from "@thunks/classifiers";
+import { useForm } from "@hooks/forms/useForm";
 import { getErrorMessage } from "@utils/helpers/error";
-import { FC } from "react";
-import { FormProps, TCreateClassifierForm } from "../../types";
-import { BaseForm } from "@components/forms/base-form";
 import { addBtnLabel } from "@utils/constants";
-import { useSelector } from "react-redux";
+
+import { Input } from "@components/forms/form-elements";
+import { BaseForm } from "@components/forms/base-form";
+import { FormProps, TCreateClassifierForm } from "../../types";
 
 export const AddClassifierForm: FC<FormProps> = ({ onClose }) => {
   const prefix = "classifier-add";

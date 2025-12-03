@@ -7,30 +7,30 @@ import s from "@ui/table/table.module.css";
 export const TableRow = <T extends TEntity>({
   rowData,
   headers,
-  actions,
+  selectable = true,
+  selectedItemId,
+  setSelectedItem,
 }: TableRowProps<T>) => {
-  const { selection } = actions || {};
-  const { onSelect, selectedItem } = selection || {};
-  const isSelected = selectedItem === rowData.id;
+  const isSelected = selectedItemId === rowData.id;
 
   // Указываем, что это не просто массив строк, а массив ключей типа T
   const data = Object.keys(headers) as Array<keyof T>;
 
   /* Проходим по массиву ключей. По ключу достаём значение объекта
   и прокидываем его в компонент. Тем самым соблюдаем верный порядок ячеек */
-  const cellElements = data.map((key, index) => (
-    <TableCell key={index} value={rowData[key]} />
+  const cellElements = data.map((key, idx) => (
+    <TableCell key={idx} value={rowData[key]} />
   ));
 
   const handleSelect = () => {
-    const data = isSelected ? null : rowData.id;
-    selection?.onSelect(data);
+    const value = isSelected ? null : rowData.id;
+    setSelectedItem?.(value);
   };
 
   return (
     <tr
       className={clsx(s.trow, {
-        [s.selectable]: onSelect,
+        [s.selectable]: selectable,
         [s.selected]: isSelected,
       })}
       onClick={handleSelect}

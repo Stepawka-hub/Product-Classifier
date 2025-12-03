@@ -8,29 +8,37 @@ export const Table = <T extends TEntity>({
   headers,
   data,
   pagination,
-  actions,
+  selectable = true,
+  selectedItemId,
+  setSelectedItem,
 }: TableProps<T>) => {
+  const { totalCount, pageSize, currentPage, setCurrentPage } = pagination;
+
   return (
     <div className={s.container}>
       <div className={s.wrapper}>
         <table className={s.table}>
-          <TableHeader
-            headers={[...Object.values(headers)]}
-            showActionsColumn={!!actions}
-          />
+          <TableHeader headers={[...Object.values(headers)]} />
           <tbody className={s.tbody}>
             {data.map((rowData) => (
-              <TableRow key={rowData.id} headers={headers} rowData={rowData} />
+              <TableRow
+                key={rowData.id}
+                headers={headers}
+                rowData={rowData}
+                selectable={selectable}
+                selectedItemId={selectedItemId}
+                setSelectedItem={setSelectedItem}
+              />
             ))}
           </tbody>
         </table>
       </div>
       {pagination && (
         <Pagination
-          totalCount={pagination.totalCount}
-          pageSize={pagination.pageSize}
-          currentPage={pagination.currentPage}
-          setCurrentPage={pagination.setCurrentPage}
+          totalCount={totalCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       )}
     </div>

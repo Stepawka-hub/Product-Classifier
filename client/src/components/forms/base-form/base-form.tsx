@@ -1,8 +1,8 @@
 import { FC, FormEventHandler } from "react";
-import s from "./base-form.module.css";
-import { BaseFormProps } from "../types";
-import { Button } from "@components/common/buttons";
 import clsx from "clsx";
+import { Button } from "@components/common/buttons";
+import { BaseFormProps } from "../types";
+import s from "./base-form.module.css";
 
 export const BaseForm: FC<BaseFormProps> = ({
   title,

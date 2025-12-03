@@ -1,19 +1,22 @@
+import { FC } from "react";
+
+import { useSelector } from "@store";
+import { dispatchErrorToast } from "@services/helpers/toast";
+import { getIsUpdatingSelector } from "@slices/classifiers";
+import { updateClassifierAsync } from "@thunks/classifiers";
+import { getSelectedClassifierSelector } from "@selectors/classifiers";
+
+import { useForm } from "@hooks/forms/useForm";
+import { editBtnLabel } from "@utils/constants";
+import { getErrorMessage } from "@utils/helpers/error";
+
 import { BaseForm } from "@components/forms/base-form";
 import { Input } from "@components/forms/form-elements";
 import { Checkbox } from "@components/forms/form-elements/checkbox";
-import { useForm } from "@hooks/forms/useForm";
-import { dispatchErrorToast } from "@services/helpers/toast";
-import { getIsUpdatingSelector } from "@slices/classifiers";
-import { useSelector } from "@store";
-import { updateClassifierAsync } from "@thunks/classifiers";
-import { editBtnLabel } from "@utils/constants";
-import { getErrorMessage } from "@utils/helpers/error";
-import { FC } from "react";
 import { FormProps, TUpdateClassifierForm } from "../../types";
-import { getEditingClassifierSelector } from "@selectors/classifiers";
 
 export const EditClassifierForm: FC<FormProps> = ({ onClose }) => {
-  const editingClassifier = useSelector(getEditingClassifierSelector);
+  const editingClassifier = useSelector(getSelectedClassifierSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "classifier-edit";

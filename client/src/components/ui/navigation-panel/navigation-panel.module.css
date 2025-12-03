@@ -40,7 +40,7 @@
 }
 
 .link:hover {
-  transform: translateX(1rem);
+  transform: translateX(0.5rem);
 }
 
 .link:active {

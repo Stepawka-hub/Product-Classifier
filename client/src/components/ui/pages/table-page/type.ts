@@ -1,5 +1,13 @@
-import { TEntityPageUI } from "@components/types";
+import { TTableConfig } from "@ui/table/type";
+import { TargetId, TPagination } from "@utils/types";
+import { ReactNode } from "react";
 
-export type TablePageUIProps<T> = TEntityPageUI<T> & {
+export type TablePageProps<T> = {
   title: string;
+  tableConfig: TTableConfig<T>;
+  headerActions?: ReactNode;
+  footerActions?: ReactNode;
+  pagination: TPagination;
+  selectedItemId: TargetId;
+  setSelectedItem: (i: TargetId) => void;
 };

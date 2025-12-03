@@ -1,13 +1,15 @@
-import { BaseForm } from "@components/forms/base-form";
-import { Input } from "@components/forms/form-elements";
-import { useForm } from "@hooks/forms/useForm";
+import { FC, memo } from "react";
+
+import { useSelector } from "@store";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingSelector } from "@slices/units";
-import { useSelector } from "@store";
 import { addUnitAsync } from "@thunks/units";
+
+import { useForm } from "@hooks/forms/useForm";
 import { addBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
-import { FC, memo } from "react";
+import { BaseForm } from "@components/forms/base-form";
+import { Input } from "@components/forms/form-elements";
 import { FormProps, TCreateUnitForm } from "../../types";
 
 export const AddUnitForm: FC<FormProps> = memo(({ onClose }) => {

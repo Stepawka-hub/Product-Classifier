@@ -1,6 +1,6 @@
-import { Loader } from "@components/common/loader";
-import { Table } from "@components/table";
-import { useTableData } from "@hooks/table/useTableData";
+import { FC } from "react";
+
+import { useSelector } from "@store";
 import {
   getChildrenSelector,
   getIsFetchChildrenSelector,
@@ -11,24 +11,29 @@ import {
   getParentsSelector,
   setNodeCurrentPage,
 } from "@slices/classifiers";
-import { useSelector } from "@store";
 import {
   getClassifierLeavesAsync,
   getChildClassifiersAsync,
   getParentClassifiersAsync,
 } from "@thunks/classifiers";
-import { PaginationParams } from "@utils/api/types/types";
+import { getSelectedClassifierSelector } from "@selectors/classifiers";
+
+import { useTableData } from "@hooks/table/useTableData";
+import { PaginationParams } from "@utils/api/types";
 import { productsHeaders, shortClassifiersHeaders } from "@utils/constants";
 import { TClassifierShort, TEntity, TProduct } from "@utils/types";
-import { FC } from "react";
-import s from "./classifier-relations.module.css";
+
+import { Loader } from "@components/common/loader";
 import { TClassifierRelationsProps } from "./type";
-import { getSelectedClassifierSelector } from "@selectors/classifiers";
+import s from "./classifier-relations.module.css";
+import { Table } from "@ui/table";
 
 type RelationDataType<T extends "parents" | "children" | "leaves"> =
   T extends "leaves" ? TProduct : TClassifierShort;
 
-export const ClassifierRelations: FC<TClassifierRelationsProps> = ({ type }) => {
+export const ClassifierRelations: FC<TClassifierRelationsProps> = ({
+  type,
+}) => {
   const selectedItem = useSelector(getSelectedClassifierSelector);
 
   const config = {
@@ -80,6 +85,7 @@ export const ClassifierRelations: FC<TClassifierRelationsProps> = ({ type }) => 
           headers={currentConfig.headers}
           data={data}
           pagination={pagination}
+          selectable={false}
         />
       ) : (
         <div className={s.notFound}>Узлы не найдены!</div>

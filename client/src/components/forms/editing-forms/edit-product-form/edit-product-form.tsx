@@ -1,18 +1,21 @@
-import { BaseForm } from "@components/forms/base-form";
-import { Input } from "@components/forms/form-elements";
-import { useForm } from "@hooks/forms/useForm";
-import { getEditingProductSelector } from "@selectors/products";
-import { dispatchErrorToast } from "@services/helpers/toast";
-import { getIsUpdatingSelector } from "@slices/products";
+import { FC } from "react";
+
 import { useSelector } from "@store";
 import { updateProductAsync } from "@thunks/products";
+import { getSelectedProductSelector } from "@selectors/products";
+import { dispatchErrorToast } from "@services/helpers/toast";
+import { getIsUpdatingSelector } from "@slices/products";
+
+import { useForm } from "@hooks/forms/useForm";
 import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
-import { FC } from "react";
+
+import { BaseForm } from "@components/forms/base-form";
+import { Input } from "@components/forms/form-elements";
 import { FormProps, TUpdateProductForm } from "../../types";
 
 export const EditProductForm: FC<FormProps> = ({ onClose }) => {
-  const editingProduct = useSelector(getEditingProductSelector);
+  const editingProduct = useSelector(getSelectedProductSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "product-edit";
@@ -20,6 +23,13 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
     name: editingProduct?.name || "",
     parentName: editingProduct?.parentName || "",
     unitName: editingProduct?.unitName || "",
+    classifierName: editingProduct?.classifierName || "",
+    baseProductName: editingProduct?.baseProductName || "",
+    versionNumber: editingProduct?.versionNumber || 1,
+    isActive: editingProduct?.isActive || true,
+    dateCreated: editingProduct?.dateCreated || "",
+    datePlanned: editingProduct?.datePlanned || "",
+    dateActual: editingProduct?.dateActual || "",
   };
   const { dispatch, formData, setFormData, onChange } =
     useForm<TUpdateProductForm>(initialState, [editingProduct]);
@@ -31,9 +41,7 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
       await dispatch(
         updateProductAsync({
           id: editingProduct.id,
-          name: formData.name,
-          parentName: formData.parentName,
-          unitName: formData.unitName,
+          ...formData,
         })
       ).unwrap();
 
@@ -66,7 +74,7 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
           id={`${prefix}_parentName`}
           name="parentName"
           label="Название категории"
-          value={formData.parentName}
+          value={formData.parentName || ""}
           onChange={onChange("parentName")}
           maxLength={128}
           required
@@ -75,7 +83,7 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
           id={`${prefix}_unitName`}
           name="unitName"
           label="Название ЕИ"
-          value={formData.unitName}
+          value={formData.unitName || ""}
           onChange={onChange("unitName")}
           maxLength={64}
           required

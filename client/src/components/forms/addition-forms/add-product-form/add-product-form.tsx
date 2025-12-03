@@ -1,15 +1,16 @@
-import { Input } from "@components/forms/form-elements";
+import { FC } from "react";
+
+import { useSelector } from "@store";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingSelector } from "@slices/products";
 import { addProductAsync } from "@thunks/products";
+import { useForm } from "@hooks/forms/useForm";
 import { getErrorMessage } from "@utils/helpers/error";
 import { getNumber } from "@utils/helpers/validation";
-import { FC } from "react";
-import { FormProps, TCreateProductForm } from "../../types";
-import { BaseForm } from "@components/forms/base-form";
 import { addBtnLabel } from "@utils/constants";
-import { useForm } from "@hooks/forms/useForm";
-import { useSelector } from "@store";
+import { Input } from "@components/forms/form-elements";
+import { BaseForm } from "@components/forms/base-form";
+import { FormProps, TCreateProductForm } from "../../types";
 
 export const AddProductForm: FC<FormProps> = ({ onClose }) => {
   const prefix = "product-add";

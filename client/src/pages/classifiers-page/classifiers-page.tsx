@@ -12,12 +12,12 @@ import {
   getClassifiersSelector,
   getIsLoadingSelector,
   getPaginationSelector,
-  getRemovingIdsSelector,
   setCurrentPage,
-  setEditingItemId,
   setNodeCurrentPage,
   getSelectedItemIdSelector as getSelectedItemId,
   setSelectedItemId,
+  getIsUpdatingSelector,
+  getIsRemovingSelector,
 } from "@slices/classifiers";
 import {
   deleteClassifierAsync,
@@ -27,36 +27,15 @@ import { classifiersHeaders as headers } from "@utils/constants";
 import { TClassifier } from "@utils/types";
 import { TablePage } from "@ui/pages";
 import { TClassifierRealtionsTypes } from "@components/classifier-relations/type";
-
-// {onEdit && (
-//   <Button
-//     title="Редактировать"
-//     variant="edit"
-//     size="small"
-//     onClick={handleEdit}
-//   />
-// )}
-
-// {deletion && (
-//   <Button
-//     title="Удалить"
-//     variant="cross"
-//     size="small"
-//     disabled={isRemoving}
-//     onClick={handleDelete}
-//   />
-// )}
-
-// <div className={s.actions}>
-//   <Button
-//     variant="plus"
-//     children={addButtonLabel}
-//     onClick={openAddForm}
-//   />
-//   {additionalActions}
-// </div>
+import { useSelector } from "@store";
+import { BaseTableActions } from "@components/base-table-actions";
+import { getIsAddingSelector } from "@slices/products";
 
 export const ClassifiersPage = () => {
+  const isAdding = useSelector(getIsAddingSelector);
+  const isUpdating = useSelector(getIsUpdatingSelector);
+  const isRemoving = useSelector(getIsRemovingSelector);
+
   const { dispatch, data, isLoading, pagination } = useTableData<TClassifier>({
     dataSelector: getClassifiersSelector,
     getIsLoadingSelector,
@@ -64,19 +43,22 @@ export const ClassifiersPage = () => {
     getElementsAsync: getAllClassifiersAsync,
     setCurrentPage,
   });
+
   const { showModal, showAddForm, showEditForm } = useTableForms({
     AddForm,
     EditForm,
   });
-  const actions = useTableActions({
-    setEditingItemId,
-    setSelectedItemId,
+
+  const { selectedItemId, handleSelect, handleDelete } = useTableActions({
     getSelectedItemId,
-    getRemovingIdsSelector,
+    setSelectedItemId,
     deleteElementAsync: deleteClassifierAsync,
     openEditForm: showEditForm,
   });
-  const isSelected = !!actions?.selection?.selectedItem;
+
+  if (isLoading) return <Loader />;
+
+  const isSelected = selectedItemId !== null;
 
   const showNodes = (type: TClassifierRealtionsTypes) => () => {
     const callback = () => {
@@ -85,13 +67,24 @@ export const ClassifiersPage = () => {
     showModal(<ClassifierRelations type={type} />, callback);
   };
 
-  if (isLoading) return <Loader />;
-
   return (
     <TablePage<TClassifier>
       title="Классификаторы"
-      tableConfig={{ headers, data, actions }}
+      tableConfig={{ headers, data }}
       pagination={pagination}
+      selectedItemId={selectedItemId}
+      setSelectedItem={handleSelect}
+      headerActions={
+        <BaseTableActions
+          isAdding={isAdding}
+          isUpdating={isUpdating}
+          isRemoving={isRemoving}
+          isSelected={isSelected}
+          onAddButtonClick={showAddForm}
+          onEditButtonClick={showEditForm}
+          onDeleteButtonClick={handleDelete}
+        />
+      }
       footerActions={
         <>
           <Button
