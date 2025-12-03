@@ -1,8 +1,8 @@
 import { BaseApi } from "./base/base.api";
-import { TAppData, TServerResponse } from "../types/types";
+import { TServerResponse } from "../types/types";
 
 export class AppApi extends BaseApi {
-  fillData(): Promise<TAppData> {
+  fillData(): Promise<TServerResponse> {
     return this.post({}, "fill-data");
   }
 

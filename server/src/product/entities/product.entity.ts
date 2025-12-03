@@ -56,7 +56,6 @@ export class Product {
     name: 'dateactual',
     type: 'timestamp without time zone',
     nullable: true,
-    default: () => 'CURRENT_TIMESTAMP',
   })
   dateActual?: Date | null;
 }

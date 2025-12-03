@@ -12,6 +12,7 @@ import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
 import { setSelectedItemId } from "@slices/products";
 import { AppThunkDispatch } from "./types/types";
+import { formatDateTime } from "@utils/helpers/datetime";
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
@@ -31,8 +32,16 @@ export const getAllProductsAsync = createAsyncThunk<
   TPaginatedData<TProduct>,
   PaginationParams
 >(GET_PRODUCTS, async (paginationParams) => {
-  const res = await api.products.getAll(paginationParams);
-  return res;
+  const { total, items } = await api.products.getAll(paginationParams);
+  return {
+    total,
+    items: items.map((i) => ({
+      ...i,
+      dateCreated: formatDateTime(i.dateCreated),
+      datePlanned: formatDateTime(i.datePlanned),
+      dateActual: i.dateActual ? formatDateTime(i.dateActual) : null,
+    })),
+  };
 });
 
 export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
