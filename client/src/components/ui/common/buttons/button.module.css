@@ -77,11 +77,13 @@
 }
 
 /* Edit */
-.edit {
+.edit,
+.plus {
   background-color: var(--theme-primary-color);
 }
 
-.edit:not(:disabled):hover {
+.edit:not(:disabled):hover,
+.plus:not(:disabled):hover {
   background-color: var(--edit-btn-bg-hover);
 }
 

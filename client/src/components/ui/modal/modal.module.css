@@ -40,9 +40,11 @@
 
   color: var(--secondary-color);
   background-color: var(--modal-bg-color);
+  box-shadow: 2px 2px 8px var(--modal-box-shadow);
 
   min-width: 25%;
-  min-height: 10rem;
+  width: 35rem;
+  min-height: 15rem;
 
   padding: 2rem;
   border-radius: 1rem;
