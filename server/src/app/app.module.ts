@@ -6,6 +6,7 @@ import { UnitModule } from '../unit/unit.module';
 import { ClassifierModule } from '../classifier/classifier.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SpecificationModule } from 'src/specification/specification.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ProductModule,
     UnitModule,
     ClassifierModule,
+    SpecificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
