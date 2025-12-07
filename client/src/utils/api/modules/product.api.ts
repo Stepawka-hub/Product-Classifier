@@ -5,7 +5,7 @@ import {
   TUpdateProductData,
 } from "@utils/types";
 import { BaseApi } from "./base/base.api";
-import { PaginationParams, TServerResponse } from "../types/types";
+import { PaginationParams, TServerResponse } from "../types";
 
 export class ProductApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {

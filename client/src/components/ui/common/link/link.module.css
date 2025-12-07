@@ -1,0 +1,30 @@
+.link {
+  font-size: 1.25rem;
+  transition: all 0.25s linear;
+}
+
+.link:hover {
+  transform: translateX(0.5rem);
+}
+
+.link:active {
+  opacity: 0.8;
+}
+
+.link_active {
+  color: var(--orange-color);
+}
+
+.link_active:hover {
+  transform: translateX(0);
+}
+
+.link_active:active {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .link {
+    font-size: 1rem;
+  }
+}

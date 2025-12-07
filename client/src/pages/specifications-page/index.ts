@@ -1,0 +1,1 @@
+export { SpecificationsPage } from './specifications-page';

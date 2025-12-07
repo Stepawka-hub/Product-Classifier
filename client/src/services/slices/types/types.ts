@@ -4,6 +4,7 @@ import {
   TClassifierShort,
   TPagination,
   TProduct,
+  TSpecification,
   TToast,
   TUnit,
 } from "@utils/types";
@@ -46,6 +47,13 @@ export type TInitialClassifierState = TActionsInitialState & {
 export type TInitialUnitState = TActionsInitialState & {
   units: TUnit[];
   selectedItemId: TargetId;
+};
+
+export type TInitialSpecificationState = Pick<
+  TActionsInitialState,
+  "isLoading" | "pagination"
+> & {
+  specifications: TSpecification[];
 };
 
 export type TInitialModalState = {

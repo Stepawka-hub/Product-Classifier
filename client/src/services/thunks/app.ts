@@ -7,6 +7,7 @@ import { getErrorMessage } from "@utils/helpers/error";
 import { getAllClassifiersAsync } from "./classifiers";
 import { getAllProductsAsync } from "./products";
 import { getAllUnitsAsync } from "./units";
+import { getAllSpecificationsAsync } from "./specifications";
 
 const INITIALIZE_APP = "app/initialize";
 const FILL_DATA = "app/fill-data";
@@ -37,6 +38,7 @@ export const fillDataAsync = createAsyncThunk(
           dispatch(getAllClassifiersAsync(basePagination)),
           dispatch(getAllProductsAsync(basePagination)),
           dispatch(getAllUnitsAsync(basePagination)),
+          dispatch(getAllSpecificationsAsync(basePagination)),
         ]);
 
         dispatchSuccessToast(dispatch, "Данные успешно заполнены!");

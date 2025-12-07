@@ -8,6 +8,7 @@ export type TablePageProps<T> = {
   headerActions?: ReactNode;
   footerActions?: ReactNode;
   pagination: TPagination;
-  selectedItemId: TargetId;
-  setSelectedItem: (i: TargetId) => void;
+  selectable?: boolean;
+  selectedItemId?: TargetId;
+  setSelectedItem?: (i: TargetId) => void;
 };

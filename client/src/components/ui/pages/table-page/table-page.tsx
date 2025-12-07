@@ -10,6 +10,7 @@ export const TablePage = <T extends TEntity>({
   pagination,
   headerActions,
   footerActions,
+  selectable = true,
   selectedItemId,
   setSelectedItem,
 }: TablePageProps<T>) => (
@@ -21,6 +22,7 @@ export const TablePage = <T extends TEntity>({
           pagination={pagination}
           selectedItemId={selectedItemId}
           setSelectedItem={setSelectedItem}
+          selectable={selectable}
           {...tableConfig}
         />
       ) : (

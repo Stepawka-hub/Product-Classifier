@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect } from "react";
 import { Route, Routes } from "react-router";
 
@@ -6,7 +5,13 @@ import { AppPreloader } from "@components/app-preloader";
 import { ModalProvider } from "@components/modal-provider/modal-provider";
 import { NotFound } from "@components/not-found";
 import { ToastList } from "@components/toast-list";
-import { ClassifiersPage, HomePage, ProductsPage, UnitsPage } from "@pages";
+import {
+  ClassifiersPage,
+  HomePage,
+  ProductsPage,
+  UnitsPage,
+  SpecificationsPage,
+} from "@pages";
 import { getIsInitializedSelector } from "@slices/app";
 import { useDispatch, useSelector } from "@store";
 import { initialize } from "@thunks/app";
@@ -19,7 +24,7 @@ export const App: FC = () => {
 
   useEffect(() => {
     dispatch(initialize());
-  }, []);
+  }, [dispatch]);
 
   if (!isInitialized) {
     return <AppPreloader />;
@@ -38,6 +43,7 @@ export const App: FC = () => {
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/classifiers" element={<ClassifiersPage />} />
             <Route path="/units" element={<UnitsPage />} />
+            <Route path="/specifications" element={<SpecificationsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

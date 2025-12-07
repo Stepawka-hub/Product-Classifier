@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from "react";
+import { Selector } from "react-redux";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { RootState, useDispatch, useSelector } from "@store";
 import { TFetchEntitiesThunk } from "@thunks/types/types";
 import { PaginationParams } from "@utils/api/types/types";
 import { TPagination } from "@utils/types";
-import { useEffect } from "react";
-import { Selector } from "react-redux";
 import { usePagination } from "../usePagination";
 
 type TUseTableDataParams<T, P> = {

@@ -1,7 +1,10 @@
 // Сущность
 export type TEntity = {
-  id: number;
+  id: number | string;
 };
+
+// Заголовки таблиц
+export type THeaders<T> = Record<keyof T, string>;
 
 // Классификатор
 export type TClassifier = TEntity & {
@@ -24,11 +27,20 @@ export type TProduct = TEntity & {
   dateCreated: string;
   datePlanned: string;
   dateActual: string | null;
-}
+};
 
 // ЕИ
 export type TUnit = TEntity & {
   name: string;
+};
+
+// Позиции спецификации
+export type TSpecification = TEntity & {
+  productName: string;
+  componentName: string;
+  consumption: number;
+  forQuantity: number;
+  flag: boolean;
 };
 
 // Сущность для пагинации

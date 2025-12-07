@@ -1,7 +1,7 @@
-import { TargetId, TPagination } from "@utils/types";
+import { TargetId, THeaders, TPagination } from "@utils/types";
 
 export type TTableConfig<T> = {
-  headers: Record<keyof T, string>;
+  headers: Partial<THeaders<T>>;
   data: T[];
 };
 
