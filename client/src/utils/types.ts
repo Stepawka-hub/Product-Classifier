@@ -91,4 +91,4 @@ export type TPagination = {
   setCurrentPage: (n: number) => void;
 };
 
-export type TargetId = number | null;
+export type TargetId = string | number | null;
