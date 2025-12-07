@@ -24,7 +24,7 @@ export const SpecificationsPage = () => {
 
   return (
     <TablePage<TSpecification>
-      title="Изделия"
+      title="Позиции спецификаций"
       tableConfig={{ headers, data }}
       pagination={pagination}
       selectable={false}
