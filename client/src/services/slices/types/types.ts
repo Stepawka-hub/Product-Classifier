@@ -35,7 +35,6 @@ export type TInitialClassifierState = TActionsInitialState & {
 
   parents: TClassifierShort[];
   children: TClassifierShort[];
-  leaves: TProduct[];
 
   isFetchParents: boolean;
   isFetchChildren: boolean;

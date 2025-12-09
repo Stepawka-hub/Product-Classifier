@@ -17,7 +17,7 @@ export class ClassifierRepository extends Repository<Classifier> {
 
   constructor(@InjectDataSource() dataSource: DataSource) {
     super(Classifier, dataSource.createEntityManager());
-    this.tableName = 'productclass';
+    this.tableName = 'objectclassifier';
   }
 
   async createClassifier(dto: CreateClassifierDto): Promise<BaseResponseDto> {

@@ -1,6 +1,8 @@
 // Сущность
+export type TEntityId = number | string;
+
 export type TEntity = {
-  id: number | string;
+  id: TEntityId;
 };
 
 // Заголовки таблиц
@@ -91,4 +93,4 @@ export type TPagination = {
   setCurrentPage: (n: number) => void;
 };
 
-export type TargetId = string | number | null;
+export type TargetId = TEntityId | null;

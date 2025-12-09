@@ -3,7 +3,6 @@ import { TInitialClassifierState } from "./types";
 import {
   addClassifierAsync,
   getAllClassifiersAsync,
-  getClassifierLeavesAsync,
   getChildClassifiersAsync,
   getParentClassifiersAsync,
   updateClassifierAsync,
@@ -14,14 +13,12 @@ import {
   TClassifier,
   TClassifierShort,
   TPaginatedData,
-  TProduct,
 } from "@utils/types";
 
 const initialState: TInitialClassifierState = {
   classifiers: [],
   parents: [],
   children: [],
-  leaves: [],
   selectedItemId: null,
 
   isLoading: false,
@@ -70,7 +67,6 @@ const classifiersSlice = createSlice({
     getClassifiersSelector: (state) => state.classifiers,
     getParentsSelector: (state) => state.parents,
     getChildrenSelector: (state) => state.children,
-    getLeavesSelector: (state) => state.leaves,
     getSelectedItemIdSelector: (state) => state.selectedItemId,
 
     getPaginationSelector: (state) => state.pagination,
@@ -166,21 +162,6 @@ const classifiersSlice = createSlice({
       )
       .addCase(getChildClassifiersAsync.rejected, (state) => {
         state.isFetchChildren = false;
-      })
-
-      .addCase(getClassifierLeavesAsync.pending, (state) => {
-        state.isFetchLeaves = true;
-      })
-      .addCase(
-        getClassifierLeavesAsync.fulfilled,
-        (state, { payload }: PayloadAction<TPaginatedData<TProduct>>) => {
-          state.leaves = payload.items;
-          state.nodesPagination.totalCount = payload.total;
-          state.isFetchLeaves = false;
-        }
-      )
-      .addCase(getClassifierLeavesAsync.rejected, (state) => {
-        state.isFetchLeaves = false;
       });
   },
 });
@@ -191,11 +172,9 @@ export const {
   getParentsSelector,
   getChildrenSelector,
   getSelectedItemIdSelector,
-  getLeavesSelector,
 
   getPaginationSelector,
   getNodesPaginationSelector,
-  getIsFetchLeavesSelector,
 
   getIsLoadingSelector,
   getIsAddingSelector,

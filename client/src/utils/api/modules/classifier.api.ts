@@ -2,12 +2,12 @@ import {
   TClassifier,
   TClassifierShort,
   TCreateClassifierData,
+  TEntityId,
   TPaginatedData,
-  TProduct,
   TUpdateClassifierData,
 } from "@utils/types";
+import { PaginationParams, TServerResponse } from "../types";
 import { BaseApi } from "./base/base.api";
-import { PaginationParams, TServerResponse } from "../types/types";
 
 export class ClassifierApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {
@@ -19,31 +19,28 @@ export class ClassifierApi extends BaseApi {
   }
 
   getParents(
-    id: number,
+    id: TEntityId,
     params: PaginationParams
   ): Promise<TPaginatedData<TClassifierShort>> {
     return this.get(params, `${id}/parents`);
   }
 
   getChildren(
-    id: number,
+    id: TEntityId,
     params: PaginationParams
   ): Promise<TPaginatedData<TClassifierShort>> {
     return this.get(params, `${id}/children`);
   }
 
-  getLeaves(
-    id: number,
-    params: PaginationParams
-  ): Promise<TPaginatedData<TProduct>> {
-    return this.get(params, `${id}/leaves`);
-  }
-
-  createClassifier(classifierData: TCreateClassifierData): Promise<TServerResponse> {
+  createClassifier(
+    classifierData: TCreateClassifierData
+  ): Promise<TServerResponse> {
     return this.post(classifierData);
   }
 
-  updateClassifier(classifierData: TUpdateClassifierData): Promise<TServerResponse> {
+  updateClassifier(
+    classifierData: TUpdateClassifierData
+  ): Promise<TServerResponse> {
     return this.update(classifierData);
   }
 

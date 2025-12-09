@@ -105,14 +105,6 @@ export const ClassifiersPage = () => {
           >
             Дочерние узлы
           </Button>
-          <Button
-            title={isSelected ? "Показать изделия (листья)" : "Выберите строку"}
-            variant="view"
-            disabled={!isSelected}
-            onClick={showNodes("leaves")}
-          >
-            Изделия (Листья)
-          </Button>
         </>
       }
     />

@@ -7,7 +7,6 @@ import {
   TCreateClassifierData,
   TEntity,
   TPaginatedData,
-  TProduct,
   TUpdateClassifierData,
 } from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
@@ -19,7 +18,6 @@ import { AppThunkDispatch } from "./types/types";
 const GET_CLASSIFIERS = "classifiers/get";
 const GET_PARENT_CLASSIFIERS = "classifiers/get-parents";
 const GET_CHILD_CLASSIFIERS = "classifiers/get-children";
-const GET_CLASSIFIER_LEAVES = "classifiers/get-leaves";
 const ADD_CLASSIFIER = "classifiers/add";
 const UPDATE_CLASSIFIER = "classifiers/update";
 const DELETE_CLASSIFIER = "classifiers/delete";
@@ -54,14 +52,6 @@ export const getChildClassifiersAsync = createAsyncThunk<
   PaginationParams & TEntity
 >(GET_CHILD_CLASSIFIERS, async ({ id, page, limit }) => {
   const res = await api.classifiers.getChildren(id, { page, limit });
-  return res;
-});
-
-export const getClassifierLeavesAsync = createAsyncThunk<
-  TPaginatedData<TProduct>,
-  PaginationParams & TEntity
->(GET_CLASSIFIER_LEAVES, async ({ id, page, limit }) => {
-  const res = await api.classifiers.getLeaves(id, { page, limit });
   return res;
 });
 
