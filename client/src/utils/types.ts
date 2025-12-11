@@ -67,10 +67,10 @@ export type TCreateUnitData = Pick<TUnit, "name">;
 
 export type TCreateProductData = {
   name: string;
-  parentId: number;
+  parentId: number | null;
   unitId: number;
-  baseProductId: number;
-  classifierId: number;
+  baseProductId: number | null;
+  classifierId: number | null;
 };
 
 export type TCreateClassifierData = {

@@ -33,10 +33,10 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
       await dispatch(
         addProductAsync({
           name,
-          parentId: getNumber(parentId),
+          parentId: parentId ? getNumber(parentId) : null,
           unitId: getNumber(unitId),
-          baseProductId: getNumber(baseProductId),
-          classifierId: getNumber(classifierId),
+          baseProductId: baseProductId ? getNumber(baseProductId) : null,
+          classifierId: classifierId ? getNumber(classifierId) : null,
         })
       ).unwrap();
 

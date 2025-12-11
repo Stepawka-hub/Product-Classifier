@@ -67,6 +67,8 @@ export class ProductRepository extends Repository<Product> {
           ARRAY[${values.join(', ')}]
         )`;
 
+      console.log(query);
+
       await this.query(query, params);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
