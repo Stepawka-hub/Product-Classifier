@@ -69,6 +69,8 @@ export type TCreateProductData = {
   name: string;
   parentId: number;
   unitId: number;
+  baseProductId: number;
+  classifierId: number;
 };
 
 export type TCreateClassifierData = {

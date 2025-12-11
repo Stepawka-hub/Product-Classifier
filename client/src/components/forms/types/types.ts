@@ -25,6 +25,8 @@ export type TCreateProductForm = {
   name: string;
   parentId: string;
   unitId: string;
+  classifierId: string;
+  baseProductId: string;
 };
 
 export type TCreateUnitForm = {

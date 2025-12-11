@@ -18,6 +18,8 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
     name: "",
     parentId: "",
     unitId: "",
+    classifierId: "",
+    baseProductId: "",
   };
 
   const isAdding = useSelector(getIsAddingSelector);
@@ -25,7 +27,7 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
     useForm<TCreateProductForm>(initialState);
 
   const handleSubmit = async () => {
-    const { name, parentId, unitId } = formData;
+    const { name, parentId, unitId, baseProductId, classifierId } = formData;
 
     try {
       await dispatch(
@@ -33,6 +35,8 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
           name,
           parentId: getNumber(parentId),
           unitId: getNumber(unitId),
+          baseProductId: getNumber(baseProductId),
+          classifierId: getNumber(classifierId),
         })
       ).unwrap();
 
@@ -50,37 +54,52 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
       onClose={onClose}
       onSubmit={handleSubmit}
     >
-      <>
-        <Input
-          id={`${prefix}_name`}
-          name="name"
-          label="Название изделия"
-          value={formData.name}
-          onChange={onChange("name")}
-          maxLength={128}
-          required
-        />
-        <Input
-          id={`${prefix}_parentId`}
-          name="parentId"
-          label="ID категории"
-          value={formData.parentId}
-          onChange={onChange("parentId")}
-          type="number"
-          maxLength={32}
-          required
-        />
-        <Input
-          id={`${prefix}_unitId`}
-          name="unitId"
-          label="ID ЕИ"
-          value={formData.unitId}
-          onChange={onChange("unitId")}
-          type="number"
-          maxLength={32}
-          required
-        />
-      </>
+      <Input
+        id={`${prefix}_name`}
+        name="name"
+        label="Название изделия"
+        value={formData.name}
+        onChange={onChange("name")}
+        maxLength={128}
+        required
+      />
+      <Input
+        id={`${prefix}_parentId`}
+        type="number"
+        name="parentId"
+        label="ID категории"
+        value={formData.parentId}
+        onChange={onChange("parentId")}
+        maxLength={32}
+      />
+      <Input
+        id={`${prefix}_unitId`}
+        type="number"
+        name="unitId"
+        label="ID ЕИ"
+        value={formData.unitId}
+        onChange={onChange("unitId")}
+        maxLength={32}
+        required
+      />
+      <Input
+        id={`${prefix}_baseProductId`}
+        type="number"
+        name="baseProductId"
+        label="ID базового изделия"
+        value={formData.baseProductId}
+        onChange={onChange("baseProductId")}
+        maxLength={32}
+      />
+      <Input
+        id={`${prefix}_classifierId`}
+        type="number"
+        name="classifierId"
+        label="ID классификатора"
+        value={formData.classifierId}
+        onChange={onChange("classifierId")}
+        maxLength={32}
+      />
     </BaseForm>
   );
 };

@@ -17,21 +17,57 @@ export class ProductRepository extends Repository<Product> {
   }
 
   async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
-    const query = `
-      SELECT AddRow(
-        $1::text,
-        ARRAY['name', 'parentid', 'umid'],
-        ARRAY[quote_literal($2), $3::text, $4::text])`;
-    const { name, parentId, unitId } = dto;
-
     try {
-      const isExist = await this.findOne({ where: { name } });
+      const isExist = await this.findOne({ where: { name: dto.name } });
       if (isExist) {
         return BaseResponseDto.Error(
           getErrorMessage('Данный продукт уже существует!'),
         );
       }
-      await this.query(query, [this.tableName, name, parentId, unitId]);
+
+      // Начинаем собирать запрос
+      const columns: string[] = [];
+      const values: string[] = [];
+      const params = [this.tableName];
+
+      let paramIndex = 2; // $1 занят tableName
+
+      console.log(dto);
+
+      // Обязательные поля
+      columns.push('name');
+      values.push(`quote_literal($${paramIndex}::text)`);
+      params.push(dto.name);
+      paramIndex++;
+
+      columns.push('umid');
+      values.push(`$${paramIndex}::text`);
+      params.push(String(dto.unitId));
+      paramIndex++;
+
+      const optionalFields = [
+        { field: 'parentId', column: 'parentid' },
+        { field: 'classifierId', column: 'classifierid' },
+        { field: 'baseProductId', column: 'baseproductid' },
+      ];
+
+      for (const { field, column } of optionalFields) {
+        if (dto[field] !== undefined && dto[field] !== null) {
+          columns.push(column);
+          values.push(`$${paramIndex}::text`);
+          params.push(String(dto[field]));
+          paramIndex++;
+        }
+      }
+
+      const query = `
+        SELECT AddRow(
+          $1::text,
+          ARRAY[${columns.map((col) => `'${col}'`).join(', ')}],
+          ARRAY[${values.join(', ')}]
+        )`;
+
+      await this.query(query, params);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
