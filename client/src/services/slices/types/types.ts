@@ -4,6 +4,7 @@ import {
   TClassifierShort,
   TPagination,
   TProduct,
+  TProductComponent,
   TSpecification,
   TToast,
   TUnit,
@@ -27,6 +28,10 @@ export type TActionsInitialState = {
 export type TInitialProductState = TActionsInitialState & {
   products: TProduct[];
   selectedItemId: TargetId;
+
+  isCalculating: boolean;
+  consumptionCalculation: TProductComponent[];
+  consumptionPagination: Omit<TPagination, "setCurrentPage">;
 };
 
 export type TInitialClassifierState = TActionsInitialState & {

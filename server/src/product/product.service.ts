@@ -12,6 +12,7 @@ import { getErrorMessage } from 'src/utils/error-handler';
 import { ClassifierRepository } from 'src/classifier/repositores/classifier.repository';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
 import { Not } from 'typeorm';
+import { ProductComponentDto } from './dto/calculate-consumption-response.dto';
 
 @Injectable()
 export class ProductService {
@@ -165,5 +166,19 @@ export class ProductService {
 
   async deleteProduct(id: number): Promise<BaseResponseDto> {
     return await this.productRepository.deleteProduct(id);
+  }
+
+  async calculateTotalConsumption(
+    id: number,
+    count: number,
+    page: number,
+    limit: number,
+  ): Promise<PaginatedResponseDto<ProductComponentDto> | BaseResponseDto> {
+    return await this.productRepository.calculateTotalConsumption(
+      id,
+      count,
+      page,
+      limit,
+    );
   }
 }

@@ -27,8 +27,8 @@ export const NavigationPanelUI: FC<NavigationPanelUIProps> = ({
         <div className={s.links}>
           <Link to="/">- На главную</Link>
           <Link to="/classifiers">- Классификаторы</Link>
-          <Link to="/products">- Изделия</Link>
-          <Link to="/specifications">- Позиции спецификаций</Link>
+          <Link to="/products" end>- Изделия</Link>
+          <Link to="/products/specifications">- Позиции спецификаций</Link>
           <Link to="/units">- Единицы измерения</Link>
         </div>
         <div className={s.buttons}>

@@ -23,8 +23,11 @@ import { TProduct } from "@utils/types";
 import { TablePage } from "@ui/pages";
 import { useSelector } from "@store";
 import { BaseTableActions } from "@components/base-table-actions";
+import { Button } from "@components/common/buttons";
+import { useNavigate } from "react-router-dom";
 
 export const ProductsPage = () => {
+  const navigate = useNavigate();
   const isAdding = useSelector(getIsAddingSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
   const isRemoving = useSelector(getIsRemovingSelector);
@@ -48,6 +51,10 @@ export const ProductsPage = () => {
 
   if (isLoading) return <Loader />;
 
+  const handleNavigateToSummary = () => {
+    navigate(`${selectedItemId}/total-consumption`);
+  };
+
   const isSelected = selectedItemId !== null;
 
   return (
@@ -67,6 +74,15 @@ export const ProductsPage = () => {
           onEditButtonClick={showEditForm}
           onDeleteButtonClick={handleDelete}
         />
+      }
+      footerActions={
+        <Button
+          variant="view"
+          disabled={!selectedItemId}
+          onClick={handleNavigateToSummary}
+        >
+          Расчитать сводные нормы расхода
+        </Button>
       }
     />
   );

@@ -1,11 +1,14 @@
-import { DataSource, Repository } from 'typeorm';
-import { Product } from '../entities/product.entity';
-import { CreateProductDto } from 'src/product/dto/create-product.dto';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
+import { DataSource, Repository } from 'typeorm';
+import { ProductComponentDto } from '../dto/calculate-consumption-response.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
+import { Product } from '../entities/product.entity';
+import { ConsumptionResult } from '../types/types';
+import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -164,6 +167,51 @@ export class ProductRepository extends Repository<Product> {
       }
 
       return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async calculateTotalConsumption(
+    id: number,
+    count: number = 1,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedResponseDto<ProductComponentDto> | BaseResponseDto> {
+    try {
+      const product = await this.findOne({
+        where: { id },
+      });
+
+      if (!product || !id) {
+        return BaseResponseDto.Error('Изделие не найдено!');
+      }
+
+      const result: ConsumptionResult[] = (await this.query(
+        `SELECT CalculateTotalConsumption(${id}, ${count})`,
+      )) as ConsumptionResult[];
+
+      const productComponents: ProductComponentDto[] = result.map((r) => {
+        const value = r['calculatetotalconsumption'];
+        const parts = value.slice(1, value.length - 1).split(',');
+
+        return {
+          id: Number(parts[0]),
+          name: parts[1].replace(/"/g, ''),
+          count: Number(parts[2]),
+          unitName: parts[3],
+        };
+      });
+
+      const total = productComponents.length;
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const paginatedData = productComponents
+        .sort((a, b) => a.id - b.id)
+        .slice(startIndex, endIndex);
+
+      return new PaginatedResponseDto(paginatedData, total);
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
     }

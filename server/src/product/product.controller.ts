@@ -10,10 +10,7 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import {
-  RequestUpdateProductDto,
-  UpdateProductDto,
-} from './dto/update-product.dto';
+import { RequestUpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductController {
@@ -37,5 +34,20 @@ export class ProductController {
   @Delete(':id')
   deleteProduct(@Param('id') id: number) {
     return this.productService.deleteProduct(id);
+  }
+
+  @Get(':id/calculate-total-consumption')
+  calculateTotalConsumption(
+    @Param('id') id: number,
+    @Query('count') count: number = 1,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.productService.calculateTotalConsumption(
+      id,
+      count,
+      page,
+      limit,
+    );
   }
 }

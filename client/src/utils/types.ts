@@ -31,6 +31,12 @@ export type TProduct = TEntity & {
   dateActual: string | null;
 };
 
+export type TProductComponent = TEntity & {
+  name: string;
+  count: number;
+  unitName: string;
+};
+
 // ЕИ
 export type TUnit = TEntity & {
   name: string;

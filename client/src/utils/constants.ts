@@ -3,6 +3,7 @@ import {
   TClassifierShort,
   THeaders,
   TProduct,
+  TProductComponent,
   TSpecification,
   TUnit,
 } from "./types";
@@ -19,6 +20,13 @@ export const productsHeaders: THeaders<TProduct> = {
   dateCreated: "Дата создания",
   datePlanned: "Дата планирования",
   dateActual: "Дата актуальности",
+};
+
+export const consumptionHeaders: THeaders<TProductComponent> = {
+  id: "ID изделия",
+  name: "Название",
+  count: "Количество",
+  unitName: "Единица измерения",
 };
 
 export const classifiersHeaders: THeaders<TClassifier> = {

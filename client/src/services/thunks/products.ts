@@ -5,19 +5,24 @@ import {
   TCreateProductData,
   TPaginatedData,
   TProduct,
+  TProductComponent,
   TUpdateProductData,
 } from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
 import { setSelectedItemId } from "@slices/products";
-import { AppThunkDispatch } from "./types/types";
+import {
+  AppThunkDispatch,
+  TCalculateTotalConsumptionPayload,
+} from "./types/types";
 import { formatDateTime } from "@utils/helpers/datetime";
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
 const UPDATE_PRODUCT = "products/update";
 const DELETE_PRODUCT = "products/delete";
+const CALCULATE_TOTAL_CONSUMPTION = "products/calculate-total-consumption";
 
 const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
   refreshTable<TProduct>(
@@ -88,3 +93,18 @@ export const deleteProductAsync = createAsyncThunk<void, number>(
     }
   }
 );
+
+export const calculateTotalConsumptionAsync = createAsyncThunk<
+  TPaginatedData<TProductComponent>,
+  TCalculateTotalConsumptionPayload
+>(CALCULATE_TOTAL_CONSUMPTION, async ({ productId, params }) => {
+  const { total, items } = await api.products.calculateTotalConsumption(
+    productId,
+    params
+  );
+
+  return {
+    total,
+    items,
+  };
+});
