@@ -4,3 +4,7 @@ export interface TerminalProduct {
   parentname: string;
   umname: string;
 }
+
+export interface ConsumptionResult {
+  calculatetotalconsumption: string;
+}

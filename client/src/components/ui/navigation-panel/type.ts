@@ -1,4 +1,4 @@
-export type NavigationPanelProps = {
+export type NavigationPanelUIProps = {
   isFillingData: boolean;
   isClearingData: boolean;
   fillData: () => void;

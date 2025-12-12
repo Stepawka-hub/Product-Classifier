@@ -1,37 +1,33 @@
 import { Pagination } from "@components/pagination/pagination";
-import s from "./table.module.css";
-import { TableUIProps } from "./type";
+import { TableProps } from "./type";
 import { TableHeader, TableRow } from "@components/table-elements";
 import { TEntity } from "@utils/types";
-import { checkInProgress } from "@utils/helpers/array";
+import s from "./table.module.css";
 
-export const TableUI = <T extends TEntity>({
+export const Table = <T extends TEntity>({
   headers,
   data,
   pagination,
-  actions,
-}: TableUIProps<T>) => {
-  const { deletion } = actions || {};
-  const { removingIds } = deletion || {};
+  selectable = true,
+  selectedItemId,
+  setSelectedItem,
+}: TableProps<T>) => {
+  const { totalCount, pageSize, currentPage, setCurrentPage } = pagination;
 
   return (
     <div className={s.container}>
       <div className={s.wrapper}>
         <table className={s.table}>
-          <TableHeader
-            headers={[...Object.values(headers)]}
-            showActionsColumn={!!actions}
-          />
+          <TableHeader headers={[...Object.values(headers)]} />
           <tbody className={s.tbody}>
             {data.map((rowData) => (
               <TableRow
                 key={rowData.id}
                 headers={headers}
                 rowData={rowData}
-                isRemoving={
-                  removingIds ? checkInProgress(removingIds, rowData.id) : false
-                }
-                actions={actions}
+                selectable={selectable}
+                selectedItemId={selectedItemId}
+                setSelectedItem={setSelectedItem}
               />
             ))}
           </tbody>
@@ -39,10 +35,10 @@ export const TableUI = <T extends TEntity>({
       </div>
       {pagination && (
         <Pagination
-          totalCount={pagination.totalCount}
-          pageSize={pagination.pageSize}
-          currentPage={pagination.currentPage}
-          setCurrentPage={pagination.setCurrentPage}
+          totalCount={totalCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       )}
     </div>

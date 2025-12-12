@@ -1,0 +1,1 @@
+export { TotalConsumptionPage } from './total-consumption-page';

@@ -1,1 +1,1 @@
-export { BasePageUI } from './base-page';
+export { BasePage } from './base-page';

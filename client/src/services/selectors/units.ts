@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { getEditingItemIdSelector, getUnitsSelector } from "@slices/units";
+import { getUnitsSelector, getSelectedItemIdSelector } from "@slices/units";
 
-export const getEditingUnitSelector = createSelector(
-  [getUnitsSelector, getEditingItemIdSelector],
-  (units, editingItemId) => units.find((u) => u.id === editingItemId)
+export const getSelectedUnitSelector = createSelector(
+  [getUnitsSelector, getSelectedItemIdSelector],
+  (units, selectedItemId) => units.find((u) => u.id === selectedItemId)
 );

@@ -1,11 +1,17 @@
 import {
   TCreateProductData,
+  TEntityId,
   TPaginatedData,
   TProduct,
+  TProductComponent,
   TUpdateProductData,
 } from "@utils/types";
 import { BaseApi } from "./base/base.api";
-import { PaginationParams, TServerResponse } from "../types/types";
+import {
+  PaginationParams,
+  TCalculateTotalConsumptionParams,
+  TServerResponse,
+} from "../types";
 
 export class ProductApi extends BaseApi {
   constructor(baseUrl: string, baseEndpoint: string) {
@@ -26,5 +32,12 @@ export class ProductApi extends BaseApi {
 
   deleteProduct(id: number): Promise<TServerResponse> {
     return this.delete(id);
+  }
+
+  calculateTotalConsumption(
+    productId: TEntityId,
+    params: TCalculateTotalConsumptionParams
+  ): Promise<TPaginatedData<TProductComponent>> {
+    return this.get(params, `${productId}/calculate-total-consumption`);
   }
 }

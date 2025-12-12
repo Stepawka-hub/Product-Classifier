@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 
-export type BasePageUIProps = {
+export type BasePageProps = {
   title?: string;
   children?: ReactElement;
 }

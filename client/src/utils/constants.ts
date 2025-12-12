@@ -1,26 +1,56 @@
-import { TCategory, TCategoryShort, TProduct, TUnit } from "./types";
+import {
+  TClassifier,
+  TClassifierShort,
+  THeaders,
+  TProduct,
+  TProductComponent,
+  TSpecification,
+  TUnit,
+} from "./types";
 
-export const productsHeaders: Record<keyof TProduct, string> = {
+export const productsHeaders: THeaders<TProduct> = {
   id: "ID изделия",
   name: "Название",
   parentName: "Категория",
   unitName: "Единица измерения",
+  classifierName: "Классификатор",
+  baseProductName: "Базовое изделие",
+  versionNumber: "Версия",
+  isActive: "Активно",
+  dateCreated: "Дата создания",
+  datePlanned: "Дата планирования",
+  dateActual: "Дата актуальности",
 };
 
-export const categoriesHeaders: Record<keyof TCategory, string> = {
-  id: "ID категории",
+export const consumptionHeaders: THeaders<TProductComponent> = {
+  id: "ID изделия",
   name: "Название",
-  parentName: "Родительская категория",
+  count: "Количество",
   unitName: "Единица измерения",
 };
 
-export const unitsHeaders: Record<keyof TUnit, string> = {
+export const classifiersHeaders: THeaders<TClassifier> = {
+  id: "ID классификатора",
+  name: "Название",
+  parentName: "Родительский классификатор",
+  unitName: "Единица измерения",
+};
+
+export const unitsHeaders: THeaders<TUnit> = {
   id: "ID Единицы измерения",
   name: "Название",
 };
 
-export const shortCategoriesHeaders: Record<keyof TCategoryShort, string> = {
-  id: "ID категории",
+export const specificationsHeaders: Omit<THeaders<TSpecification>, "id"> = {
+  productName: "Изделие",
+  componentName: "Компонент",
+  consumption: "Потребление",
+  forQuantity: "Для количества",
+  flag: "Актуальна",
+};
+
+export const shortClassifiersHeaders: Record<keyof TClassifierShort, string> = {
+  id: "ID классификатора",
   name: "Название",
 };
 

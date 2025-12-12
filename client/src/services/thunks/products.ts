@@ -5,25 +5,31 @@ import {
   TCreateProductData,
   TPaginatedData,
   TProduct,
+  TProductComponent,
   TUpdateProductData,
 } from "@utils/types";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { RootState } from "@store";
 import { refreshTable } from "../helpers/pagination";
-import { setEditingItemId, setRemovingIds } from "@slices/products";
-import { AppThunkDispatch } from "./types/types";
+import { setSelectedItemId } from "@slices/products";
+import {
+  AppThunkDispatch,
+  TCalculateTotalConsumptionPayload,
+} from "./types/types";
+import { formatDateTime } from "@utils/helpers/datetime";
 
 const GET_PRODUCTS = "products/get";
 const ADD_PRODUCT = "products/add";
 const UPDATE_PRODUCT = "products/update";
 const DELETE_PRODUCT = "products/delete";
+const CALCULATE_TOTAL_CONSUMPTION = "products/calculate-total-consumption";
 
 const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
   refreshTable<TProduct>(
     dispatch,
     getAllProductsAsync,
     state.products.pagination,
-    setEditingItemId
+    setSelectedItemId
   );
 };
 
@@ -31,8 +37,16 @@ export const getAllProductsAsync = createAsyncThunk<
   TPaginatedData<TProduct>,
   PaginationParams
 >(GET_PRODUCTS, async (paginationParams) => {
-  const res = await api.products.getAll(paginationParams);
-  return res;
+  const { total, items } = await api.products.getAll(paginationParams);
+  return {
+    total,
+    items: items.map((i) => ({
+      ...i,
+      dateCreated: formatDateTime(i.dateCreated),
+      datePlanned: formatDateTime(i.datePlanned),
+      dateActual: i.dateActual ? formatDateTime(i.dateActual) : null,
+    })),
+  };
 });
 
 export const addProductAsync = createAsyncThunk<void, TCreateProductData>(
@@ -68,7 +82,6 @@ export const updateProductAsync = createAsyncThunk<void, TUpdateProductData>(
 export const deleteProductAsync = createAsyncThunk<void, number>(
   DELETE_PRODUCT,
   async (id, { dispatch, getState }) => {
-    dispatch(setRemovingIds(id));
     const res = await api.products.deleteProduct(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -78,7 +91,20 @@ export const deleteProductAsync = createAsyncThunk<void, number>(
     } else {
       dispatchErrorToast(dispatch, res.message);
     }
-
-    dispatch(setRemovingIds(id));
   }
 );
+
+export const calculateTotalConsumptionAsync = createAsyncThunk<
+  TPaginatedData<TProductComponent>,
+  TCalculateTotalConsumptionPayload
+>(CALCULATE_TOTAL_CONSUMPTION, async ({ productId, params }) => {
+  const { total, items } = await api.products.calculateTotalConsumption(
+    productId,
+    params
+  );
+
+  return {
+    total,
+    items,
+  };
+});

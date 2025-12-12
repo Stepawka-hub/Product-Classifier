@@ -1,24 +1,37 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   addProductAsync,
+  calculateTotalConsumptionAsync,
+  deleteProductAsync,
   getAllProductsAsync,
   updateProductAsync,
 } from "@thunks/products";
-import { toggleArrayItem } from "@utils/helpers/array";
-import { TargetId, TPaginatedData, TProduct } from "@utils/types";
+import {
+  TargetId,
+  TPaginatedData,
+  TProduct,
+  TProductComponent,
+} from "@utils/types";
 import { TInitialProductState } from "./types/types";
 
 const initialState: TInitialProductState = {
   products: [],
+  selectedItemId: null,
 
   isLoading: false,
   isAdding: false,
-  removingIds: [],
-
-  editingItemId: null,
+  isRemoving: false,
   isUpdating: false,
 
   pagination: {
+    totalCount: 1,
+    pageSize: 10,
+    currentPage: 1,
+  },
+
+  isCalculating: false,
+  consumptionCalculation: [],
+  consumptionPagination: {
     totalCount: 1,
     pageSize: 10,
     currentPage: 1,
@@ -30,30 +43,30 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     resetProductsState: () => initialState,
-    setProducts: (state, { payload }: PayloadAction<TProduct[]>) => {
-      state.products = payload;
-    },
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
+    },
+    setConsumptionCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.consumptionPagination.currentPage = payload;
     },
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;
     },
-    setRemovingIds: (state, { payload }: PayloadAction<string | number>) => {
-      state.removingIds = toggleArrayItem(state.removingIds, payload);
-    },
-    setEditingItemId: (state, { payload }: PayloadAction<TargetId>) => {
-      state.editingItemId = payload;
+    setSelectedItemId: (state, { payload }: PayloadAction<TargetId>) => {
+      state.selectedItemId = payload;
     },
   },
   selectors: {
     getProductsSelector: (state) => state.products,
+    getSelectedItemIdSelector: (state) => state.selectedItemId,
     getIsLoadingSelector: (state) => state.isLoading,
     getIsAddingSelector: (state) => state.isAdding,
-    getRemovingIdsSelector: (state) => state.removingIds,
+    getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
-    getEditingItemIdSelector: (state) => state.editingItemId,
+    getIsCalculating: (state) => state.isCalculating,
+    getConsumptionCalculation: (state) => state.consumptionCalculation,
     getPaginationSelector: (state) => state.pagination,
+    getConsumptionPagination: (state) => state.consumptionPagination,
   },
   extraReducers: (builder) => {
     builder
@@ -90,6 +103,34 @@ const productsSlice = createSlice({
       })
       .addCase(updateProductAsync.rejected, (state) => {
         state.isUpdating = false;
+      })
+
+      .addCase(deleteProductAsync.pending, (state) => {
+        state.isRemoving = true;
+      })
+      .addCase(deleteProductAsync.fulfilled, (state) => {
+        state.isRemoving = false;
+      })
+      .addCase(deleteProductAsync.rejected, (state) => {
+        state.isRemoving = false;
+      })
+
+      .addCase(calculateTotalConsumptionAsync.pending, (state) => {
+        state.isCalculating = true;
+      })
+      .addCase(
+        calculateTotalConsumptionAsync.fulfilled,
+        (
+          state,
+          { payload }: PayloadAction<TPaginatedData<TProductComponent>>
+        ) => {
+          state.isCalculating = false;
+          state.consumptionCalculation = payload.items;
+          state.consumptionPagination.totalCount = payload.total;
+        }
+      )
+      .addCase(calculateTotalConsumptionAsync.rejected, (state) => {
+        state.isCalculating = false;
       });
   },
 });
@@ -99,16 +140,18 @@ export const {
   getProductsSelector,
   getIsLoadingSelector,
   getIsAddingSelector,
-  getRemovingIdsSelector,
   getIsUpdatingSelector,
-  getEditingItemIdSelector,
+  getIsRemovingSelector,
+  getIsCalculating,
   getPaginationSelector,
+  getConsumptionPagination,
+  getSelectedItemIdSelector,
+  getConsumptionCalculation,
 } = productsSlice.selectors;
 export const {
   resetProductsState,
-  setProducts,
   setCurrentPage,
+  setConsumptionCurrentPage,
   setTotalCount,
-  setRemovingIds,
-  setEditingItemId,
+  setSelectedItemId,
 } = productsSlice.actions;

@@ -1,6 +1,13 @@
-import { TTableConfig } from '@components/types';
-import { TPagination } from '@utils/types';
+import { TargetId, THeaders, TPagination } from "@utils/types";
 
-export type TableUIProps<T> = TTableConfig<T> & {
+export type TTableConfig<T> = {
+  headers: Partial<THeaders<T>>;
+  data: T[];
+};
+
+export type TableProps<T> = TTableConfig<T> & {
   pagination: TPagination;
-}
+  selectable?: boolean;
+  selectedItemId?: TargetId;
+  setSelectedItem?: (i: TargetId) => void;
+};

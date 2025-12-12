@@ -1,18 +1,21 @@
-import { BaseForm } from "@components/forms/base-form";
-import { Input } from "@components/forms/form-elements";
-import { useForm } from "@hooks/forms/useForm";
-import { getEditingUnitSelector } from "@selectors/units";
+import { FC } from "react";
+
+import { useSelector } from "@store";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsUpdatingSelector } from "@slices/units";
-import { useSelector } from "@store";
 import { updateUnitAsync } from "@thunks/units";
+
+import { BaseForm } from "@components/forms/base-form";
+import { Input } from "@components/forms/form-elements";
+
+import { useForm } from "@hooks/forms/useForm";
 import { editBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
-import { FC } from "react";
 import { FormProps, TUpdateUnitForm } from "../../types";
+import { getSelectedUnitSelector } from "@selectors/units";
 
 export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
-  const editingUnit = useSelector(getEditingUnitSelector);
+  const editingUnit = useSelector(getSelectedUnitSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
 
   const prefix = "unit-edit";
@@ -48,17 +51,15 @@ export const EditUnitForm: FC<FormProps> = ({ onClose }) => {
       onClose={onClose}
       onSubmit={handleSubmit}
     >
-      <>
-        <Input
-          id={`${prefix}_name`}
-          name="name"
-          label="Название ЕИ"
-          value={formData.name}
-          onChange={onChange("name")}
-          maxLength={64}
-          required
-        />
-      </>
+      <Input
+        id={`${prefix}_name`}
+        name="name"
+        label="Название ЕИ"
+        value={formData.name}
+        onChange={onChange("name")}
+        maxLength={64}
+        required
+      />
     </BaseForm>
   );
 };

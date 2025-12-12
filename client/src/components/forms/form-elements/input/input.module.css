@@ -6,8 +6,7 @@
 }
 
 .label {
-  font-size: 1.15rem;
-  font-weight: 500;
+  font-size: 1.05rem;
   color: var(--primary-color);
 }
 
@@ -16,10 +15,6 @@
 }
 
 @media (max-width: 960px) {
-  .input {
-    font-size: 1rem;
-  }
-
   .label {
     font-size: 1rem;
   }
@@ -31,6 +26,6 @@
   }
 
   .label {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 }

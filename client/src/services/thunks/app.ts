@@ -1,10 +1,13 @@
 import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setInitializeSuccess } from "@slices/app";
-import { resetAllState, setAllEntitiesState } from "../helpers/entities";
-import { setPaginationTotals } from "../helpers/pagination";
+import { resetAllState } from "../helpers/entities";
 import { dispatchErrorToast, dispatchSuccessToast } from "../helpers/toast";
 import { getErrorMessage } from "@utils/helpers/error";
+import { getAllClassifiersAsync } from "./classifiers";
+import { getAllProductsAsync } from "./products";
+import { getAllUnitsAsync } from "./units";
+import { getAllSpecificationsAsync } from "./specifications";
 
 const INITIALIZE_APP = "app/initialize";
 const FILL_DATA = "app/fill-data";
@@ -21,21 +24,27 @@ export const fillDataAsync = createAsyncThunk(
   FILL_DATA,
   async (_, { dispatch }) => {
     try {
-      const { products, categories, units } = await api.app.fillData();
+      const { resultCode } = await api.app.fillData();
 
-      resetAllState(dispatch);
-      setAllEntitiesState(dispatch, {
-        products: products.items,
-        categories: categories.items,
-        units: units.items,
-      });
-      setPaginationTotals(dispatch, {
-        products: products.total,
-        categories: categories.total,
-        units: units.total,
-      });
+      if (resultCode === SUCCESS_CODE) {
+        const basePagination = {
+          page: 1,
+          limit: 10,
+        };
 
-      dispatchSuccessToast(dispatch, "Данные успешно заполнены!");
+        resetAllState(dispatch);
+
+        await Promise.all([
+          dispatch(getAllClassifiersAsync(basePagination)),
+          dispatch(getAllProductsAsync(basePagination)),
+          dispatch(getAllUnitsAsync(basePagination)),
+          dispatch(getAllSpecificationsAsync(basePagination)),
+        ]);
+
+        dispatchSuccessToast(dispatch, "Данные успешно заполнены!");
+      } else {
+        dispatchErrorToast(dispatch, "Не удалось заполнить данные!");
+      }
     } catch (e) {
       dispatchErrorToast(
         dispatch,

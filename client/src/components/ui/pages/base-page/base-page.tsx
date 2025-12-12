@@ -1,10 +1,10 @@
-import { Title } from "@components/common/title";
 import { FC } from "react";
-import { BasePageUIProps } from "./type";
+import { BasePageProps } from "./type";
 import { SEO } from "@components/SEO";
+import { Title } from "@components/common/title";
 import { Separator } from "@components/common/separator";
 
-export const BasePageUI: FC<BasePageUIProps> = ({ title, children }) => (
+export const BasePage: FC<BasePageProps> = ({ title, children }) => (
   <>
     <SEO title={title} />
     <section>

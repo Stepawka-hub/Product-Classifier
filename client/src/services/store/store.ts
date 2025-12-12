@@ -7,15 +7,17 @@ import {
 
 import { reducer as appReducer } from "@slices/app";
 import { reducer as productsReducer } from "@slices/products";
-import { reducer as categoriesReducer } from "@slices/categories";
+import { reducer as classifiersReducer } from "@slices/classifiers";
 import { reducer as unitsReducer } from "@slices/units";
+import { reducer as specificationReducer } from "@slices/specifications";
 import { reducer as toastsReducer } from "@slices/toasts";
 
 const rootReducer = combineReducers({
   app: appReducer,
   products: productsReducer,
-  categories: categoriesReducer,
+  classifiers: classifiersReducer,
   units: unitsReducer,
+  specifications: specificationReducer,
   toasts: toastsReducer,
 });
 

@@ -1,3 +1,4 @@
+import { FC, useState } from "react";
 import { useDeviceDetect } from "@hooks/useDeviceDetect";
 import {
   getIsClearingDataSelector,
@@ -6,7 +7,6 @@ import {
 import { useDispatch, useSelector } from "@store";
 import { clearDataAsync, fillDataAsync } from "@thunks/app";
 import { NavigationPanelUI } from "@ui/navigation-panel";
-import { FC, useState } from "react";
 
 export const NavigationPanel: FC = () => {
   const dispatch = useDispatch();

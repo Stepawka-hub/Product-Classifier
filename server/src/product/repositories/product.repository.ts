@@ -1,11 +1,14 @@
-import { DataSource, Repository } from 'typeorm';
-import { Product } from '../entities/product.entity';
-import { CreateProductDto } from 'src/product/dto/create-product.dto';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
+import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
+import { DataSource, Repository } from 'typeorm';
+import { ProductComponentDto } from '../dto/calculate-consumption-response.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
+import { Product } from '../entities/product.entity';
+import { ConsumptionResult } from '../types/types';
+import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -17,21 +20,51 @@ export class ProductRepository extends Repository<Product> {
   }
 
   async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
-    const query = `
-      SELECT AddRow(
-        $1::text,
-        ARRAY['name', 'parentid', 'umid'],
-        ARRAY[quote_literal($2), $3::text, $4::text])`;
-    const { name, parentId, unitId } = dto;
-
     try {
-      const isExist = await this.findOne({ where: { name } });
+      const isExist = await this.findOne({ where: { name: dto.name } });
       if (isExist) {
         return BaseResponseDto.Error(
-          getErrorMessage('Данный продукт уже существует!'),
+          getErrorMessage('Данное изделие уже существует!'),
         );
       }
-      await this.query(query, [this.tableName, name, parentId, unitId]);
+
+      // Начинаем собирать запрос
+      const columns: string[] = [];
+      const values: string[] = [];
+      const params = [this.tableName];
+
+      let paramIndex = 2; // $1 занят tableName
+
+      // Обязательные поля
+      columns.push('name');
+      values.push(`quote_literal($${paramIndex}::text)`);
+      params.push(dto.name);
+      paramIndex++;
+
+      const optionalFields = [
+        { field: 'unitId', column: 'unitid' },
+        { field: 'parentId', column: 'parentid' },
+        { field: 'classifierId', column: 'classifierid' },
+        { field: 'baseProductId', column: 'baseproductid' },
+      ];
+
+      for (const { field, column } of optionalFields) {
+        if (dto[field] !== undefined && dto[field] !== null) {
+          columns.push(column);
+          values.push(`$${paramIndex}::text`);
+          params.push(String(dto[field]));
+          paramIndex++;
+        }
+      }
+
+      const query = `
+        SELECT AddRow(
+          $1::text,
+          ARRAY[${columns.map((col) => `'${col}'`).join(', ')}],
+          ARRAY[${values.join(', ')}]
+        )`;
+
+      await this.query(query, params);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
@@ -39,23 +72,74 @@ export class ProductRepository extends Repository<Product> {
   }
 
   async updateProduct(dto: UpdateProductDto): Promise<BaseResponseDto> {
-    const query = `
-      SELECT AddRow(
-        $1::text,
-        ARRAY['name'],
-        ARRAY[quote_literal($2)]
-      )`;
-    const { name } = dto;
-
     try {
-      const isExist = await this.findOne({ where: { name } });
-      if (isExist) {
+      const { id, name, unitId, parentId, classifierId, baseProductId } = dto;
+
+      // Проверяем существование изделия по ID
+      const existingProduct = await this.findOne({ where: { id } });
+
+      if (!existingProduct) {
         return BaseResponseDto.Error(
-          getErrorMessage('Данная ЕИ уже существует!'),
+          getErrorMessage('Изделие с указанным ID не найден!'),
         );
       }
 
-      await this.query(query, [this.tableName, name]);
+      const updatePromises: Promise<unknown>[] = [];
+      if (name && name !== existingProduct.name) {
+        updatePromises.push(
+          this.query(`SELECT EditRows($1, $2, $3, $4, $5)`, [
+            this.tableName,
+            'name',
+            name,
+            'id',
+            [String(id)],
+          ]),
+        );
+      }
+
+      // Обновляем единицу измерения если указана
+      if (unitId && unitId !== existingProduct.unit?.id) {
+        updatePromises.push(
+          this.query(`SELECT EditRows($1, $2, $3, $4, $5)`, [
+            this.tableName,
+            'umid',
+            String(unitId),
+            'id',
+            [String(id)],
+          ]),
+        );
+      }
+
+      // Опциональные поля
+      const optionalUpdates = [
+        { field: 'parentId', column: 'parentid', value: parentId },
+        { field: 'classifierId', column: 'classifierid', value: classifierId },
+        {
+          field: 'baseProductId',
+          column: 'baseproductid',
+          value: baseProductId,
+        },
+      ];
+
+      for (const { column, value } of optionalUpdates) {
+        if (value !== undefined) {
+          const dbValue = value === null ? null : String(value);
+          updatePromises.push(
+            this.query(`SELECT EditRows($1, $2, $3, $4, $5)`, [
+              this.tableName,
+              column,
+              dbValue,
+              'id',
+              [String(id)],
+            ]),
+          );
+        }
+      }
+
+      if (updatePromises.length > 0) {
+        await Promise.all(updatePromises);
+      }
+
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
@@ -83,6 +167,51 @@ export class ProductRepository extends Repository<Product> {
       }
 
       return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async calculateTotalConsumption(
+    id: number,
+    count: number = 1,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedResponseDto<ProductComponentDto> | BaseResponseDto> {
+    try {
+      const product = await this.findOne({
+        where: { id },
+      });
+
+      if (!product || !id) {
+        return BaseResponseDto.Error('Изделие не найдено!');
+      }
+
+      const result: ConsumptionResult[] = (await this.query(
+        `SELECT CalculateTotalConsumption(${id}, ${count})`,
+      )) as ConsumptionResult[];
+
+      const productComponents: ProductComponentDto[] = result.map((r) => {
+        const value = r['calculatetotalconsumption'];
+        const parts = value.slice(1, value.length - 1).split(',');
+
+        return {
+          id: Number(parts[0]),
+          name: parts[1].replace(/"/g, ''),
+          count: Number(parts[2]),
+          unitName: parts[3],
+        };
+      });
+
+      const total = productComponents.length;
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const paginatedData = productComponents
+        .sort((a, b) => a.id - b.id)
+        .slice(startIndex, endIndex);
+
+      return new PaginatedResponseDto(paginatedData, total);
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
     }

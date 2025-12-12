@@ -1,9 +1,11 @@
 import {
   TargetId,
-  TCategory,
-  TCategoryShort,
+  TClassifier,
+  TClassifierShort,
   TPagination,
   TProduct,
+  TProductComponent,
+  TSpecification,
   TToast,
   TUnit,
 } from "@utils/types";
@@ -15,46 +17,48 @@ export type TInitialAppState = {
   isClearingData: boolean;
 };
 
-export type TCommonInitialState = {
+export type TActionsInitialState = {
   isLoading: boolean;
   isAdding: boolean;
-  removingIds: (string | number)[];
+  isRemoving: boolean;
+  isUpdating: boolean;
   pagination: Omit<TPagination, "setCurrentPage">;
 };
 
-export type TEditingState = {
-  editingItemId: TargetId;
-  isUpdating: boolean;
+export type TInitialProductState = TActionsInitialState & {
+  products: TProduct[];
+  selectedItemId: TargetId;
+
+  isCalculating: boolean;
+  consumptionCalculation: TProductComponent[];
+  consumptionPagination: Omit<TPagination, "setCurrentPage">;
 };
 
-export type TSelectingState = {
+export type TInitialClassifierState = TActionsInitialState & {
+  classifiers: TClassifier[];
+  selectedItemId: TargetId;
+
+  parents: TClassifierShort[];
+  children: TClassifierShort[];
+
+  isFetchParents: boolean;
+  isFetchChildren: boolean;
+  isFetchLeaves: boolean;
+
+  nodesPagination: Omit<TPagination, "setCurrentPage">;
+};
+
+export type TInitialUnitState = TActionsInitialState & {
+  units: TUnit[];
   selectedItemId: TargetId;
 };
 
-export type TInitialProductState = TCommonInitialState &
-  TEditingState & {
-    products: TProduct[];
-  };
-
-export type TInitialCategoryState = TCommonInitialState &
-  TSelectingState &
-  TEditingState & {
-    categories: TCategory[];
-    parents: TCategoryShort[];
-    children: TCategoryShort[];
-    leaves: TProduct[];
-
-    isFetchParents: boolean;
-    isFetchChildren: boolean;
-    isFetchLeaves: boolean;
-
-    nodesPagination: Omit<TPagination, "setCurrentPage">;
-  };
-
-export type TInitialUnitState = TCommonInitialState &
-  TEditingState & {
-    units: TUnit[];
-  };
+export type TInitialSpecificationState = Pick<
+  TActionsInitialState,
+  "isLoading" | "pagination"
+> & {
+  specifications: TSpecification[];
+};
 
 export type TInitialModalState = {
   isOpen: boolean;

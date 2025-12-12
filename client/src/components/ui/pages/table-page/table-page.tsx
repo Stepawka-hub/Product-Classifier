@@ -1,35 +1,34 @@
-import { Button } from "@components/common/buttons";
-import { BasePage } from "@pages";
-import { Table } from "@components/table";
-import { TablePageUIProps } from "./type";
-import s from "./table-page.module.css";
+import { TablePageProps } from "./type";
 import { TEntity } from "@utils/types";
+import { BasePage } from "@ui/pages";
+import { Table } from "@ui/table";
+import s from "./table-page.module.css";
 
-export const TablePageUI = <T extends TEntity>({
+export const TablePage = <T extends TEntity>({
   title,
-  addButtonLabel,
   tableConfig,
   pagination,
-  openAddForm,
-  additionalActions,
-}: TablePageUIProps<T>) => (
-  <>
-    <BasePage title={title}>
-      <div className={s.content}>
-        {tableConfig.data.length ? (
-          <Table<T> pagination={pagination} {...tableConfig} />
-        ) : (
-          <span className={s.noData}>Данных не найдено!</span>
-        )}
-        <div className={s.actions}>
-          <Button
-            variant="plus"
-            children={addButtonLabel}
-            onClick={openAddForm}
-          />
-          {additionalActions}
-        </div>
-      </div>
-    </BasePage>
-  </>
+  headerActions,
+  footerActions,
+  selectable = true,
+  selectedItemId,
+  setSelectedItem,
+}: TablePageProps<T>) => (
+  <BasePage title={title}>
+    <div className={s.content}>
+      {headerActions}
+      {tableConfig.data.length ? (
+        <Table<T>
+          pagination={pagination}
+          selectedItemId={selectedItemId}
+          setSelectedItem={setSelectedItem}
+          selectable={selectable}
+          {...tableConfig}
+        />
+      ) : (
+        <span className={s.noData}>Данных не найдено!</span>
+      )}
+      <div className={s.footerActions}>{footerActions}</div>
+    </div>
+  </BasePage>
 );

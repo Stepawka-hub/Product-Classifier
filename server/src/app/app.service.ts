@@ -1,38 +1,30 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { DataSource } from 'typeorm';
-import { CategoryService } from '../category/category.service';
-import { ProductService } from '../product/product.service';
-import { UnitService } from '../unit/unit.service';
-import { IAppData } from './dto/app-data.dto';
 
 @Injectable()
 export class AppService {
-  constructor(
-    private dataSource: DataSource,
-    private productService: ProductService,
-    private categoryService: CategoryService,
-    private unitService: UnitService,
-  ) {}
+  constructor(private dataSource: DataSource) {}
 
-  async fillData(): Promise<IAppData> {
-    // Вызываем процедуру заполнения данных
-    await this.seedDatabase();
-
-    const [products, categories, units] = await Promise.all([
-      this.productService.findAllWithPagination(),
-      this.categoryService.findAllWithPagination(),
-      this.unitService.findAllWithPagination(),
-    ]);
-
-    return { products, categories, units };
-  }
-
-  async clearData() {
+  async fillData(): Promise<BaseResponseDto> {
     try {
-      await this.clearDatabase();
+      await this.seedDatabase();
+      return BaseResponseDto.Success();
     } catch {
       throw new HttpException(
-        { resultCode: 1, message: 'Database clearing failed' },
+        BaseResponseDto.Error('Database filling failed'),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async clearData(): Promise<BaseResponseDto> {
+    try {
+      await this.clearDatabase();
+      return BaseResponseDto.Success();
+    } catch {
+      throw new HttpException(
+        BaseResponseDto.Error('Database clearing failed'),
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

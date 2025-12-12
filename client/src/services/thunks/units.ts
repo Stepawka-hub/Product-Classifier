@@ -1,6 +1,6 @@
 import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { setEditingItemId, setRemovingIds } from "@slices/units";
+import { setSelectedItemId } from "@slices/units";
 import { RootState } from "@store";
 import { PaginationParams } from "@utils/api/types/types";
 import {
@@ -23,7 +23,7 @@ const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
     dispatch,
     getAllUnitsAsync,
     state.units.pagination,
-    setEditingItemId
+    setSelectedItemId
   );
 };
 
@@ -66,7 +66,6 @@ export const updateUnitAsync = createAsyncThunk<void, TUpdateUnitData>(
 export const deleteUnitAsync = createAsyncThunk<void, number>(
   DELETE_UNIT,
   async (id, { dispatch, getState }) => {
-    dispatch(setRemovingIds(id));
     const res = await api.units.deleteUnit(id);
 
     if (res.resultCode === SUCCESS_CODE) {
@@ -76,7 +75,5 @@ export const deleteUnitAsync = createAsyncThunk<void, number>(
     } else {
       dispatchErrorToast(dispatch, res.message);
     }
-
-    dispatch(setRemovingIds(id));
   }
 );
