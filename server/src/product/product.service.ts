@@ -4,7 +4,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { ProductRepository } from 'src/product/repositories/product.repository';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  RequestUpdateProductDto,
+  UpdateProductDto,
+} from './dto/update-product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
 import { ClassifierRepository } from 'src/classifier/repositores/classifier.repository';
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
@@ -70,48 +73,89 @@ export class ProductService {
     return await this.productRepository.createProduct(dto);
   }
 
-  async updateProduct(dto: UpdateProductDto): Promise<BaseResponseDto> {
+  async updateProduct(dto: RequestUpdateProductDto): Promise<BaseResponseDto> {
     try {
-      const { id, name, parentName, unitName } = dto;
-      const isProductExist = await this.productRepository.findOne({
-        where: {
-          name,
-          id: Not(id),
-        },
-      });
+      const {
+        id,
+        name,
+        parentName,
+        unitName,
+        classifierName,
+        baseProductName,
+      } = dto;
 
-      if (isProductExist) {
+      const checks = {
+        duplicateName: name
+          ? await this.productRepository.findOne({
+              where: { name, id: Not(id) },
+            })
+          : null,
+
+        relatedEntities: {
+          parent: parentName
+            ? await this.productRepository.findOne({
+                where: { name: parentName },
+              })
+            : null,
+          unit: unitName
+            ? await this.unitRepository.findOne({ where: { name: unitName } })
+            : null,
+          baseProduct: baseProductName
+            ? await this.productRepository.findOne({
+                where: { name: baseProductName },
+              })
+            : null,
+          classifier: classifierName
+            ? await this.classifierRepository.findOne({
+                where: { name: classifierName },
+              })
+            : null,
+        },
+      };
+
+      // Проверка на дубликат имени
+      if (name && checks.duplicateName) {
         return BaseResponseDto.Error(
           'Изделие с таким названием уже существует!',
         );
       }
 
-      const classifier = await this.classifierRepository.findOne({
-        where: { name: parentName },
-      });
-      if (!classifier) {
-        return BaseResponseDto.Error(
-          'Указанного классификатора не существует!',
-        );
+      const validationErrors = [
+        {
+          name: parentName,
+          entity: checks.relatedEntities.parent,
+          message: 'Указанного родительского изделия не существует!',
+        },
+        { name: unitName, entity: checks.relatedEntities.unit, message: 'ЕИ' },
+        {
+          name: baseProductName,
+          entity: checks.relatedEntities.baseProduct,
+          message: 'Указанного базового изделия не существует!',
+        },
+        {
+          name: classifierName,
+          entity: checks.relatedEntities.classifier,
+          message: 'Указанного классификатора не существует!',
+        },
+      ]
+        .filter(({ name }) => name)
+        .filter(({ entity }) => !entity)
+        .map(({ message }) => message);
+
+      if (validationErrors.length > 0) {
+        return BaseResponseDto.Error(validationErrors[0]);
       }
 
-      const unit = await this.unitRepository.findOne({
-        where: { name: unitName },
-      });
-      if (!unit) {
-        return BaseResponseDto.Error('Указанной ЕИ не существует!');
-      }
+      const updateData: UpdateProductDto = {
+        id,
+        name,
+        unitId: checks.relatedEntities.unit?.id || null,
+        parentId: checks.relatedEntities.parent?.id || null,
+        baseProductId: checks.relatedEntities.baseProduct?.id || null,
+        classifierId: checks.relatedEntities.classifier?.id || null,
+      };
 
-      const updateResult = await this.productRepository.update(
-        { id },
-        { name, parent: classifier, unit },
-      );
-
-      if (updateResult.affected === 0) {
-        return BaseResponseDto.Error('Запись не найдена или не была изменена!');
-      }
-
-      return BaseResponseDto.Success();
+      return await this.productRepository.updateProduct(updateData);
     } catch (error) {
       return BaseResponseDto.Error(
         'Ошибка при обновлении записи: ' + getErrorMessage(error),

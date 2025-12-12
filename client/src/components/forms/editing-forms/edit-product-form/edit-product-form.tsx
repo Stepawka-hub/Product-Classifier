@@ -25,11 +25,6 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
     unitName: editingProduct?.unitName || "",
     classifierName: editingProduct?.classifierName || "",
     baseProductName: editingProduct?.baseProductName || "",
-    versionNumber: editingProduct?.versionNumber || 1,
-    isActive: editingProduct?.isActive || true,
-    dateCreated: editingProduct?.dateCreated || "",
-    datePlanned: editingProduct?.datePlanned || "",
-    dateActual: editingProduct?.dateActual || "",
   };
   const { dispatch, formData, setFormData, onChange } =
     useForm<TUpdateProductForm>(initialState, [editingProduct]);
@@ -37,11 +32,17 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
   if (!editingProduct) return null;
 
   const handleSubmit = async () => {
+    const { name, parentName, unitName, classifierName, baseProductName } =
+      formData;
     try {
       await dispatch(
         updateProductAsync({
-          id: editingProduct.id,
-          ...formData,
+          ...editingProduct,
+          name,
+          parentName: parentName || null,
+          unitName: unitName || null,
+          classifierName: classifierName || null,
+          baseProductName: baseProductName || null,
         })
       ).unwrap();
 
@@ -60,35 +61,47 @@ export const EditProductForm: FC<FormProps> = ({ onClose }) => {
       onClose={onClose}
       onSubmit={handleSubmit}
     >
-      <>
-        <Input
-          id={`${prefix}_name`}
-          name="name"
-          label="Название изделия"
-          value={formData.name}
-          onChange={onChange("name")}
-          maxLength={128}
-          required
-        />
-        <Input
-          id={`${prefix}_parentName`}
-          name="parentName"
-          label="Название категории"
-          value={formData.parentName || ""}
-          onChange={onChange("parentName")}
-          maxLength={128}
-          required
-        />
-        <Input
-          id={`${prefix}_unitName`}
-          name="unitName"
-          label="Название ЕИ"
-          value={formData.unitName || ""}
-          onChange={onChange("unitName")}
-          maxLength={64}
-          required
-        />
-      </>
+      <Input
+        id={`${prefix}_name`}
+        name="name"
+        label="Название изделия"
+        value={formData.name}
+        onChange={onChange("name")}
+        maxLength={128}
+        required
+      />
+      <Input
+        id={`${prefix}_parentName`}
+        name="parentName"
+        label="Название родительского изделия"
+        value={formData.parentName || ""}
+        onChange={onChange("parentName")}
+        maxLength={128}
+      />
+      <Input
+        id={`${prefix}_unitName`}
+        name="unitName"
+        label="Название ЕИ"
+        value={formData.unitName || ""}
+        onChange={onChange("unitName")}
+        maxLength={64}
+      />
+      <Input
+        id={`${prefix}_baseProductName`}
+        name="baseProductName"
+        label="Название базового изделия"
+        value={formData.baseProductName || ""}
+        onChange={onChange("baseProductName")}
+        maxLength={64}
+      />
+      <Input
+        id={`${prefix}_classifierName`}
+        name="classifierName"
+        label="Название классификатора"
+        value={formData.classifierName || ""}
+        onChange={onChange("classifierName")}
+        maxLength={64}
+      />
     </BaseForm>
   );
 };

@@ -81,7 +81,9 @@ export type TCreateClassifierData = {
 
 // Данные, необходимые для обновления сущностей
 export type TUpdateUnitData = TUnit;
+
 export type TUpdateProductData = TProduct;
+
 export type TUpdateClassifierData = TEntity &
   TCreateClassifierData & {
     needInheritInLeaves: boolean;

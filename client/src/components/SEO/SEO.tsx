@@ -8,7 +8,7 @@ export const SEO: FC<SEOProps> = ({ title, description }) => (
       name="description"
       content={
         description ||
-        `Product Classier — это удобный сервис для классификации продуктов!`
+        `Product Classier — это удобный сервис для классификации изделий!`
       }
     />
   </>

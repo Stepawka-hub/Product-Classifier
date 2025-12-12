@@ -34,7 +34,7 @@ export const unitsHeaders: THeaders<TUnit> = {
 };
 
 export const specificationsHeaders: Omit<THeaders<TSpecification>, "id"> = {
-  productName: "Товар",
+  productName: "Изделие",
   componentName: "Компонент",
   consumption: "Потребление",
   forQuantity: "Для количества",

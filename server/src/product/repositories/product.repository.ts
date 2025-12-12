@@ -21,7 +21,7 @@ export class ProductRepository extends Repository<Product> {
       const isExist = await this.findOne({ where: { name: dto.name } });
       if (isExist) {
         return BaseResponseDto.Error(
-          getErrorMessage('Данный продукт уже существует!'),
+          getErrorMessage('Данное изделие уже существует!'),
         );
       }
 
@@ -67,8 +67,6 @@ export class ProductRepository extends Repository<Product> {
           ARRAY[${values.join(', ')}]
         )`;
 
-      console.log(query);
-
       await this.query(query, params);
       return BaseResponseDto.Success();
     } catch (e: unknown) {
@@ -77,23 +75,74 @@ export class ProductRepository extends Repository<Product> {
   }
 
   async updateProduct(dto: UpdateProductDto): Promise<BaseResponseDto> {
-    const query = `
-      SELECT AddRow(
-        $1::text,
-        ARRAY['name'],
-        ARRAY[quote_literal($2)]
-      )`;
-    const { name } = dto;
-
     try {
-      const isExist = await this.findOne({ where: { name } });
-      if (isExist) {
+      const { id, name, unitId, parentId, classifierId, baseProductId } = dto;
+
+      // Проверяем существование изделия по ID
+      const existingProduct = await this.findOne({ where: { id } });
+
+      if (!existingProduct) {
         return BaseResponseDto.Error(
-          getErrorMessage('Данная ЕИ уже существует!'),
+          getErrorMessage('Изделие с указанным ID не найден!'),
         );
       }
 
-      await this.query(query, [this.tableName, name]);
+      const updatePromises: Promise<unknown>[] = [];
+      if (name && name !== existingProduct.name) {
+        updatePromises.push(
+          this.query(`SELECT EditRows($1, $2, $3, $4, $5)`, [
+            this.tableName,
+            'name',
+            name,
+            'id',
+            [String(id)],
+          ]),
+        );
+      }
+
+      // Обновляем единицу измерения если указана
+      if (unitId && unitId !== existingProduct.unit?.id) {
+        updatePromises.push(
+          this.query(`SELECT EditRows($1, $2, $3, $4, $5)`, [
+            this.tableName,
+            'umid',
+            String(unitId),
+            'id',
+            [String(id)],
+          ]),
+        );
+      }
+
+      // Опциональные поля
+      const optionalUpdates = [
+        { field: 'parentId', column: 'parentid', value: parentId },
+        { field: 'classifierId', column: 'classifierid', value: classifierId },
+        {
+          field: 'baseProductId',
+          column: 'baseproductid',
+          value: baseProductId,
+        },
+      ];
+
+      for (const { column, value } of optionalUpdates) {
+        if (value !== undefined) {
+          const dbValue = value === null ? null : String(value);
+          updatePromises.push(
+            this.query(`SELECT EditRows($1, $2, $3, $4, $5)`, [
+              this.tableName,
+              column,
+              dbValue,
+              'id',
+              [String(id)],
+            ]),
+          );
+        }
+      }
+
+      if (updatePromises.length > 0) {
+        await Promise.all(updatePromises);
+      }
+
       return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));

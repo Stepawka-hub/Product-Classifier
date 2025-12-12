@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  RequestUpdateProductDto,
+  UpdateProductDto,
+} from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductController {
@@ -27,7 +30,7 @@ export class ProductController {
   }
 
   @Patch()
-  updateProduct(@Body() dto: UpdateProductDto) {
+  updateProduct(@Body() dto: RequestUpdateProductDto) {
     return this.productService.updateProduct(dto);
   }
 
