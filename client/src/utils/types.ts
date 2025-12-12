@@ -68,7 +68,7 @@ export type TCreateUnitData = Pick<TUnit, "name">;
 export type TCreateProductData = {
   name: string;
   parentId: number | null;
-  unitId: number;
+  unitId: number | null;
   baseProductId: number | null;
   classifierId: number | null;
 };

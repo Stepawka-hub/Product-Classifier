@@ -32,20 +32,14 @@ export class ProductRepository extends Repository<Product> {
 
       let paramIndex = 2; // $1 занят tableName
 
-      console.log(dto);
-
       // Обязательные поля
       columns.push('name');
       values.push(`quote_literal($${paramIndex}::text)`);
       params.push(dto.name);
       paramIndex++;
 
-      columns.push('umid');
-      values.push(`$${paramIndex}::text`);
-      params.push(String(dto.unitId));
-      paramIndex++;
-
       const optionalFields = [
+        { field: 'unitId', column: 'unitid' },
         { field: 'parentId', column: 'parentid' },
         { field: 'classifierId', column: 'classifierid' },
         { field: 'baseProductId', column: 'baseproductid' },

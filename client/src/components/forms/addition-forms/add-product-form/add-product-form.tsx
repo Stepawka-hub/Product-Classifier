@@ -34,7 +34,7 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
         addProductAsync({
           name,
           parentId: parentId ? getNumber(parentId) : null,
-          unitId: getNumber(unitId),
+          unitId: unitId ? getNumber(unitId) : null,
           baseProductId: baseProductId ? getNumber(baseProductId) : null,
           classifierId: classifierId ? getNumber(classifierId) : null,
         })
@@ -80,7 +80,6 @@ export const AddProductForm: FC<FormProps> = ({ onClose }) => {
         value={formData.unitId}
         onChange={onChange("unitId")}
         maxLength={32}
-        required
       />
       <Input
         id={`${prefix}_baseProductId`}
