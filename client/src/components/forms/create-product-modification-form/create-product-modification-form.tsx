@@ -4,7 +4,7 @@ import { useSelector } from "@store";
 import { getSelectedProductSelector } from "@selectors/products";
 import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsAddingModification } from "@slices/products";
-import { changeProductVersionAsync } from "@thunks/products";
+import { createProductModificationAsync } from "@thunks/products";
 
 import { useForm } from "@hooks/forms/useForm";
 import { createBtnLabel } from "@utils/constants";
@@ -54,9 +54,9 @@ export const CreateProductModificationForm: FC<FormProps> = ({ onClose }) => {
       }
 
       await dispatch(
-        changeProductVersionAsync({
-          id: selectedProduct.id,
+        createProductModificationAsync({
           name: formData.name || null,
+          baseProductId: Number(formData.baseProductId),
           newComponentIds: componentIds.map((e) => Number(e)),
           newConsumptions: consumptions.map((e) => Number(e)),
           newForQuantities: forQuanities.map((e) => Number(e)),
@@ -85,14 +85,17 @@ export const CreateProductModificationForm: FC<FormProps> = ({ onClose }) => {
         value={formData.name}
         onChange={onChange("name")}
         maxLength={128}
+        required
       />
       <Input
         id={`${prefix}_baseProductId`}
+        type="number"
         name="baseProductId"
         label="ID базового изделия"
         value={formData.baseProductId}
         onChange={onChange("baseProductId")}
         maxLength={32}
+        required
       />
       <Input
         id={`${prefix}_componentIds`}

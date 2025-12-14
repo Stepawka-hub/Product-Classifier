@@ -71,6 +71,7 @@ export const TotalConsumptionPage = () => {
       <div className={s.inputWrapper}>
         <Input
           id="product-quantity"
+          type="number"
           name="product-quantity"
           label="Для какого количества изделий:"
           placeholder="Количество..."
