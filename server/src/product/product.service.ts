@@ -52,12 +52,35 @@ export class ProductService {
   }
 
   async createProduct(dto: CreateProductDto): Promise<BaseResponseDto> {
-    const { parentId, unitId } = dto;
+    const { parentId, unitId, classifierId, baseProductId } = dto;
 
     if (parentId) {
-      const classifierExists = await this.classifierRepository.findOne({
+      const parentProductExists = await this.productRepository.findOne({
         where: { id: parentId },
       });
+
+      if (!parentProductExists) {
+        return BaseResponseDto.Error(
+          'Указанное родительское изделие не найдено',
+        );
+      }
+    }
+
+    if (baseProductId) {
+      const baseProductExists = await this.productRepository.findOne({
+        where: { id: baseProductId },
+      });
+
+      if (!baseProductExists) {
+        return BaseResponseDto.Error('Указанное базовое изделие не найдено');
+      }
+    }
+
+    if (classifierId) {
+      const classifierExists = await this.classifierRepository.findOne({
+        where: { id: classifierId },
+      });
+
       if (!classifierExists) {
         return BaseResponseDto.Error('Указанный классификатор не найден');
       }
@@ -67,6 +90,7 @@ export class ProductService {
       const unitExists = await this.unitRepository.findOne({
         where: { id: unitId },
       });
+
       if (!unitExists) {
         return BaseResponseDto.Error('Указанная ЕИ не найдена');
       }
