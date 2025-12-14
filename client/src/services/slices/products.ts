@@ -3,6 +3,7 @@ import {
   addProductAsync,
   calculateTotalConsumptionAsync,
   changeProductVersionAsync,
+  createProductModificationAsync,
   deleteProductAsync,
   getAllProductsAsync,
   updateProductAsync,
@@ -146,6 +147,16 @@ const productsSlice = createSlice({
       })
       .addCase(changeProductVersionAsync.rejected, (state) => {
         state.isChangingVersion = false;
+      })
+
+      .addCase(createProductModificationAsync.pending, (state) => {
+        state.isAddingModification = true;
+      })
+      .addCase(createProductModificationAsync.fulfilled, (state) => {
+        state.isAddingModification = false;
+      })
+      .addCase(createProductModificationAsync.rejected, (state) => {
+        state.isAddingModification = false;
       });
   },
 });

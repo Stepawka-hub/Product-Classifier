@@ -4,6 +4,7 @@ import { PaginationParams } from "@utils/api/types/types";
 import {
   TChangeProductVersionData,
   TCreateProductData,
+  TCreateProductModificationData,
   TPaginatedData,
   TProduct,
   TProductComponent,
@@ -25,6 +26,7 @@ const UPDATE_PRODUCT = "products/update";
 const DELETE_PRODUCT = "products/delete";
 const CALCULATE_TOTAL_CONSUMPTION = "products/calculate-total-consumption";
 const CHANGE_PRODUCT_VERSION = "products/change-product-version";
+const CREATE_PRODUCT_MODIFICATION = "products/create-product-modification";
 
 const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
   refreshTable<TProduct>(
@@ -125,6 +127,26 @@ export const changeProductVersionAsync = createAsyncThunk<
       const state = getState() as RootState;
       refresh(dispatch, state);
       dispatchSuccessToast(dispatch, "Изменение изделия создано!");
+    } else {
+      return Promise.reject(res.message);
+    }
+  }
+);
+
+export const createProductModificationAsync = createAsyncThunk<
+  void,
+  TCreateProductModificationData
+>(
+  CREATE_PRODUCT_MODIFICATION,
+  async (createProductModificationPayload, { dispatch, getState }) => {
+    const res = await api.products.createProductModification(
+      createProductModificationPayload
+    );
+
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refresh(dispatch, state);
+      dispatchSuccessToast(dispatch, "Модификация изделия создана!");
     } else {
       return Promise.reject(res.message);
     }

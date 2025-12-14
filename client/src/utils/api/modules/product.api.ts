@@ -1,6 +1,7 @@
 import {
   TChangeProductVersionData,
   TCreateProductData,
+  TCreateProductModificationData,
   TEntityId,
   TPaginatedData,
   TProduct,
@@ -46,5 +47,11 @@ export class ProductApi extends BaseApi {
     changeProductVersionData: TChangeProductVersionData
   ): Promise<TServerResponse> {
     return this.post(changeProductVersionData, "change-product-version");
+  }
+
+  createProductModification(
+    createProductModification: TCreateProductModificationData
+  ): Promise<TServerResponse> {
+    return this.post(createProductModification, "create-product-modification");
   }
 }
