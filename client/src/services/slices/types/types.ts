@@ -29,6 +29,8 @@ export type TInitialProductState = TActionsInitialState & {
   products: TProduct[];
   selectedItemId: TargetId;
 
+  isChangingVersion: boolean;
+
   isCalculating: boolean;
   consumptionCalculation: TProductComponent[];
   consumptionPagination: Omit<TPagination, "setCurrentPage">;

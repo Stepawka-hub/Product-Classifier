@@ -1,4 +1,5 @@
 import {
+  TChangeProductVersionData,
   TCreateProductData,
   TEntityId,
   TPaginatedData,
@@ -39,5 +40,11 @@ export class ProductApi extends BaseApi {
     params: TCalculateTotalConsumptionParams
   ): Promise<TPaginatedData<TProductComponent>> {
     return this.get(params, `${productId}/calculate-total-consumption`);
+  }
+
+  changeProductVersion(
+    changeProductVersionData: TChangeProductVersionData
+  ): Promise<TServerResponse> {
+    return this.post(changeProductVersionData, "change-product-version");
   }
 }

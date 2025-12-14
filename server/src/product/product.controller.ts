@@ -11,6 +11,7 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { RequestUpdateProductDto } from './dto/update-product.dto';
+import { ChangeProductVersionDto } from './dto/change-product-version.dto';
 
 @Controller('products')
 export class ProductController {
@@ -49,5 +50,10 @@ export class ProductController {
       page,
       limit,
     );
+  }
+
+  @Post('change-product-version')
+  changeProductVersion(@Body() dto: ChangeProductVersionDto) {
+    return this.productService.changeProductVersion(dto);
   }
 }

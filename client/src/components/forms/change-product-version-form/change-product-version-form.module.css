@@ -1,0 +1,9 @@
+.hint {
+  color: var(--primary-color);
+}
+
+.symbol {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--lighten-orange-color);
+}

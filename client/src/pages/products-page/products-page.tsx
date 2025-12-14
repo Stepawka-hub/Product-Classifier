@@ -25,6 +25,7 @@ import { useSelector } from "@store";
 import { BaseTableActions } from "@components/base-table-actions";
 import { Button } from "@components/common/buttons";
 import { useNavigate } from "react-router-dom";
+import { ChangeProductVersionForm } from "@components/forms/change-product-version-form";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
@@ -40,7 +41,10 @@ export const ProductsPage = () => {
     setCurrentPage,
   });
 
-  const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
+  const { showAddForm, showEditForm, showModal, hideModal } = useTableForms({
+    AddForm,
+    EditForm,
+  });
 
   const { selectedItemId, handleSelect, handleDelete } = useTableActions({
     getSelectedItemId,
@@ -76,13 +80,24 @@ export const ProductsPage = () => {
         />
       }
       footerActions={
-        <Button
-          variant="view"
-          disabled={!selectedItemId}
-          onClick={handleNavigateToSummary}
-        >
-          Расчитать сводные нормы расхода
-        </Button>
+        <>
+          <Button
+            variant="view"
+            disabled={!selectedItemId}
+            onClick={handleNavigateToSummary}
+          >
+            Расчитать сводные нормы расхода
+          </Button>
+          <Button
+            variant="plus"
+            disabled={!selectedItemId}
+            onClick={() =>
+              showModal(<ChangeProductVersionForm onClose={hideModal} />)
+            }
+          >
+            Создать изменение изделия
+          </Button>
+        </>
       }
     />
   );

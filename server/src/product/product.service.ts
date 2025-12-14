@@ -13,6 +13,7 @@ import { ClassifierRepository } from 'src/classifier/repositores/classifier.repo
 import { UnitRepository } from 'src/unit/repositories/unit.repository';
 import { Not } from 'typeorm';
 import { ProductComponentDto } from './dto/calculate-consumption-response.dto';
+import { ChangeProductVersionDto } from './dto/change-product-version.dto';
 
 @Injectable()
 export class ProductService {
@@ -180,5 +181,9 @@ export class ProductService {
       page,
       limit,
     );
+  }
+
+  async changeProductVersion(dto: ChangeProductVersionDto) {
+    return await this.productRepository.changeProductVersion(dto);
   }
 }

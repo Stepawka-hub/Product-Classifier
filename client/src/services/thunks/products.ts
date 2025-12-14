@@ -2,6 +2,7 @@ import { api, SUCCESS_CODE } from "@api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { PaginationParams } from "@utils/api/types/types";
 import {
+  TChangeProductVersionData,
   TCreateProductData,
   TPaginatedData,
   TProduct,
@@ -23,6 +24,7 @@ const ADD_PRODUCT = "products/add";
 const UPDATE_PRODUCT = "products/update";
 const DELETE_PRODUCT = "products/delete";
 const CALCULATE_TOTAL_CONSUMPTION = "products/calculate-total-consumption";
+const CHANGE_PRODUCT_VERSION = "products/change-product-version";
 
 const refresh = (dispatch: AppThunkDispatch, state: RootState) => {
   refreshTable<TProduct>(
@@ -108,3 +110,23 @@ export const calculateTotalConsumptionAsync = createAsyncThunk<
     items,
   };
 });
+
+export const changeProductVersionAsync = createAsyncThunk<
+  void,
+  TChangeProductVersionData
+>(
+  CHANGE_PRODUCT_VERSION,
+  async (changeProductVersionPayload, { dispatch, getState }) => {
+    const res = await api.products.changeProductVersion(
+      changeProductVersionPayload
+    );
+
+    if (res.resultCode === SUCCESS_CODE) {
+      const state = getState() as RootState;
+      refresh(dispatch, state);
+      dispatchSuccessToast(dispatch, "Изменение изделия создано!");
+    } else {
+      return Promise.reject(res.message);
+    }
+  }
+);

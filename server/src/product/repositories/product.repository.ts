@@ -3,12 +3,13 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { BaseResponseDto } from 'src/common/dto/response.dto';
 import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { getErrorMessage } from 'src/utils/error-handler';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { ProductComponentDto } from '../dto/calculate-consumption-response.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from '../entities/product.entity';
 import { ConsumptionResult } from '../types/types';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
+import { ChangeProductVersionDto } from '../dto/change-product-version.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -80,7 +81,7 @@ export class ProductRepository extends Repository<Product> {
 
       if (!existingProduct) {
         return BaseResponseDto.Error(
-          getErrorMessage('Изделие с указанным ID не найден!'),
+          getErrorMessage('Изделие с указанным ID не найдено!'),
         );
       }
 
@@ -212,6 +213,54 @@ export class ProductRepository extends Repository<Product> {
         .slice(startIndex, endIndex);
 
       return new PaginatedResponseDto(paginatedData, total);
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async changeProductVersion(
+    dto: ChangeProductVersionDto,
+  ): Promise<BaseResponseDto> {
+    try {
+      const { id, name, newComponentIds, newConsumptions, newForQuantities } =
+        dto;
+
+      // Проверяем существование изделия по ID
+      const existingProduct = await this.findOne({ where: { id } });
+
+      if (!existingProduct) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Изделие с указанным ID не найдено!'),
+        );
+      }
+
+      const existingComponents = await this.find({
+        where: {
+          id: In(newComponentIds),
+        },
+        select: ['id'],
+      });
+
+      const existingIds = existingComponents.map((comp) => comp.id);
+      const missingIds = newComponentIds.filter(
+        (id) => !existingIds.includes(id),
+      );
+
+      if (missingIds.length > 0) {
+        throw new Error(`Компоненты с ID не найдены: ${missingIds.join(', ')}`);
+      }
+
+      // Todo: добавить обёртку array или попробовать добавить ::integer[], ::number[], ::integer[]
+      await this.query('SELECT ChangeProductVersion($1, $2, $3, $4, $5)', [
+        this.tableName,
+        id,
+        name,
+        newComponentIds,
+        newConsumptions,
+        newForQuantities,
+      ]);
+
+      return BaseResponseDto.Success();
     } catch (e: unknown) {
       return BaseResponseDto.Error(getErrorMessage(e));
     }

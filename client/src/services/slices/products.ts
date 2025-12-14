@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   addProductAsync,
   calculateTotalConsumptionAsync,
+  changeProductVersionAsync,
   deleteProductAsync,
   getAllProductsAsync,
   updateProductAsync,
@@ -22,6 +23,7 @@ const initialState: TInitialProductState = {
   isAdding: false,
   isRemoving: false,
   isUpdating: false,
+  isChangingVersion: false,
 
   pagination: {
     totalCount: 1,
@@ -63,6 +65,7 @@ const productsSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
+    getIsChangingVersion: (state) => state.isChangingVersion,
     getIsCalculating: (state) => state.isCalculating,
     getConsumptionCalculation: (state) => state.consumptionCalculation,
     getPaginationSelector: (state) => state.pagination,
@@ -131,6 +134,16 @@ const productsSlice = createSlice({
       )
       .addCase(calculateTotalConsumptionAsync.rejected, (state) => {
         state.isCalculating = false;
+      })
+
+      .addCase(changeProductVersionAsync.pending, (state) => {
+        state.isChangingVersion = true;
+      })
+      .addCase(changeProductVersionAsync.fulfilled, (state) => {
+        state.isChangingVersion = false;
+      })
+      .addCase(changeProductVersionAsync.rejected, (state) => {
+        state.isChangingVersion = false;
       });
   },
 });
@@ -142,6 +155,7 @@ export const {
   getIsAddingSelector,
   getIsUpdatingSelector,
   getIsRemovingSelector,
+  getIsChangingVersion,
   getIsCalculating,
   getPaginationSelector,
   getConsumptionPagination,
