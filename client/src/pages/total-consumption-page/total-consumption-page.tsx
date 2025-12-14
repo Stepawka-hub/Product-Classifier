@@ -75,8 +75,8 @@ export const TotalConsumptionPage = () => {
           label="Для какого количества изделий:"
           placeholder="Количество..."
           defaultValue={1}
-          onChange={handleChangeProductQuantityDebounced}
           maxLength={4}
+          onChange={handleChangeProductQuantityDebounced}
         />
       </div>
     </>

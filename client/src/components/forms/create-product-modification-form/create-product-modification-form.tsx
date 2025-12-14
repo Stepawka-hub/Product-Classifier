@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useSelector } from "@store";
 import { getSelectedProductSelector } from "@selectors/products";
 import { dispatchErrorToast } from "@services/helpers/toast";
-import { getIsChangingVersion } from "@slices/products";
+import { getIsAddingModification } from "@slices/products";
 import { changeProductVersionAsync } from "@thunks/products";
 
 import { useForm } from "@hooks/forms/useForm";
@@ -15,35 +15,36 @@ import { BaseForm } from "@components/forms/base-form";
 import { Input } from "@components/forms/form-elements";
 import { FormSymbolHint } from "@ui/form-symbol-hint";
 
+import { TCreateProductModificationForm } from "./types";
 import { FormProps } from "../types";
-import { TChangeProductVersionForm } from "./types";
 
-export const ChangeProductVersionForm: FC<FormProps> = ({ onClose }) => {
-  const editingProduct = useSelector(getSelectedProductSelector);
-  const isChanging = useSelector(getIsChangingVersion);
+export const CreateProductModificationForm: FC<FormProps> = ({ onClose }) => {
+  const selectedProduct = useSelector(getSelectedProductSelector);
+  const isAdding = useSelector(getIsAddingModification);
 
-  const prefix = "change-product-version";
-  const initialState: TChangeProductVersionForm = {
+  const prefix = "product-modification";
+  const initialState: TCreateProductModificationForm = {
     name: "",
-    newComponentIds: "",
-    newConsumptions: "",
-    newForQuanities: "",
+    baseProductId: "",
+    componentIds: "",
+    consumptions: "",
+    forQuanities: "",
   };
 
   const { dispatch, formData, setFormData, onChange } =
-    useForm<TChangeProductVersionForm>(initialState, [editingProduct]);
+    useForm<TCreateProductModificationForm>(initialState, [selectedProduct]);
 
-  if (!editingProduct) return null;
+  if (!selectedProduct) return null;
 
   const handleSubmit = async () => {
     try {
-      const newComponentIds = parseStringToArray(formData.newComponentIds);
-      const newConsumptions = parseStringToArray(formData.newConsumptions);
-      const newForQuanities = parseStringToArray(formData.newForQuanities);
+      const componentIds = parseStringToArray(formData.componentIds);
+      const consumptions = parseStringToArray(formData.consumptions);
+      const forQuanities = parseStringToArray(formData.forQuanities);
 
       if (
-        newComponentIds.length !== newConsumptions.length ||
-        newComponentIds.length !== newForQuanities.length
+        componentIds.length !== consumptions.length ||
+        componentIds.length !== forQuanities.length
       ) {
         dispatchErrorToast(
           dispatch,
@@ -54,11 +55,11 @@ export const ChangeProductVersionForm: FC<FormProps> = ({ onClose }) => {
 
       await dispatch(
         changeProductVersionAsync({
-          id: editingProduct.id,
+          id: selectedProduct.id,
           name: formData.name || null,
-          newComponentIds: newComponentIds.map((e) => Number(e)),
-          newConsumptions: newConsumptions.map((e) => Number(e)),
-          newForQuantities: newForQuanities.map((e) => Number(e)),
+          newComponentIds: componentIds.map((e) => Number(e)),
+          newConsumptions: consumptions.map((e) => Number(e)),
+          newForQuantities: forQuanities.map((e) => Number(e)),
         })
       ).unwrap();
 
@@ -71,9 +72,9 @@ export const ChangeProductVersionForm: FC<FormProps> = ({ onClose }) => {
 
   return (
     <BaseForm
-      title="Создание изменения изделия"
+      title="Создание модификации изделия"
       btnLabel={createBtnLabel}
-      isProgress={isChanging}
+      isProgress={isAdding}
       onClose={onClose}
       onSubmit={handleSubmit}
     >
@@ -86,27 +87,35 @@ export const ChangeProductVersionForm: FC<FormProps> = ({ onClose }) => {
         maxLength={128}
       />
       <Input
-        id={`${prefix}_newComponentIds`}
-        name="newComponentIds"
+        id={`${prefix}_baseProductId`}
+        name="baseProductId"
+        label="ID базового изделия"
+        value={formData.baseProductId}
+        onChange={onChange("baseProductId")}
+        maxLength={32}
+      />
+      <Input
+        id={`${prefix}_componentIds`}
+        name="componentIds"
         label="Список ID новых компонентов"
-        value={formData.newComponentIds}
-        onChange={onChange("newComponentIds")}
+        value={formData.componentIds}
+        onChange={onChange("componentIds")}
         maxLength={64}
       />
       <Input
-        id={`${prefix}_newConsumptions`}
-        name="newConsumptions"
+        id={`${prefix}_consumptions`}
+        name="consumptions"
         label="Список норм расходов"
-        value={formData.newConsumptions}
-        onChange={onChange("newConsumptions")}
+        value={formData.consumptions}
+        onChange={onChange("consumptions")}
         maxLength={64}
       />
       <Input
-        id={`${prefix}_newForQuanities`}
-        name="newForQuanities"
+        id={`${prefix}_forQuanities`}
+        name="forQuanities"
         label="Список для количества"
-        value={formData.newForQuanities}
-        onChange={onChange("newForQuanities")}
+        value={formData.forQuanities}
+        onChange={onChange("forQuanities")}
         maxLength={64}
       />
       <FormSymbolHint />

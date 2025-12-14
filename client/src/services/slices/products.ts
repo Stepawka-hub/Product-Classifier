@@ -24,6 +24,7 @@ const initialState: TInitialProductState = {
   isRemoving: false,
   isUpdating: false,
   isChangingVersion: false,
+  isAddingModification: false,
 
   pagination: {
     totalCount: 1,
@@ -66,6 +67,7 @@ const productsSlice = createSlice({
     getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
     getIsChangingVersion: (state) => state.isChangingVersion,
+    getIsAddingModification: (state) => state.isAddingModification,
     getIsCalculating: (state) => state.isCalculating,
     getConsumptionCalculation: (state) => state.consumptionCalculation,
     getPaginationSelector: (state) => state.pagination,
@@ -156,6 +158,7 @@ export const {
   getIsUpdatingSelector,
   getIsRemovingSelector,
   getIsChangingVersion,
+  getIsAddingModification,
   getIsCalculating,
   getPaginationSelector,
   getConsumptionPagination,

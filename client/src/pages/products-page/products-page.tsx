@@ -1,11 +1,9 @@
-import { Loader } from "@components/common/loader";
-import {
-  AddProductForm as AddForm,
-  EditProductForm as EditForm,
-} from "@components/forms";
+import { useNavigate } from "react-router-dom";
+
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
 import { useTableForms } from "@hooks/table/useTableForms";
+import { useSelector } from "@store";
 import {
   getIsAddingSelector,
   getIsLoadingSelector,
@@ -20,12 +18,17 @@ import {
 import { deleteProductAsync, getAllProductsAsync } from "@thunks/products";
 import { productsHeaders as headers } from "@utils/constants";
 import { TProduct } from "@utils/types";
-import { TablePage } from "@ui/pages";
-import { useSelector } from "@store";
+
+import {
+  AddProductForm as AddForm,
+  EditProductForm as EditForm,
+  ChangeProductVersionForm,
+  CreateProductModificationForm,
+} from "@components/forms";
+import { Loader } from "@components/common/loader";
 import { BaseTableActions } from "@components/base-table-actions";
 import { Button } from "@components/common/buttons";
-import { useNavigate } from "react-router-dom";
-import { ChangeProductVersionForm } from "@components/forms/change-product-version-form";
+import { TablePage } from "@ui/pages";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
@@ -96,6 +99,15 @@ export const ProductsPage = () => {
             }
           >
             Создать изменение изделия
+          </Button>
+          <Button
+            variant="plus"
+            disabled={!selectedItemId}
+            onClick={() =>
+              showModal(<CreateProductModificationForm onClose={hideModal} />)
+            }
+          >
+            Создать модификацию изделия
           </Button>
         </>
       }

@@ -59,6 +59,11 @@ export const addBtnLabel = {
   disabled: "Добавление...",
 };
 
+export const createBtnLabel = {
+  default: "Создать",
+  disabled: "Создание...",
+};
+
 export const editBtnLabel = {
   default: "Обновить",
   disabled: "Обновление...",

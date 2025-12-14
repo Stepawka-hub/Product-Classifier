@@ -30,6 +30,7 @@ export type TInitialProductState = TActionsInitialState & {
   selectedItemId: TargetId;
 
   isChangingVersion: boolean;
+  isAddingModification: boolean;
 
   isCalculating: boolean;
   consumptionCalculation: TProductComponent[];
