@@ -6,7 +6,7 @@ import { dispatchErrorToast } from "@services/helpers/toast";
 import { getIsUpdatingSelector } from "@slices/products";
 
 import { useForm } from "@hooks/forms/useForm";
-import { editBtnLabel } from "@utils/constants";
+import { addBtnLabel } from "@utils/constants";
 import { getErrorMessage } from "@utils/helpers/error";
 
 import { BaseForm } from "@components/forms/base-form";
@@ -71,7 +71,7 @@ export const ChangeProductVersionForm: FC<FormProps> = ({ onClose }) => {
   return (
     <BaseForm
       title="Обновление изделия"
-      btnLabel={editBtnLabel}
+      btnLabel={addBtnLabel}
       isProgress={isUpdating}
       onClose={onClose}
       onSubmit={handleSubmit}

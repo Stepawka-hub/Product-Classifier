@@ -250,9 +250,6 @@ export class ProductRepository extends Repository<Product> {
         throw new Error(`Компоненты с ID не найдены: ${missingIds.join(', ')}`);
       }
 
-      console.log(dto);
-
-      // Todo: добавить обёртку array или попробовать добавить ::integer[], ::number[], ::integer[]
       await this.query('SELECT ChangeProductVersion($1, $2, $3, $4, $5)', [
         id,
         name,
