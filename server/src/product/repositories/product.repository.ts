@@ -10,6 +10,7 @@ import { Product } from '../entities/product.entity';
 import { ConsumptionResult } from '../types/types';
 import { PaginatedResponseDto } from 'src/common/dto/paginated.dto';
 import { ChangeProductVersionDto } from '../dto/change-product-version.dto';
+import { CreateProductModificationDto } from '../dto/create-product-modification.dto';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -257,6 +258,63 @@ export class ProductRepository extends Repository<Product> {
         newConsumptions,
         newForQuantities,
       ]);
+
+      return BaseResponseDto.Success();
+    } catch (e: unknown) {
+      return BaseResponseDto.Error(getErrorMessage(e));
+    }
+  }
+
+  async createProductModification(
+    dto: CreateProductModificationDto,
+  ): Promise<BaseResponseDto> {
+    try {
+      const {
+        name,
+        baseProductId,
+        newComponentIds,
+        newConsumptions,
+        newForQuantities,
+      } = dto;
+
+      // Проверяем существование изделия по ID
+      const existingProduct = await this.findOne({
+        where: { id: baseProductId },
+      });
+
+      if (!existingProduct) {
+        return BaseResponseDto.Error(
+          getErrorMessage('Базовое изделие с указанным ID не найдено!'),
+        );
+      }
+
+      const existingComponents = await this.find({
+        where: {
+          id: In(newComponentIds),
+        },
+        select: ['id'],
+      });
+
+      const existingIds = existingComponents.map((comp) => comp.id);
+
+      const missingIds = newComponentIds.filter(
+        (id) => !existingIds.includes(id),
+      );
+
+      if (missingIds.length > 0) {
+        throw new Error(`Компоненты с ID не найдены: ${missingIds.join(', ')}`);
+      }
+
+      await this.query(
+        'SELECT CreateProductModification($1, $2, null, null, $3, $4, $5)',
+        [
+          baseProductId,
+          name,
+          newComponentIds,
+          newConsumptions,
+          newForQuantities,
+        ],
+      );
 
       return BaseResponseDto.Success();
     } catch (e: unknown) {

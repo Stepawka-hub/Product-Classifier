@@ -13,7 +13,7 @@ export type TFetchEntitiesThunk<T> = AsyncThunk<
   object
 >;
 
-export type TDeleteEntityThunk = AsyncThunk<void, number, object>;
+export type TDeleteEntityThunk = AsyncThunk<void, TEntityId, object>;
 
 export type TCalculateTotalConsumptionPayload = {
   productId: TEntityId;

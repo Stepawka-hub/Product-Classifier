@@ -14,6 +14,7 @@ import { UnitRepository } from 'src/unit/repositories/unit.repository';
 import { Not } from 'typeorm';
 import { ProductComponentDto } from './dto/calculate-consumption-response.dto';
 import { ChangeProductVersionDto } from './dto/change-product-version.dto';
+import { CreateProductModificationDto } from './dto/create-product-modification.dto';
 
 @Injectable()
 export class ProductService {
@@ -209,5 +210,9 @@ export class ProductService {
 
   async changeProductVersion(dto: ChangeProductVersionDto) {
     return await this.productRepository.changeProductVersion(dto);
+  }
+
+  async createProductModification(dto: CreateProductModificationDto) {
+    return await this.productRepository.createProductModification(dto);
   }
 }

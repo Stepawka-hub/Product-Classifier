@@ -49,6 +49,7 @@ const productsSlice = createSlice({
     resetProductsState: () => initialState,
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
+      state.selectedItemId = null;
     },
     setConsumptionCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.consumptionPagination.currentPage = payload;

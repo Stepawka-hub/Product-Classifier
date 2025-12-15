@@ -32,7 +32,7 @@ export class ProductApi extends BaseApi {
     return this.update(productData);
   }
 
-  deleteProduct(id: number): Promise<TServerResponse> {
+  deleteProduct(id: TEntityId): Promise<TServerResponse> {
     return this.delete(id);
   }
 

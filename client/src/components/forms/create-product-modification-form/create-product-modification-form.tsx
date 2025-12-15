@@ -56,7 +56,7 @@ export const CreateProductModificationForm: FC<FormProps> = ({ onClose }) => {
       await dispatch(
         createProductModificationAsync({
           name: formData.name || null,
-          baseProductId: Number(formData.baseProductId),
+          baseProductId: Number(selectedProduct.id),
           newComponentIds: componentIds.map((e) => Number(e)),
           newConsumptions: consumptions.map((e) => Number(e)),
           newForQuantities: forQuanities.map((e) => Number(e)),
@@ -85,16 +85,6 @@ export const CreateProductModificationForm: FC<FormProps> = ({ onClose }) => {
         value={formData.name}
         onChange={onChange("name")}
         maxLength={128}
-        required
-      />
-      <Input
-        id={`${prefix}_baseProductId`}
-        type="number"
-        name="baseProductId"
-        label="ID базового изделия"
-        value={formData.baseProductId}
-        onChange={onChange("baseProductId")}
-        maxLength={32}
         required
       />
       <Input

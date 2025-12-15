@@ -29,9 +29,11 @@ import { Loader } from "@components/common/loader";
 import { BaseTableActions } from "@components/base-table-actions";
 import { Button } from "@components/common/buttons";
 import { TablePage } from "@ui/pages";
+import { getSelectedProductSelector } from "@selectors/products";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
+  const selectedItem = useSelector(getSelectedProductSelector);
   const isAdding = useSelector(getIsAddingSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
   const isRemoving = useSelector(getIsRemovingSelector);
@@ -102,7 +104,7 @@ export const ProductsPage = () => {
           </Button>
           <Button
             variant="plus"
-            disabled={!selectedItemId}
+            disabled={!selectedItemId || !selectedItem?.isActive}
             onClick={() =>
               showModal(<CreateProductModificationForm onClose={hideModal} />)
             }

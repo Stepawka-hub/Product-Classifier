@@ -34,6 +34,7 @@ const unitsSlice = createSlice({
     },
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
+      state.selectedItemId = null;
     },
     setTotalCount: (state, { payload }: PayloadAction<number>) => {
       state.pagination.totalCount = payload;

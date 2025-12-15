@@ -5,6 +5,7 @@ import {
   TChangeProductVersionData,
   TCreateProductData,
   TCreateProductModificationData,
+  TEntityId,
   TPaginatedData,
   TProduct,
   TProductComponent,
@@ -83,7 +84,7 @@ export const updateProductAsync = createAsyncThunk<void, TUpdateProductData>(
   }
 );
 
-export const deleteProductAsync = createAsyncThunk<void, number>(
+export const deleteProductAsync = createAsyncThunk<void, TEntityId>(
   DELETE_PRODUCT,
   async (id, { dispatch, getState }) => {
     const res = await api.products.deleteProduct(id);
