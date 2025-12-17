@@ -21,11 +21,11 @@ npm i
 ```js
 // Пример (указывать своё):
 
-DB_HOST='localhost'           // Хост
-DB_PORT='5432'                // Порт
-DB_USERNAME='postgres'        // Имя пользователя БД
-DB_PASSWORD='123123'          // Пароль пользователя БД
-DB_NAME='Product Classifier'  // Имя базы данных
+DB_HOST='localhost'
+DB_PORT='5432'
+DB_USERNAME='postgres'
+DB_PASSWORD='123123'
+DB_NAME='product_classifier_bill_of_materials'
 ```
 
 ---
