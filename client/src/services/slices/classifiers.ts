@@ -52,6 +52,7 @@ const classifiersSlice = createSlice({
     },
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
+      state.selectedItemId = null;
     },
     setNodeCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.nodesPagination.currentPage = payload;

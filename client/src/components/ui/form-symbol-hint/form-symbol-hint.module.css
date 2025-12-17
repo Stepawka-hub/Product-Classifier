@@ -1,0 +1,13 @@
+.hint {
+  color: var(--primary-color);
+}
+
+.symbol,
+.example {
+  font-weight: 600;
+  color: var(--lighten-orange-color);
+}
+
+.symbol {
+  font-size: 1.25rem;
+}

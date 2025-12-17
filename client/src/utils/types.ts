@@ -37,6 +37,21 @@ export type TProductComponent = TEntity & {
   unitName: string;
 };
 
+export type TChangeProductVersionData = TEntity & {
+  name: string | null;
+  newComponentIds: number[];
+  newConsumptions: number[];
+  newForQuantities: number[];
+};
+
+export type TCreateProductModificationData = {
+  name: string | null;
+  baseProductId: number;
+  newComponentIds: number[];
+  newConsumptions: number[];
+  newForQuantities: number[];
+};
+
 // ЕИ
 export type TUnit = TEntity & {
   name: string;

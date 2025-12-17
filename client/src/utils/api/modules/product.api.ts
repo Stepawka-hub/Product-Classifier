@@ -1,5 +1,7 @@
 import {
+  TChangeProductVersionData,
   TCreateProductData,
+  TCreateProductModificationData,
   TEntityId,
   TPaginatedData,
   TProduct,
@@ -30,7 +32,7 @@ export class ProductApi extends BaseApi {
     return this.update(productData);
   }
 
-  deleteProduct(id: number): Promise<TServerResponse> {
+  deleteProduct(id: TEntityId): Promise<TServerResponse> {
     return this.delete(id);
   }
 
@@ -39,5 +41,17 @@ export class ProductApi extends BaseApi {
     params: TCalculateTotalConsumptionParams
   ): Promise<TPaginatedData<TProductComponent>> {
     return this.get(params, `${productId}/calculate-total-consumption`);
+  }
+
+  changeProductVersion(
+    changeProductVersionData: TChangeProductVersionData
+  ): Promise<TServerResponse> {
+    return this.post(changeProductVersionData, "change-product-version");
+  }
+
+  createProductModification(
+    createProductModification: TCreateProductModificationData
+  ): Promise<TServerResponse> {
+    return this.post(createProductModification, "create-product-modification");
   }
 }

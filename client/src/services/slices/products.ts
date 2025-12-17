@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   addProductAsync,
   calculateTotalConsumptionAsync,
+  changeProductVersionAsync,
+  createProductModificationAsync,
   deleteProductAsync,
   getAllProductsAsync,
   updateProductAsync,
@@ -22,6 +24,8 @@ const initialState: TInitialProductState = {
   isAdding: false,
   isRemoving: false,
   isUpdating: false,
+  isChangingVersion: false,
+  isAddingModification: false,
 
   pagination: {
     totalCount: 1,
@@ -45,6 +49,7 @@ const productsSlice = createSlice({
     resetProductsState: () => initialState,
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.pagination.currentPage = payload;
+      state.selectedItemId = null;
     },
     setConsumptionCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.consumptionPagination.currentPage = payload;
@@ -63,6 +68,8 @@ const productsSlice = createSlice({
     getIsAddingSelector: (state) => state.isAdding,
     getIsRemovingSelector: (state) => state.isRemoving,
     getIsUpdatingSelector: (state) => state.isUpdating,
+    getIsChangingVersion: (state) => state.isChangingVersion,
+    getIsAddingModification: (state) => state.isAddingModification,
     getIsCalculating: (state) => state.isCalculating,
     getConsumptionCalculation: (state) => state.consumptionCalculation,
     getPaginationSelector: (state) => state.pagination,
@@ -131,6 +138,26 @@ const productsSlice = createSlice({
       )
       .addCase(calculateTotalConsumptionAsync.rejected, (state) => {
         state.isCalculating = false;
+      })
+
+      .addCase(changeProductVersionAsync.pending, (state) => {
+        state.isChangingVersion = true;
+      })
+      .addCase(changeProductVersionAsync.fulfilled, (state) => {
+        state.isChangingVersion = false;
+      })
+      .addCase(changeProductVersionAsync.rejected, (state) => {
+        state.isChangingVersion = false;
+      })
+
+      .addCase(createProductModificationAsync.pending, (state) => {
+        state.isAddingModification = true;
+      })
+      .addCase(createProductModificationAsync.fulfilled, (state) => {
+        state.isAddingModification = false;
+      })
+      .addCase(createProductModificationAsync.rejected, (state) => {
+        state.isAddingModification = false;
       });
   },
 });
@@ -142,6 +169,8 @@ export const {
   getIsAddingSelector,
   getIsUpdatingSelector,
   getIsRemovingSelector,
+  getIsChangingVersion,
+  getIsAddingModification,
   getIsCalculating,
   getPaginationSelector,
   getConsumptionPagination,

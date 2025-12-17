@@ -1,11 +1,9 @@
-import { Loader } from "@components/common/loader";
-import {
-  AddProductForm as AddForm,
-  EditProductForm as EditForm,
-} from "@components/forms";
+import { useNavigate } from "react-router-dom";
+
 import { useTableActions } from "@hooks/table/useTableActions";
 import { useTableData } from "@hooks/table/useTableData";
 import { useTableForms } from "@hooks/table/useTableForms";
+import { useSelector } from "@store";
 import {
   getIsAddingSelector,
   getIsLoadingSelector,
@@ -20,14 +18,22 @@ import {
 import { deleteProductAsync, getAllProductsAsync } from "@thunks/products";
 import { productsHeaders as headers } from "@utils/constants";
 import { TProduct } from "@utils/types";
-import { TablePage } from "@ui/pages";
-import { useSelector } from "@store";
+
+import {
+  AddProductForm as AddForm,
+  EditProductForm as EditForm,
+  ChangeProductVersionForm,
+  CreateProductModificationForm,
+} from "@components/forms";
+import { Loader } from "@components/common/loader";
 import { BaseTableActions } from "@components/base-table-actions";
 import { Button } from "@components/common/buttons";
-import { useNavigate } from "react-router-dom";
+import { TablePage } from "@ui/pages";
+import { getSelectedProductSelector } from "@selectors/products";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
+  const selectedItem = useSelector(getSelectedProductSelector);
   const isAdding = useSelector(getIsAddingSelector);
   const isUpdating = useSelector(getIsUpdatingSelector);
   const isRemoving = useSelector(getIsRemovingSelector);
@@ -40,7 +46,10 @@ export const ProductsPage = () => {
     setCurrentPage,
   });
 
-  const { showAddForm, showEditForm } = useTableForms({ AddForm, EditForm });
+  const { showAddForm, showEditForm, showModal, hideModal } = useTableForms({
+    AddForm,
+    EditForm,
+  });
 
   const { selectedItemId, handleSelect, handleDelete } = useTableActions({
     getSelectedItemId,
@@ -76,13 +85,33 @@ export const ProductsPage = () => {
         />
       }
       footerActions={
-        <Button
-          variant="view"
-          disabled={!selectedItemId}
-          onClick={handleNavigateToSummary}
-        >
-          Расчитать сводные нормы расхода
-        </Button>
+        <>
+          <Button
+            variant="view"
+            disabled={!selectedItemId}
+            onClick={handleNavigateToSummary}
+          >
+            Расчитать сводные нормы расхода
+          </Button>
+          <Button
+            variant="plus"
+            disabled={!selectedItemId}
+            onClick={() =>
+              showModal(<ChangeProductVersionForm onClose={hideModal} />)
+            }
+          >
+            Создать изменение изделия
+          </Button>
+          <Button
+            variant="plus"
+            disabled={!selectedItemId || !selectedItem?.isActive}
+            onClick={() =>
+              showModal(<CreateProductModificationForm onClose={hideModal} />)
+            }
+          >
+            Создать модификацию изделия
+          </Button>
+        </>
       }
     />
   );
